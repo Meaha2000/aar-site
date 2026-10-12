@@ -84,7 +84,7 @@
             </div>
             <ul class="drawer__index">
               <li class="drawer__row"><span class="pos">01</span><span class="q">A swordsman who cannot die, and the woman who follows him</span><span class="tag">ask</span></li>
-              <li class="drawer__row"><span class="pos">02</span><span class="q">POST /search &mdash; scope, limit, answer opt-in</span><span class="tag">send</span></li>
+              <li class="drawer__row"><span class="pos">02</span><span class="q">POST /search &mdash; scope and limit</span><span class="tag">send</span></li>
               <li class="drawer__row"><span class="pos">03</span><span class="q">Ranked works, each with the passage that matched</span><span class="tag">read</span></li>
             </ul>
             <p class="drawer__foot micro">This is the request&rsquo;s shape, not a stored result.
@@ -151,17 +151,15 @@
         <div class="field"><span class="field__name">Four media, one index</span><span class="field__value">Anime, manga, light novels and visual novels resolve to a single canonical work.</span></div>
         <div class="field"><span class="field__name">Built for fuzzy memory</span><span class="field__value">Half-remembered spellings, typos and romanisation drift still land on the right work.</span></div>
         <div class="field"><span class="field__name">Grounded, not guessed</span><span class="field__value">Every result carries the passage that matched, so a recommendation can be checked, not just trusted.</span></div>
-        <div class="field"><span class="field__name">Answers on request</span><span class="field__value">Want prose instead of a list? Ask once and get a grounded answer with its sources alongside.</span></div>
       </section>
 
 
       <section class="section" id="api" aria-labelledby="api-title">
         <div class="section__head">
           <h2 class="section__title" id="api-title">API reference</h2>
-          <p class="measure muted">JSON over HTTP. Three endpoints cover the whole catalogue. The live
-          demo runs against a public Worker that is rate-limited per IP, so no key is sent from the
-          browser; the upstream origin still authenticates with an <code>X-API-Key</code> held
-          server-side.</p>
+          <p class="measure muted">JSON over HTTP. Two endpoints cover the whole catalogue. The API
+          is hosted on RapidAPI, so one <code>X-RapidAPI-Key</code> header authenticates every call
+          and the rate limit is whatever your plan allows.</p>
         </div>
 
         <div class="code">
@@ -171,12 +169,11 @@
           </div>
           <div class="code__body"><pre data-endpoints>GET  /health   liveness check (no auth)
 POST /search   ranked works, with the passages that matched
-POST /ask      a grounded answer, with its sources</pre></div>
         </div>
 
         <h3 class="subhead">The search request</h3>
         <p class="measure muted">The demo sends exactly this shape. <code>scope</code> carries hard
-        filters; <code>answer</code> is opt-in because prose is not always wanted.</p>
+        filters; every returned work carries the passage that matched.</p>
         <div class="code">
           <div class="code__bar">
             <span class="micro">POST /search</span>
@@ -185,8 +182,7 @@ POST /ask      a grounded answer, with its sources</pre></div>
           <div class="code__body"><pre data-req-body>{
   "question": "Time-travel visual novel with branching timelines",
   "limit": 8,
-  "scope": { "types": ["VISUAL_NOVEL"] },
-  "answer": false
+  "scope": { "types": ["VISUAL_NOVEL"] }
 }</pre></div>
         </div>
 
@@ -199,7 +195,6 @@ POST /ask      a grounded answer, with its sources</pre></div>
           <div class="code__body"><pre data-res-body>{
   "results": [
     {
-      "work_id": "anilist:16498",
       "canonical_title": "Shingeki no Kyojin",
       "work_type": "ANIME",
       "year": 2013,
@@ -207,7 +202,6 @@ POST /ask      a grounded answer, with its sources</pre></div>
       "matched_chunk": { "text": "…" }
     }
   ],
-  "answer": null,
   "trace": { "fused": 150, "rerank": { "scored": 80, "ms": 340.2 }, "ms": 820.5 }
 }</pre></div>
         </div>
@@ -232,47 +226,40 @@ POST /ask      a grounded answer, with its sources</pre></div>
     <section class="section" id="integration" aria-labelledby="integ-title">
         <div class="section__head">
           <h2 class="section__title" id="integ-title">Get started</h2>
-          <p class="measure muted">Four steps from a request to rendered results. The live demo is
-          already wired to a public Worker, so you can call it directly; a key is only needed for the
-          upstream origin.</p>
+          <p class="measure muted">Four steps from a request to rendered results. The catalogue is
+          served as a hosted API &mdash; subscribe on RapidAPI, take the base URL and key from your
+          dashboard, and call it directly.</p>
         </div>
-        <div class="code">
-          <div class="code__bar">
-            <span class="micro">Live base URL</span>
-            <button class="btn btn--quiet" type="button" data-copy="[data-live-url]"><span data-copy-label>Copy</span></button>
-          </div>
-          <div class="code__body"><pre data-live-url>https://orange-cell-9386.meaha2000.workers.dev</pre></div>
-        </div>
+        <a class="listing" href="https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api"
+           rel="noopener" target="_blank">
+          <span class="listing__body">
+            <span class="listing__eyebrow micro">Hosted on RapidAPI</span>
+            <span class="listing__name">Anime Akashic Records (AAR) API</span>
+            <span class="listing__note">Subscribe on the listing to get your base URL and
+            <code>X-RapidAPI-Key</code>, then call it directly. Plans and rate limits are shown there.</span>
+          </span>
+          <span class="listing__go" aria-hidden="true">Subscribe &rarr;</span>
+        </a>
         <ol class="stages">
           <li class="stage"><span class="stage__num">1</span><div class="stage__body">
-            <h3>Point at the live base URL</h3><p class="measure muted">Use the public Worker above as
-            your <code>API_BASE</code>. It is rate-limited per IP, so the browser sends no key. Behind
-            it, the origin authenticates with an <code>X-API-Key</code> stored as a server-side secret.</p></div></li>
+            <h3>Subscribe on RapidAPI</h3><p class="measure muted">Open the listing and pick a plan.
+            Your dashboard shows the base URL and the <code>X-RapidAPI-Key</code> to send with every
+            request; the origin server itself stays private.</p></div></li>
           <li class="stage"><span class="stage__num">2</span><div class="stage__body">
             <h3>Send a request</h3><p class="measure muted">POST <code>/search</code> with a
             <code>question</code> and optional <code>scope</code>.</p></div></li>
           <li class="stage"><span class="stage__num">3</span><div class="stage__body">
-            <h3>Parse the envelope</h3><p class="measure muted">Read <code>results[]</code> by
-            <code>work_id</code>, with <code>score</code>, <code>year</code> and the matched passages.</p></div></li>
+            <h3>Parse the envelope</h3><p class="measure muted">Read <code>results[]</code> with
+            <code>score</code>, <code>year</code> and the matched passages.</p></div></li>
           <li class="stage"><span class="stage__num">4</span><div class="stage__body">
             <h3>Render</h3><p class="measure muted">One ruled line per work, expanding to the passages
             that matched &mdash; exactly what the demo does.</p></div></li>
         </ol>
 
-        <h3 class="subhead">The Worker path (recommended)</h3>
-        <p class="measure muted">Deploy the included Cloudflare Worker and point the site at it. The
-        Worker holds <code>AAR_API_KEY</code> as an encrypted secret and forwards only the routes the
-        demo needs, so both the origin server and the key stay hidden.</p>
-        <div class="code">
-          <div class="code__bar">
-            <span class="micro">worker</span>
-            <button class="btn btn--quiet" type="button" data-copy="[data-worker-cmds]"><span data-copy-label>Copy</span></button>
-          </div>
-          <div class="code__body"><pre data-worker-cmds>cd worker
-npx wrangler secret put AAR_API_KEY
-npx wrangler secret put AAR_ORIGIN
-npx wrangler deploy</pre></div>
-        </div>
+        <h3 class="subhead">Authentication</h3>
+        <p class="measure muted">Every request carries your <code>X-RapidAPI-Key</code> header. The key
+        is checked at the gateway, so the catalogue&rsquo;s own origin is never exposed and never
+        needs a second credential.</p>
       </section>
 
       <section class="section" id="agents" aria-labelledby="agents-title">
@@ -284,10 +271,7 @@ npx wrangler deploy</pre></div>
         <div class="field"><span class="field__name">Grounded</span><span class="field__value">Every result carries the passage that matched &mdash; citable, not summarised.</span></div>
         <div class="field"><span class="field__name">Unified</span><span class="field__value">Anime, manga, light novels and visual novels resolve to one canonical work.</span></div>
         <div class="field"><span class="field__name">Fuzzy by design</span><span class="field__value">Typos and romanisation drift still land.</span></div>
-        <div class="field"><span class="field__name">Composable</span><span class="field__value">Hard <code>scope</code> filters plus optional grounded prose in one call.</span></div>
-        <p class="measure muted" style="margin-top:var(--space-4)">For an agent, the useful endpoint is
-        often <code>POST /ask</code>: retrieval <em>plus</em> a grounded answer, with the passages it was
-        built from returned alongside so the answer can be checked.</p>
+        <div class="field"><span class="field__name">Composable</span><span class="field__value">Hard <code>scope</code> filters in one call.</span></div>
       </section>
 
     </main>

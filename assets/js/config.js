@@ -3,22 +3,15 @@
    ============================================================================
    THE ONE PLACE THE BACKEND IS WIRED. Nothing else in this site knows a URL.
 
-   Two supported shapes:
+   The catalogue is served as a hosted RapidAPI product. Every request goes to
+   the RapidAPI gateway host below and carries two headers: X-RapidAPI-Key (the
+   subscriber's key) and X-RapidAPI-Host (this host). The origin server stays
+   private behind the gateway.
 
-   1. PROXIED (recommended for production)
-      Point API_BASE at your deployed Cloudflare Worker. The Worker holds the
-      real AAR_API_KEY as an encrypted server-side secret; the browser never
-      sees a key. Leave API_KEY empty.
+        export const API_KEY = "<your RapidAPI key>";
 
-        export const API_BASE = "https://aar-proxy.<you>.workers.dev";
-        export const API_KEY  = "";
-
-   2. DIRECT (local testing only)
-      Point API_BASE straight at the AAR API origin and supply a key. This puts
-      the key in a browser-served file: treat any key used here as published.
-
-        export const API_BASE = "https://your-origin.example";
-        export const API_KEY  = "<your key>";
+   Leave API_KEY empty to keep the demo in its honest unconfigured state: it
+   will show the request it *would* send and never invent results.
 
    There is no build step, so changing this file changes the site. That is the
    entire point of the constraint: the frontend never needs rebuilding to point
@@ -26,24 +19,26 @@
    ========================================================================= */
 
 /**
- * API origin. Points at the deployed public Worker. The listing is rate-limited
- * per IP, so no key is sent from the browser and the Worker holds any upstream
- * secret server-side.
+ * RapidAPI host for the AAR listing. This is the `X-RapidAPI-Host` value and
+ * the host component of every request URL.
  */
-export const API_BASE = "https://orange-cell-9386.meaha2000.workers.dev";
+export const RAPIDAPI_HOST = "anime-akashic-records-aar-api.p.rapidapi.com";
 
-/** API key, used ONLY in the direct (non-proxied) local-testing shape. */
+/** API origin — the RapidAPI gateway in front of the catalogue. */
+export const API_BASE = `https://${RAPIDAPI_HOST}`;
+
+/** Your RapidAPI key, sent as the `X-RapidAPI-Key` header. */
 export const API_KEY = "";
 
 /** Default result count for the demo request. Server clamps to its own maximum. */
 export const DEFAULT_LIMIT = 8;
 
 /**
- * The public RapidAPI listing URL. Not supplied by the owner, so it is left as a
- * single configurable constant; the UI references the listing by name and links
- * here when it is set.
+ * The public RapidAPI listing URL. The UI references the listing by name and
+ * links here when it is set.
  */
-export const RAPIDAPI_URL = "";
+export const RAPIDAPI_URL =
+  "https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api";
 
 /** Source repository. */
 export const REPO_URL = "https://github.com/";

@@ -1,12 +1,12 @@
-# Anime Akashic Records — official website
+# Anime Akashic Records â€” official website
 
 This folder is **self-contained**. It is the complete, standalone public website for Anime Akashic
 Records (AAR). It does not read from, write to, or depend on any other folder in this workspace.
 
 > **Independence note.** The backend project lives in a sibling folder (`../aar/`). This site talks to
-> that backend **only over its public HTTP API**, through a configured endpoint URL. Nothing in this
-> folder imports backend code, shares a Python environment, or references a relative backend path.
-> Deleting the backend folder would not break any file here.
+> that backend **only over its public HTTP API**. Nothing in this folder imports backend code, shares
+> a Python environment, or references a relative backend path. Deleting the backend folder would not
+> break any file here.
 
 ## What is here
 
@@ -19,19 +19,18 @@ Records (AAR). It does not read from, write to, or depend on any other folder in
 | `assets/js/` | `config.js` (the one backend constant), `api.js` (contract client), `site.js` (chrome), `search.js` (the demo). Vanilla ES modules. |
 | `assets/img/` | Original SVG art: `seal.svg`, `mark.svg` (lockup), `monogram.svg`, `favicon.svg`. |
 | `index.html` | The landing page: hero drawer, what it does, API reference, get started, for agents. |
-| `search.html` | The search demo — the centrepiece. Shows the request before sending; never fabricates results. |
-| `worker/` | The Cloudflare Worker proxy (the **only** place an API key exists). Own `wrangler.toml`. |
+| `search.html` | The search demo â€” the centrepiece. Shows the request before sending; never fabricates results. |
 | `.nojekyll` | Tells GitHub Pages not to run Jekyll. |
 
 ## Search demo behaviour
 
-- **Before a query** it renders the exact JSON body and resolved endpoint it *would* send — no
+- **Before a query** it renders the exact JSON body and resolved endpoint it *would* send â€” no
   spinner, no placeholder results.
 - **With no backend configured** it says so plainly and links the hosted listing; it never invents
   retrieval output.
-- **On error** it names the problem and the recovery (401 → where the proxy sits; timeout → a Retry
+- **On error** it names the problem and the recovery (401 â€” check the RapidAPI key; timeout â€” a Retry
   that actually retries).
-- **Scope chips** are hard filters; the composed-answer toggle maps to the API's opt-in `answer`.
+- **Scope chips** are hard filters over the four media types.
 
 ## How to run
 
@@ -46,35 +45,24 @@ Then open `http://localhost:5173/`.
 
 ## How to point it at a backend
 
-All backend wiring lives in one constant in `assets/js/config.js`. It is shipped pre-wired to the
-live public Worker (`https://orange-cell-9386.meaha2000.workers.dev`), which is rate-limited per IP,
-so the browser sends no key. The two shapes below are for pointing it somewhere else:
+All backend wiring lives in one file, `assets/js/config.js`. The catalogue is served as a hosted
+RapidAPI product, so the demo sends every request through the RapidAPI gateway:
 
-- **Direct** — set `API_BASE` to the API origin and `API_KEY` to a key. Only do this for local
-  testing; a browser-visible key is a published key.
-- **Proxied (recommended for production)** — leave `API_KEY` empty and set `API_BASE` to your
-  deployed Worker URL. The Worker holds the real key as an encrypted server-side secret.
+- `RAPIDAPI_HOST` â€” the listing host, sent as the `X-RapidAPI-Host` header and used as the request host.
+- `API_KEY` â€” your RapidAPI key, sent as the `X-RapidAPI-Key` header. Leave it empty to keep the demo
+  in its honest unconfigured state.
 
-Changing the backend never requires a rebuild, because there is nothing to build.
+Changing the key never requires a rebuild, because there is nothing to build.
 
 ## Deployment
 
-- **Site:** static host / GitHub Pages. Publish the contents of this folder; ship `.nojekyll`.
-- **Proxy:** deploy `worker/` with Wrangler, then set `AAR_API_KEY` as a secret:
-
-```sh
-cd worker
-npx wrangler secret put AAR_API_KEY
-npx wrangler deploy
-```
+Static host / GitHub Pages. Publish the contents of this folder; ship `.nojekyll`. There is no server
+component in this repository.
 
 ## Security boundary
 
-The site is public. Therefore:
-
-- No API key, backend origin, or admin endpoint is ever committed into browser-served files.
-- `worker/` is the single trusted component; the key lives only as a Cloudflare secret.
-- `config.js` contains **no** credential at all — only a public, per-IP-rate-limited Worker URL and an empty `API_KEY`.
+The site is public. Therefore `config.js` ships with an **empty** `API_KEY`; each visitor supplies
+their own RapidAPI key, and the origin server stays private behind the gateway.
 
 ---
 

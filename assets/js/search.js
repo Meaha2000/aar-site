@@ -24,7 +24,6 @@ const els = {
   input:     $("[data-search-input]"),
   submit:    $("[data-search-submit]"),
   chips:     Array.from(document.querySelectorAll("[data-scope-type]")),
-  answerBox: $("[data-answer-toggle]"),
   preview:   $("[data-request-preview]"),
   status:    $("[data-search-status]"),
   results:   $("[data-results]"),
@@ -56,7 +55,6 @@ function currentOptions(question) {
     question,
     limit: DEFAULT_LIMIT,
     work_types: Array.from(state.types),
-    answer: Boolean(els.answerBox && els.answerBox.checked),
   };
 }
 
@@ -101,24 +99,23 @@ function renderEmpty() {
 function renderRow(work, i) {
   // The live API returns `title` / `type` / `chunks[]`; the documented shape
   // uses `canonical_title` / `work_type` / `matched_chunk`. Accept both.
-  const title = escapeHtml(work.title || work.canonical_title || work.work_id || "Untitled");
+  const title = escapeHtml(work.title || work.canonical_title || "Untitled");
+  const alt = work.title && work.canonical_title && work.title !== work.canonical_title
+    ? escapeHtml(work.canonical_title) : "";
   const type = escapeHtml((work.type || work.work_type || "").toString());
   const year = work.year != null ? escapeHtml(work.year) : "—";
   const score = typeof work.score === "number" ? work.score.toFixed(4) : "—";
-  const wid = escapeHtml(work.work_id || "");
 
   const chunks = Array.isArray(work.chunks) ? work.chunks
                : Array.isArray(work.matched_chunks) ? work.matched_chunks
                : work.matched_chunk ? [work.matched_chunk] : [];
   const passages = chunks.length
-    ? chunks.map((c, n) => {
+    ? chunks.map((c) => {
         const section = escapeHtml(c.section || c.kind || c.field || "passage");
-        const cid = escapeHtml(c.chunk_id || c.id || `${wid}#${n}`);
         const text = escapeHtml(c.text || c.excerpt || "");
         return `<figure class="passage">
             <figcaption class="passage__meta">
               <span class="micro">${section}</span>
-              <span class="micro">${cid}</span>
             </figcaption>
             <blockquote class="passage__text">${text}</blockquote>
           </figure>`;
@@ -130,7 +127,7 @@ function renderRow(work, i) {
       <button class="index-row__head" type="button" aria-expanded="false"
               data-row-toggle aria-controls="row-${i}">
         <span class="index-row__pos">${String(i + 1).padStart(2, "0")}</span>
-        <span class="index-row__title">${title} <span class="en mono">${wid}</span></span>
+        <span class="index-row__title">${title}${alt ? ` <span class="en">${alt}</span>` : ""}</span>
         <span class="index-row__meta">
           <span class="index-row__type">${type}</span>
           <span>${year}</span>
@@ -151,27 +148,16 @@ function renderTrace(trace) {
            : typeof trace.ms === "number" ? trace.ms : null;
   if (fused != null) bits.push(`<span class="field__name">fused</span> <span class="mono">${fused}</span>`);
   if (ms != null) bits.push(`<span class="field__name">ms</span> <span class="mono">${ms.toFixed(1)}</span>`);
-  if (trace.reranker_backend && trace.reranker_backend !== "none") {
-    bits.push(`<span class="field__name">rerank</span> <span class="mono">${escapeHtml(trace.reranker_backend)}</span>`);
-  }
-  if (trace.rerank && typeof trace.rerank === "object") {
-    const r = trace.rerank;
-    bits.push(`<span class="field__name">rerank</span> <span class="mono">${escapeHtml(r.model || r.backend || "")}`+
+  // Reranking is reported as a step, never by its backend or model name.
+  const reranked = (trace.reranker_backend && trace.reranker_backend !== "none") ||
+                   (trace.rerank && typeof trace.rerank === "object");
+  if (reranked) {
+    const r = typeof trace.rerank === "object" && trace.rerank ? trace.rerank : {};
+    bits.push(`<span class="field__name">reranked</span> <span class="mono">yes`+
       `${typeof r.scored === "number" ? ` · ${r.scored}` : ""}${typeof r.ms === "number" ? ` · ${r.ms.toFixed(1)}ms` : ""}</span>`);
   }
   if (!bits.length) return "";
   return `<div class="trace" style="margin-top:var(--space-3)">${bits.join("")}</div>`;
-}
-
-function renderAnswer(text) {
-  if (!els.results) return;
-  if (!text) return;
-  const paras = escapeHtml(text).split(/\n\s*\n/).map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
-  const box = document.createElement("div");
-  box.className = "answer";
-  box.innerHTML = `<div class="micro" style="margin-bottom:var(--space-2)">Composed answer · grounded in the passages above</div>
-                   <div class="answer__body">${paras}</div>`;
-  els.results.insertBefore(box, els.results.firstChild);
 }
 
 function renderResults(data) {
@@ -187,7 +173,6 @@ function renderResults(data) {
 
   statusNote(null, "");
   els.results.innerHTML = results.map(renderRow).join("") + renderTrace(data.trace);
-  if (data.answer) renderAnswer(data.answer);
 }
 
 /* ---- Unconfigured state (honest, per DESIGN.md) --------------------------- */
@@ -198,7 +183,7 @@ function renderUnconfigured() {
     : " or subscribe to the hosted listing on RapidAPI";
   statusNote("warn",
     `<strong>No backend is configured for this demo.</strong> This page will not invent results. `+
-    `Set <code>API_BASE</code> in <code>assets/js/config.js</code> to a deployed Worker${live}, then reload. `+
+    `Set <code>API_KEY</code> in <code>assets/js/config.js</code> to your RapidAPI key${live}, then reload. `+
     `The request below is exactly what this page <em>would</em> send.`);
   renderPreview(state.lastQuery || "");
   renderEmpty();
@@ -253,16 +238,16 @@ function renderError(err, q) {
   if (err.status === 401 || err.status === 403) {
     statusNote("error",
       `<strong>The endpoint rejected the request (${err.status}).</strong> The key was refused. `+
-      `In production the key lives only inside the Cloudflare Worker as <code>AAR_API_KEY</code>; `+
-      `if you are testing directly, check <code>API_KEY</code> in <code>assets/js/config.js</code>. ${retry}`);
+      `Check the <code>X-RapidAPI-Key</code> in <code>assets/js/config.js</code> against the key on your `+
+      `RapidAPI dashboard. ${retry}`);
   } else if (err.status === 429) {
     statusNote("warn",
       `<strong>Rate limited (429).</strong> The endpoint is asking for a slower cadence. `+
       `Wait a moment, then ${retry.charAt(0).toLowerCase() + retry.slice(1)}`);
   } else if (err.status === 0 && err.message.includes("reach")) {
     statusNote("error",
-      `<strong>The request could not reach the endpoint.</strong> Check that <code>API_BASE</code> `+
-      `points at a running origin or deployed Worker, and that it allows this origin via CORS. ${retry}`);
+      `<strong>The request could not reach the endpoint.</strong> Check that <code>RAPIDAPI_HOST</code> `+
+      `in <code>assets/js/config.js</code> is correct and that the gateway allows this origin via CORS. ${retry}`);
   } else if (err.status === 0) {
     statusNote("warn", `<strong>The request was slow.</strong> The endpoint did not answer within 30 seconds. ${retry}`);
   } else {
@@ -344,7 +329,6 @@ function init() {
   });
 
   if (els.input) els.input.addEventListener("input", () => renderPreview(els.input.value));
-  if (els.answerBox) els.answerBox.addEventListener("change", () => renderPreview(state.lastQuery));
 }
 
 if (document.readyState === "loading") {

@@ -198,8 +198,8 @@ index, with the demo given its own leaf because it is the proof.
 | 01 | **Hero — the drawer** | Persuade | Land "you shouldn't need to know a title to find it." The one card. |
 | 02 | **The demo** (`search.html`) | Operate | Real query → real result structure. The centrepiece. |
 | 03 | **What it does** | Persuade | Why fuzzy, described retrieval beats a title search — the benefits, plainly. |
-| 04 | **API reference** | Read | Endpoints (`/search`, `/ask`, `/health`), auth, scope fields, envelope shape, copyable examples. |
-| 05 | **Get started** | Operate | Four steps: key → request → parse → render. Includes the Worker path. |
+| 04 | **API reference** | Read | Endpoints (`/search`, `/health`), RapidAPI auth, scope fields, envelope shape, copyable examples. |
+| 05 | **Get started** | Operate | Four steps: subscribe → request → parse → render, all through RapidAPI. |
 | 06 | **For agents & chatbots** | Persuade | Why a specialised retriever beats general web search for this job. |
 | — | **Footer** | Read | Mark, docs links, licence, provenance. |
 
