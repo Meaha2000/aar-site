@@ -24,8 +24,8 @@
  */
 export const RAPIDAPI_HOST = "anime-akashic-records-aar-api.p.rapidapi.com";
 
-/** API origin — the RapidAPI gateway in front of the catalogue. */
-export const API_BASE = `https://${RAPIDAPI_HOST}`;
+/** API origin — the Cloudflare Worker proxy that enforces 10 req/day per IP. */
+export const API_BASE = "https://orange-cell-9386.meaha2000.workers.dev";
 
 /** Your RapidAPI key, sent as the `X-RapidAPI-Key` header. */
 export const API_KEY = "";

@@ -19,9 +19,10 @@ export class ApiError extends Error {
 function headers(json) {
   const h = { Accept: "application/json" };
   if (json) h["Content-Type"] = "application/json";
-  // RapidAPI routes and authenticates on these two headers.
-  h["X-RapidAPI-Host"] = RAPIDAPI_HOST;
-  if (API_KEY) h["X-RapidAPI-Key"] = API_KEY;
+  if (API_KEY) {
+    h["X-RapidAPI-Host"] = RAPIDAPI_HOST;
+    h["X-RapidAPI-Key"] = API_KEY;
+  }
   return h;
 }
 
