@@ -4,7 +4,7 @@
    Returns the raw envelope; rendering is the caller's business.
    ========================================================================= */
 
-import { API_KEY, RAPIDAPI_HOST, endpoint, isConfigured } from "./config.js";
+import { API_KEY, RAPIDAPI_HOST, endpoint, isConfigured } from "./config.js?v=2";
 
 /** Error carrying an HTTP status so callers can name the recovery. */
 export class ApiError extends Error {

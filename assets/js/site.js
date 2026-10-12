@@ -4,8 +4,8 @@
    No framework. Progressive: everything works without JS except the live chip.
    ========================================================================= */
 
-import { health, ApiError } from "./api.js";
-import { isConfigured } from "./config.js";
+import { health, ApiError } from "./api.js?v=2";
+import { isConfigured } from "./config.js?v=2";
 
 /* ---- Theme ---------------------------------------------------------------- */
 

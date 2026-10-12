@@ -11,9 +11,9 @@
      timeout → a retry that actually retries).
    ========================================================================= */
 
-import { search, previewSearchBody, ApiError } from "./api.js";
+import { search, previewSearchBody, ApiError } from "./api.js?v=2";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, RAPIDAPI_URL, isConfigured, endpoint }
-  from "./config.js";
+  from "./config.js?v=2";
 
 /* ---- DOM ------------------------------------------------------------------ */
 
