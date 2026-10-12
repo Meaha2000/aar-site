@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AAR — full lockup mark.
+  A calligraphic capital A (an ink stroke, not a geometric glyph) whose crossbar
+  becomes the stem that holds the seal blossom. Original vector art, hand-authored.
+  Uses currentColor for the ink; the blossom keeps --sakura via a class hook.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 40" width="64" height="40"
+     role="img" aria-label="Anime Akashic Records">
+  <g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"
+     stroke-linejoin="round">
+    <!-- calligraphic A: a swept left stroke and a right stem, drawn as one gesture -->
+    <path d="M6 34 C 12 20, 18 8, 24 6 C 28 5, 29 9, 30 14"/>
+    <path d="M30 34 L 30 14"/>
+    <!-- crossbar, slightly rising, as a pen would place it -->
+    <path d="M15 24 C 20 22, 25 22, 30 21"/>
+  </g>
+  <!-- the seal sits where the A's counter closes, in sakura -->
+  <g class="mark__seal" transform="translate(42 20) scale(.92) translate(-12 -12)"
+     fill="none" stroke="var(--sakura, #C86B85)" stroke-width="1.4"
+     stroke-linejoin="round" stroke-linecap="round">
+    <g id="pet">
+      <path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/>
+      <path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/>
+    </g>
+    <use href="#pet" transform="rotate(72 12 12)"/>
+    <use href="#pet" transform="rotate(144 12 12)"/>
+    <use href="#pet" transform="rotate(216 12 12)"/>
+    <use href="#pet" transform="rotate(288 12 12)"/>
+    <circle cx="12" cy="12" r="1.1" fill="var(--sakura, #C86B85)" stroke="none"/>
+  </g>
+</svg>

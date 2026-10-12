@@ -1,0 +1,81 @@
+/* ============================================================================
+   AAR — design tokens
+   Single source of truth for colour, type, space, motion.
+   Values are read verbatim from DESIGN.md (light + ink-dark ramps).
+   No gradients. No purple. No blue. Sakura is an accent, never a field.
+   ========================================================================= */
+
+:root {
+  /* ---- Colour: light (default art direction) ------------------------------ */
+  --paper:        #F4EEE2; /* warm parchment, the canvas */
+  --paper-deep:   #EAE1D1; /* recessed wells: drawers, code, table stripes */
+  --paper-raised: #FBF7EF; /* the one true card lift */
+
+  --ink:        #1A1714; /* deep ink, headings + body */
+  --ink-soft:   #4A4238; /* secondary prose, tinted from ink, never grey */
+  --ink-faint:  #6B6051; /* tertiary / labels, >=4.5:1 on paper */
+
+  --rule:        #CFC4AE; /* hairlines, rails, table borders */
+  --rule-strong: #A89A80; /* structural rules that must read at a glance */
+
+  --sakura:      #C86B85; /* the mark, the seal, active state */
+  --sakura-deep: #8E4058; /* sakura at text weight on paper (>=4.5:1) */
+  --sakura-wash: #F0DCE1; /* sakura as a field: selection, highlight, chip */
+
+  --moss:  #4F6B4A; /* one true accent for retrieved / ok */
+  --amber: #8A6520; /* warning / degraded */
+  --rust:  #9C3B2E; /* error only */
+
+  /* ---- Type families (self-hosted; see fonts.css) ------------------------- */
+  --serif: "Fraunces", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+  --mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- Baseline + space scale -------------------------------------------- */
+  --baseline: 1.5rem;
+  --space-1:  .375rem;
+  --space-2:  .75rem;
+  --space-3:  1.125rem;
+  --space-4:  1.5rem;
+  --space-6:  2.25rem;
+  --space-8:  3rem;
+  --space-12: 4.5rem;
+  --space-16: 6rem;
+
+  /* ---- Shell ------------------------------------------------------------- */
+  --shell: 78rem;
+  --pad-x: clamp(1.25rem, 4vw, 3rem);
+  --rail-w: 11rem;
+  --measure: 68ch;
+  --measure-lead: 58ch;
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --dur-quiet: 120ms;
+  --dur-drawer: 620ms;
+
+  color-scheme: light;
+}
+
+/* ---- Colour: ink-dark second printing ------------------------------------ */
+:root[data-theme="dark"] {
+  --paper:        #141210;
+  --paper-deep:   #1C1916;
+  --paper-raised: #232019;
+
+  --ink:       #F1EADC;
+  --ink-soft:  #C4B8A5;
+  --ink-faint: #948877;
+
+  --rule:        #38322A;
+  --rule-strong: #544B3E;
+
+  --sakura:      #E08CA4;
+  --sakura-deep: #E8A2B5;
+  --sakura-wash: #3A2530;
+
+  --moss:  #8FAF86;
+  --amber: #D2A45A;
+  --rust:  #E08A7C;
+
+  color-scheme: dark;
+}

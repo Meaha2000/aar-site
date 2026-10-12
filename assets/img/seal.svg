@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AAR seal — a single five-petal blossom (sakura) drawn as an ink stamp.
+  Original vector art. Used at 20px as the section stamp and as the loading mark.
+  Stroke/fill use currentColor so the seal inherits its context's ink or sakura tone.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+     role="img" aria-label="Anime Akashic Records seal">
+  <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round"
+     stroke-linecap="round">
+    <!-- five petals, rotated about the centre; each petal is a notched teardrop -->
+    <g id="petal">
+      <path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/>
+      <path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/>
+    </g>
+    <use href="#petal" transform="rotate(72 12 12)"/>
+    <use href="#petal" transform="rotate(144 12 12)"/>
+    <use href="#petal" transform="rotate(216 12 12)"/>
+    <use href="#petal" transform="rotate(288 12 12)"/>
+    <!-- the stamp's centre -->
+    <circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/>
+  </g>
+</svg>

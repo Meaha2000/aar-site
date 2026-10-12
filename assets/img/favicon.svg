@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AAR favicon — the seal at small size, on parchment. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" fill="#F4EEE2"/>
+  <rect x=".5" y=".5" width="31" height="31" fill="none" stroke="#CFC4AE"/>
+  <g transform="translate(16 16) scale(1.02) translate(-12 -12)"
+     fill="none" stroke="#C86B85" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+    <g id="p">
+      <path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/>
+      <path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/>
+    </g>
+    <use href="#p" transform="rotate(72 12 12)"/>
+    <use href="#p" transform="rotate(144 12 12)"/>
+    <use href="#p" transform="rotate(216 12 12)"/>
+    <use href="#p" transform="rotate(288 12 12)"/>
+    <circle cx="12" cy="12" r="1.15" fill="#C86B85" stroke="none"/>
+  </g>
+</svg>

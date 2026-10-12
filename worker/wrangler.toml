@@ -1,0 +1,23 @@
+# ============================================================================
+# AAR proxy — Cloudflare Worker configuration
+# ============================================================================
+# Secrets are NOT stored here. Set them once with wrangler and they live
+# encrypted on Cloudflare:
+#
+#   npx wrangler secret put AAR_API_KEY     # required — upstream X-API-Key
+#   npx wrangler secret put AAR_ORIGIN      # required — real API origin
+#   npx wrangler secret put AAR_ALLOWED_ORIGIN  # optional — CORS allowlist
+#
+# The origin host is a secret precisely so that this repository, and the
+# deployed Worker bundle, never reveal where the backend actually lives.
+# ============================================================================
+
+name = "aar-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Nothing else is needed: no KV, no D1, no R2. This Worker only forwards three
+# routes and attaches the key. Smaller surface, smaller blast radius.
+
+[observability]
+enabled = true

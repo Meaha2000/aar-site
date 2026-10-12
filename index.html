@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anime Akashic Records — find the work you half-remember</title>
+<meta name="description" content="Anime Akashic Records is a hybrid retrieval API over anime, manga, light novels and visual novels. Describe what you remember; the catalogue returns ranked works with the passages that matched.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the catalogue</a>
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
+      <svg class="seal" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+        <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+          <g id="pk"><path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/><path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/></g>
+          <use href="#pk" transform="rotate(72 12 12)"/><use href="#pk" transform="rotate(144 12 12)"/>
+          <use href="#pk" transform="rotate(216 12 12)"/><use href="#pk" transform="rotate(288 12 12)"/>
+          <circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/>
+        </g>
+      </svg>
+      <span class="wordmark">Anime Akashic Records <span class="jp">資料館</span></span>
+    </a>
+    <nav class="masthead__nav" aria-label="Primary">
+      <a href="search.html">Try the demo</a>
+      <a href="#api">API</a>
+      <a href="#integration">Get started</a>
+      <a href="#agents">For agents</a>
+    </nav>
+    <div class="masthead__tools">
+      <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
+      <button class="theme-toggle" type="button" data-theme-toggle>Light</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== The ruled page ============================================== -->
+<div class="shell">
+  <div class="leaf">
+
+    <nav class="rail" aria-label="Catalogue index">
+      <div class="rail__title micro">Index</div>
+      <ul class="rail__list">
+        <li><a href="#hero"><span class="num">01</span> The promise</a></li>
+        <li><a href="#examples"><span class="num">02</span> Example questions</a></li>
+        <li><a href="#why"><span class="num">03</span> What it does</a></li>
+        <li><a href="#api"><span class="num">04</span> API</a></li>
+        <li><a href="#integration"><span class="num">05</span> Get started</a></li>
+        <li><a href="#agents"><span class="num">06</span> For agents</a></li>
+      </ul>
+      <a class="rail__cta" href="search.html">Try the demo <span aria-hidden="true">&rarr;</span></a>
+    </nav>
+
+    <main class="column" id="main">
+
+      <section class="section" id="hero" aria-labelledby="hero-title">
+        <div class="hero__grid">
+          <div>
+            <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
+            <p class="lead hero__lede">
+              Anime Akashic Records is a retrieval engine over anime, manga, light novels and visual
+              novels. Describe the half-remembered thing &mdash; a plot, a mechanic, a studio &mdash; or
+              just the vibe you&rsquo;re after, the feeling for that moment. It returns works to watch
+              or read, ranked, each with the passage that matched.
+            </p>
+            <div class="controls">
+              <a class="btn btn--primary" href="search.html">Try the search demo</a>
+              <a class="btn btn--quiet" href="#integration">Get started</a>
+            </div>
+          </div>
+
+          <div class="drawer" aria-labelledby="drawer-title">
+            <div class="drawer__label">
+              <span class="micro" id="drawer-title">One call, end to end</span>
+              <span class="micro">Documented shape</span>
+            </div>
+            <ul class="drawer__index">
+              <li class="drawer__row"><span class="pos">01</span><span class="q">A swordsman who cannot die, and the woman who follows him</span><span class="tag">ask</span></li>
+              <li class="drawer__row"><span class="pos">02</span><span class="q">POST /search &mdash; scope, limit, answer opt-in</span><span class="tag">send</span></li>
+              <li class="drawer__row"><span class="pos">03</span><span class="q">Ranked works, each with the passage that matched</span><span class="tag">read</span></li>
+            </ul>
+            <p class="drawer__foot micro">This is the request&rsquo;s shape, not a stored result.
+            The demo sends it for real.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="examples" aria-labelledby="examples-title">
+        <div class="section__head">
+          <h2 class="section__title" id="examples-title">Example questions</h2>
+          <p class="measure muted">Six hand-kept prompts, one for each way in &mdash; a plot, a
+          mechanic, a studio, a theme, a mood, a vibe. Each opens the demo with the question
+          already in the field.</p>
+        </div>
+        <ol class="shelf">
+          <li><a class="shelf__item" href="search.html?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
+            <span class="shelf__pos">01</span>
+            <span class="shelf__q">A swordsman who cannot die, and the woman who follows him</span>
+            <span class="shelf__tag">plot</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=Time-travel%20visual%20novel%20with%20branching%20timelines">
+            <span class="shelf__pos">02</span>
+            <span class="shelf__q">Time-travel visual novel with branching timelines</span>
+            <span class="shelf__tag">mechanic</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=Studio%20that%20animated%20a%20demon-slaying%20brother%20and%20sister">
+            <span class="shelf__pos">03</span>
+            <span class="shelf__q">Studio that animated a demon-slaying brother and sister</span>
+            <span class="shelf__tag">studio</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=Cyberpunk%20dystopia%20where%20memory%20can%20be%20bought">
+            <span class="shelf__pos">04</span>
+            <span class="shelf__q">Cyberpunk dystopia where memory can be bought</span>
+            <span class="shelf__tag">theme</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=A%20quiet%20story%20about%20grief%2C%20set%20in%20a%20seaside%20town">
+            <span class="shelf__pos">05</span>
+            <span class="shelf__q">A quiet story about grief, set in a seaside town</span>
+            <span class="shelf__tag">mood</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=Something%20cozy%20but%20a%20little%20lonely%2C%20for%20a%20rainy%20evening">
+            <span class="shelf__pos">06</span>
+            <span class="shelf__q">Something cozy but a little lonely, for a rainy evening</span>
+            <span class="shelf__tag">vibe</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+        </ol>
+      </section>
+
+      <section class="section" id="why" aria-labelledby="why-title">
+        <div class="section__head">
+          <h2 class="section__title" id="why-title">What it does</h2>
+          <p class="measure muted">Built for the moment when you remember a scene, not a name. Point it
+          at a feeling and get back the works that fit &mdash; each one with the passage that matched.</p>
+        </div>
+        <div class="field"><span class="field__name">Find it by feel</span><span class="field__value">No title, no genre, no studio &mdash; just the vibe. &ldquo;Something bittersweet and slow,&rdquo; &ldquo;a story for a rainy evening,&rdquo; &ldquo;cozy but a little lonely&rdquo; &mdash; describe the feeling for that moment and it returns works to watch or read that match it.</span></div>
+        <div class="field"><span class="field__name">Describe, don&rsquo;t query</span><span class="field__value">Ask in plain language. A plot, a mechanic, a studio, a mood &mdash; the catalogue understands all of them.</span></div>
+        <div class="field"><span class="field__name">Four media, one index</span><span class="field__value">Anime, manga, light novels and visual novels resolve to a single canonical work.</span></div>
+        <div class="field"><span class="field__name">Built for fuzzy memory</span><span class="field__value">Half-remembered spellings, typos and romanisation drift still land on the right work.</span></div>
+        <div class="field"><span class="field__name">Grounded, not guessed</span><span class="field__value">Every result carries the passage that matched, so a recommendation can be checked, not just trusted.</span></div>
+        <div class="field"><span class="field__name">Answers on request</span><span class="field__value">Want prose instead of a list? Ask once and get a grounded answer with its sources alongside.</span></div>
+      </section>
+
+
+      <section class="section" id="api" aria-labelledby="api-title">
+        <div class="section__head">
+          <h2 class="section__title" id="api-title">API reference</h2>
+          <p class="measure muted">JSON over HTTP. Three endpoints cover the whole catalogue. The live
+          demo runs against a public Worker that is rate-limited per IP, so no key is sent from the
+          browser; the upstream origin still authenticates with an <code>X-API-Key</code> held
+          server-side.</p>
+        </div>
+
+        <div class="code">
+          <div class="code__bar">
+            <span class="micro">Endpoints</span>
+            <button class="btn btn--quiet" type="button" data-copy="[data-endpoints]"><span data-copy-label>Copy</span></button>
+          </div>
+          <div class="code__body"><pre data-endpoints>GET  /health   liveness check (no auth)
+POST /search   ranked works, with the passages that matched
+POST /ask      a grounded answer, with its sources</pre></div>
+        </div>
+
+        <h3 class="subhead">The search request</h3>
+        <p class="measure muted">The demo sends exactly this shape. <code>scope</code> carries hard
+        filters; <code>answer</code> is opt-in because prose is not always wanted.</p>
+        <div class="code">
+          <div class="code__bar">
+            <span class="micro">POST /search</span>
+            <button class="btn btn--quiet" type="button" data-copy="[data-req-body]"><span data-copy-label>Copy</span></button>
+          </div>
+          <div class="code__body"><pre data-req-body>{
+  "question": "Time-travel visual novel with branching timelines",
+  "limit": 8,
+  "scope": { "types": ["VISUAL_NOVEL"] },
+  "answer": false
+}</pre></div>
+        </div>
+
+        <h3 class="subhead">The response envelope</h3>
+        <div class="code">
+          <div class="code__bar">
+            <span class="micro">200 OK</span>
+            <button class="btn btn--quiet" type="button" data-copy="[data-res-body]"><span data-copy-label>Copy</span></button>
+          </div>
+          <div class="code__body"><pre data-res-body>{
+  "results": [
+    {
+      "work_id": "anilist:16498",
+      "canonical_title": "Shingeki no Kyojin",
+      "work_type": "ANIME",
+      "year": 2013,
+      "score": 0.9842,
+      "matched_chunk": { "text": "…" }
+    }
+  ],
+  "answer": null,
+  "trace": { "fused": 150, "rerank": { "scored": 80, "ms": 340.2 }, "ms": 820.5 }
+}</pre></div>
+        </div>
+
+      <h3 class="subhead">Scope fields</h3>
+      <p class="measure muted">Hard filters. <code>scope</code> rejects unknown fields rather than
+      ignoring them, so a typo is an error you can see.</p>
+      <div class="field"><span class="field__name">types</span><span class="field__value mono">ANIME · MANGA · LIGHT_NOVEL · VISUAL_NOVEL</span></div>
+      <div class="field"><span class="field__name">genres / tags / themes</span><span class="field__value">Free-text filter lists.</span></div>
+      <div class="field"><span class="field__name">studios</span><span class="field__value">Studio names.</span></div>
+      <div class="field"><span class="field__name">years / min_year / max_year</span><span class="field__value">Exact years or bounds.</span></div>
+      <div class="field"><span class="field__name">min_score</span><span class="field__value">Minimum score threshold.</span></div>
+      <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content filter; the default excludes 18+.</span></div>
+      <div class="field"><span class="field__name">staff_names / director_names</span><span class="field__value">People filters.</span></div>
+
+      <h3 class="subhead">Errors</h3>
+      <div class="field"><span class="field__name">401</span><span class="field__value">Missing or invalid key &mdash; <span class="mono">{"detail":"missing or invalid API key"}</span></span></div>
+      <div class="field"><span class="field__name">422</span><span class="field__value">A field failed validation (an unknown <span class="mono">scope</span> key, an empty question).</span></div>
+    </section>
+
+
+    <section class="section" id="integration" aria-labelledby="integ-title">
+        <div class="section__head">
+          <h2 class="section__title" id="integ-title">Get started</h2>
+          <p class="measure muted">Four steps from a request to rendered results. The live demo is
+          already wired to a public Worker, so you can call it directly; a key is only needed for the
+          upstream origin.</p>
+        </div>
+        <div class="code">
+          <div class="code__bar">
+            <span class="micro">Live base URL</span>
+            <button class="btn btn--quiet" type="button" data-copy="[data-live-url]"><span data-copy-label>Copy</span></button>
+          </div>
+          <div class="code__body"><pre data-live-url>https://orange-cell-9386.meaha2000.workers.dev</pre></div>
+        </div>
+        <ol class="stages">
+          <li class="stage"><span class="stage__num">1</span><div class="stage__body">
+            <h3>Point at the live base URL</h3><p class="measure muted">Use the public Worker above as
+            your <code>API_BASE</code>. It is rate-limited per IP, so the browser sends no key. Behind
+            it, the origin authenticates with an <code>X-API-Key</code> stored as a server-side secret.</p></div></li>
+          <li class="stage"><span class="stage__num">2</span><div class="stage__body">
+            <h3>Send a request</h3><p class="measure muted">POST <code>/search</code> with a
+            <code>question</code> and optional <code>scope</code>.</p></div></li>
+          <li class="stage"><span class="stage__num">3</span><div class="stage__body">
+            <h3>Parse the envelope</h3><p class="measure muted">Read <code>results[]</code> by
+            <code>work_id</code>, with <code>score</code>, <code>year</code> and the matched passages.</p></div></li>
+          <li class="stage"><span class="stage__num">4</span><div class="stage__body">
+            <h3>Render</h3><p class="measure muted">One ruled line per work, expanding to the passages
+            that matched &mdash; exactly what the demo does.</p></div></li>
+        </ol>
+
+        <h3 class="subhead">The Worker path (recommended)</h3>
+        <p class="measure muted">Deploy the included Cloudflare Worker and point the site at it. The
+        Worker holds <code>AAR_API_KEY</code> as an encrypted secret and forwards only the routes the
+        demo needs, so both the origin server and the key stay hidden.</p>
+        <div class="code">
+          <div class="code__bar">
+            <span class="micro">worker</span>
+            <button class="btn btn--quiet" type="button" data-copy="[data-worker-cmds]"><span data-copy-label>Copy</span></button>
+          </div>
+          <div class="code__body"><pre data-worker-cmds>cd worker
+npx wrangler secret put AAR_API_KEY
+npx wrangler secret put AAR_ORIGIN
+npx wrangler deploy</pre></div>
+        </div>
+      </section>
+
+      <section class="section" id="agents" aria-labelledby="agents-title">
+        <div class="section__head">
+          <h2 class="section__title" id="agents-title">For agents &amp; chatbots</h2>
+        </div>
+        <p class="lead measure--lead">General web search finds pages <em>about</em> anime. AAR finds the
+        work itself, by meaning, across four media at once.</p>
+        <div class="field"><span class="field__name">Grounded</span><span class="field__value">Every result carries the passage that matched &mdash; citable, not summarised.</span></div>
+        <div class="field"><span class="field__name">Unified</span><span class="field__value">Anime, manga, light novels and visual novels resolve to one canonical work.</span></div>
+        <div class="field"><span class="field__name">Fuzzy by design</span><span class="field__value">Typos and romanisation drift still land.</span></div>
+        <div class="field"><span class="field__name">Composable</span><span class="field__value">Hard <code>scope</code> filters plus optional grounded prose in one call.</span></div>
+        <p class="measure muted" style="margin-top:var(--space-4)">For an agent, the useful endpoint is
+        often <code>POST /ask</code>: retrieval <em>plus</em> a grounded answer, with the passages it was
+        built from returned alongside so the answer can be checked.</p>
+      </section>
+
+    </main>
+
+
+    <aside class="margin" aria-label="Margin notes">
+      <div class="margin__note">
+        <span class="micro">Provenance</span>
+        <p style="margin-top:.4rem">The endpoint status shown at the top of this page is read live
+        from the running service&rsquo;s own <code>/health</code>. Nothing here is invented.</p>
+      </div>
+      <div class="margin__note">
+        <span class="micro">Scope</span>
+        <p style="margin-top:.4rem">Anime &middot; Manga &middot; Light novels &middot; Visual novels. One canonical
+        index across four media.</p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="shell footer__grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)">
+        <svg class="seal" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"><g id="pf"><path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/><path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/></g><use href="#pf" transform="rotate(72 12 12)"/><use href="#pf" transform="rotate(144 12 12)"/><use href="#pf" transform="rotate(216 12 12)"/><use href="#pf" transform="rotate(288 12 12)"/><circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/></g></svg>
+        <span class="wordmark">Anime Akashic Records</span>
+      </div>
+      <p class="faint" style="font-size:.875rem;max-width:42ch">A retrieval engine for stories you
+      half-remember. A working archive, kept by hand.</p>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Docs</div>
+      <div class="stack-2"><a href="search.html">The demo</a><a href="#api">API reference</a><a href="#integration">Get started</a></div>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Provenance</div>
+      <div class="stack-2"><a href="#agents">For agents</a><a href="#why">What it does</a><span class="faint" style="font-size:.8125rem">Fonts: Fraunces &amp; IBM Plex Mono (SIL OFL)</span></div>
+    </div>
+  </div>
+  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule)">
+    <span class="micro">© Anime Akashic Records</span>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/site.js"></script>
+</body>
+</html>
+

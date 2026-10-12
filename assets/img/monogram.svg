@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AAR monogram — a square stamp: the A set inside a ruled box, blossom at foot. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48"
+     role="img" aria-label="AAR">
+  <rect x=".75" y=".75" width="46.5" height="46.5" fill="none"
+        stroke="var(--rule-strong, #A89A80)" stroke-width="1.5"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+     stroke-linejoin="round">
+    <path d="M14 33 C 18 24, 22 17, 26 16 C 28.5 15.4, 29 17.6, 29.5 20.5"/>
+    <path d="M29.5 33 L 29.5 20.5"/>
+    <path d="M19.5 27 C 22.5 26, 26 26, 29.5 25.4"/>
+  </g>
+  <circle cx="24" cy="40.5" r="2.4" fill="var(--sakura, #C86B85)"/>
+</svg>
