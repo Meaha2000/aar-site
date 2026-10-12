@@ -179,12 +179,11 @@ function renderResults(data) {
 
 function renderUnconfigured() {
   const live = RAPIDAPI_URL
-    ? ` or subscribe to the hosted listing on <a href="${escapeHtml(RAPIDAPI_URL)}" rel="noopener">RapidAPI</a>`
-    : " or subscribe to the hosted listing on RapidAPI";
+    ? ` or visit the official listing on <a href="${escapeHtml(RAPIDAPI_URL)}" rel="noopener" target="_blank">RapidAPI</a>`
+    : "";
   statusNote("warn",
-    `<strong>No backend is configured for this demo.</strong> This page will not invent results. `+
-    `Set <code>API_KEY</code> in <code>assets/js/config.js</code> to your RapidAPI key${live}, then reload. `+
-    `The request below is exactly what this page <em>would</em> send.`);
+    `<strong>Service is currently unavailable.</strong> The search gateway is not configured for this demo${live}. `+
+    `Please try again later.`);
   renderPreview(state.lastQuery || "");
   renderEmpty();
 }
@@ -235,24 +234,22 @@ async function runQuery(question) {
 
 function renderError(err, q) {
   const retry = `<button class="btn btn--link" type="button" data-retry>Retry this query</button>`;
+  const detail = (err?.body && (err.body.message || err.body.error)) || "";
   if (err.status === 401 || err.status === 403) {
     statusNote("error",
-      `<strong>The endpoint rejected the request (${err.status}).</strong> The key was refused. `+
-      `Check the <code>X-RapidAPI-Key</code> in <code>assets/js/config.js</code> against the key on your `+
-      `RapidAPI dashboard. ${retry}`);
+      `<strong>Authentication error (${err.status}).</strong> Access to the API service was denied. Please verify your credentials or subscription. ${retry}`);
   } else if (err.status === 429) {
+    const msg = detail || "You have reached your daily limit of 10 requests per IP for this demo. Your quota will reset at 00:00 UTC.";
     statusNote("warn",
-      `<strong>Rate limited (429).</strong> The endpoint is asking for a slower cadence. `+
-      `Wait a moment, then ${retry.charAt(0).toLowerCase() + retry.slice(1)}`);
-  } else if (err.status === 0 && err.message.includes("reach")) {
+      `<strong>Rate limit exceeded (429).</strong> ${escapeHtml(msg)} ${retry}`);
+  } else if (err.status === 0 && err.message && err.message.includes("reach")) {
     statusNote("error",
-      `<strong>The request could not reach the endpoint.</strong> Check that <code>RAPIDAPI_HOST</code> `+
-      `in <code>assets/js/config.js</code> is correct and that the gateway allows this origin via CORS. ${retry}`);
+      `<strong>Service unreachable.</strong> Could not establish a connection to the search endpoint. ${retry}`);
   } else if (err.status === 0) {
-    statusNote("warn", `<strong>The request was slow.</strong> The endpoint did not answer within 30 seconds. ${retry}`);
+    statusNote("warn", `<strong>The request timed out.</strong> The endpoint did not answer within 30 seconds. ${retry}`);
   } else {
     statusNote("error",
-      `<strong>The endpoint returned an error (${err.status}).</strong> ${escapeHtml(err.message)} ${retry}`);
+      `<strong>Service error (${err.status}).</strong> ${escapeHtml(detail || err.message)} ${retry}`);
   }
   if (els.results) els.results.innerHTML = "";
 }
