@@ -80,24 +80,27 @@ Anime Akashic Records is **primarily an Anime API**, created to solve the discov
 - **Official Telegram Bot:** https://t.me/AnimeAkashicRecords_bot (@AnimeAkashicRecords_bot)
 
 ### Mandatory HTTP Headers
-Every request (except `GET /health`) must supply the following headers:
+Every request routed through the RapidAPI gateway must supply the following headers:
 ```http
 X-RapidAPI-Key: YOUR_RAPIDAPI_KEY
 X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com
 Content-Type: application/json
 Accept: application/json
 ```
+*(Note: `GET /health` requires the RapidAPI key headers to pass the gateway, but does not consume your plan quota).*
 
 ---
 
 ## 5. Endpoints Reference
 
 ### 5.1. `GET /health`
-Unauthenticated liveness probe and catalog metrics. Safe for container probes and uptime checkers.
+Liveness probe and catalog metrics. Requires standard RapidAPI key headers, but **does not consume request quota** (quota-free). Safe for container probes, uptime checkers, and integration smoke tests.
 
 #### Request:
 ```bash
-curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health"
+curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
+  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"
 ```
 
 #### Response (`200 OK`):

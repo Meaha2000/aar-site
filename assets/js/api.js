@@ -55,7 +55,7 @@ async function request(path, { method = "GET", body = null, signal = null } = {}
 
 /* ---- Endpoints ----------------------------------------------------------- */
 
-/** GET /health — unauthenticated liveness check. */
+/** GET /health — quota-free liveness check (requires gateway key). */
 export function health(signal) {
   return request("/health", { signal });
 }

@@ -121,7 +121,7 @@
         <div style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
           <h2 style="font-size:1.25rem;margin-bottom:var(--space-2)">Authentication Headers</h2>
           <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-3)">
-            Every request to protected endpoints requires the two RapidAPI headers. The upstream server stays completely private.
+            Every request routed through the RapidAPI gateway requires your authentication headers. All endpoints (including <code>GET /health</code>) require your RapidAPI key to pass through the gateway, though <code>GET /health</code> does not consume any plan request quota (quota-free).
           </p>
           <div class="field"><span class="field__name">X-RapidAPI-Key</span><span class="field__value mono">&lt;your-rapidapi-key&gt;</span></div>
           <div class="field"><span class="field__name">X-RapidAPI-Host</span><span class="field__value mono">anime-akashic-records-aar-api.p.rapidapi.com</span></div>
@@ -274,7 +274,7 @@
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Liveness Probe &amp; Corpus Statistics</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
-                Lightweight, unauthenticated endpoint. Safe for uptime monitors, container liveness checks, and verifying live catalogue status.
+                Lightweight health check and catalog statistics endpoint. Requires RapidAPI authentication headers (<code>X-RapidAPI-Key</code> and <code>X-RapidAPI-Host</code>), but <strong>does not consume request quota</strong> (quota-free). Safe for uptime monitors, container liveness checks, and integration smoke tests.
               </p>
             </div>
 
@@ -284,7 +284,9 @@
                 <span class="micro">cURL</span>
                 <button class="btn btn--quiet" type="button" data-copy="[data-curl-health]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-health>curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health"</pre></div>
+              <div class="code__body"><pre data-curl-health>curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
+  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</pre></div>
             </div>
 
             <h4 class="subhead">Example Response (200 OK)</h4>
