@@ -11,14 +11,14 @@ Anime Akashic Records (AAR) is built to solve the "tip-of-the-tongue" problem in
 ### Key Strengths:
 - **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
 - **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
-- **Verbatim Passage Citations:** Every retrieved candidate returns the exact synopsis chunk or lore passage that satisfied the query, enabling hallucination-free LLM grounding.
-- **Lore Synthesis (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
+- **Verbatim Passage Citations:** Every retrieved candidate returns the exact synopsis chunk that satisfied the query, enabling reliable citation-backed LLM grounding.
+- **Question Answering (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
 - **Hosted on RapidAPI:** Zero-setup infrastructure, global low latency, managed rate limits, and instant API key issuance.
 
 ### Intended Scope & Best Practices:
-- **Core Purpose:** Semantic retrieval, trope discovery, natural language query resolution, and grounded AI lore synthesis across 180,000+ East Asian pop culture works.
+- **Core Purpose:** Semantic retrieval, trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ East Asian pop culture works.
 - **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
-- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns, and use AAR when you need intelligent discovery, semantic matching, and lore reasoning.
+- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
 
 ---
 
@@ -130,7 +130,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
 ---
 
 ### 3.3. `POST /ask`
-Conversational question answering and lore synthesis for chatbots and agents. Returns an AI-composed factual answer grounded in corpus citations, accompanied by supporting ranked works.
+Conversational question answering for chatbots and agents. Returns an AI-composed factual answer grounded in corpus citations, accompanied by supporting ranked works.
 
 #### Request Example:
 ```json
@@ -156,7 +156,7 @@ Conversational question answering and lore synthesis for chatbots and agents. Re
       "status": "finished",
       "chunks": [
         {
-          "section": "Lore / Mechanics",
+          "section": "Synopsis",
           "text": "Reading Steiner allows the subject to perceive world line shifts and maintain intact continuity of personal consciousness across timeline divergences."
         }
       ]

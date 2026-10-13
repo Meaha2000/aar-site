@@ -4,7 +4,7 @@
    ========================================================================= */
 
 import { search, ask, previewSearchBody, previewAskBody, ApiError } from "./api.js?v=2";
-import { API_BASE, API_KEY, DEFAULT_LIMIT, RAPIDAPI_URL, isConfigured, endpoint }
+import { API_BASE, API_KEY, DEFAULT_LIMIT, RAPIDAPI_HOST, RAPIDAPI_URL, isConfigured, endpoint }
   from "./config.js?v=2";
 
 /* ---- DOM ------------------------------------------------------------------ */
@@ -61,12 +61,12 @@ function renderPreview(question) {
     ? previewAskBody(currentOptions(q))
     : previewSearchBody(currentOptions(q));
   const path = state.mode === "ask" ? "/ask" : "/search";
-  const url = isConfigured() ? endpoint(path) : `<API_BASE>${path}`;
+  const displayUrl = `https://${RAPIDAPI_HOST}${path}`;
 
   els.preview.innerHTML = `
     <div class="code">
       <div class="code__bar">
-        <span class="micro">POST ${escapeHtml(url)}</span>
+        <span class="micro">POST ${escapeHtml(displayUrl)}</span>
         <button class="btn btn--quiet" type="button" data-copy="[data-preview-body]">
           <span data-copy-label>Copy</span>
         </button>

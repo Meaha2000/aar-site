@@ -82,7 +82,7 @@
             <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">💡 Intended Scope &amp; Best Practices</span>
           </div>
           <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0">
-            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, and grounded AI lore synthesis across 180,000+ works. While canonical metadata (medium type, lifecycle status, release year, genres, and studios) is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
+            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ works. While canonical metadata (medium type, lifecycle status, release year, genres, and studios) is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
           </p>
         </div>
 
@@ -180,15 +180,15 @@
           <!-- TAB 2: /ask -->
           <div class="tab-pane" id="tab-ask">
             <div style="margin-bottom:var(--space-4)">
-              <h3 style="font-size:1.25rem;margin-bottom:.4rem">Question Answering &amp; Lore Synthesis</h3>
+              <h3 style="font-size:1.25rem;margin-bottom:.4rem">Question Answering</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
-                Conversational endpoint tailored for chatbots, AI agents, and lore inquiries. Returns a synthesized,
+                Conversational endpoint tailored for chatbots and AI agents. Returns a synthesized,
                 factual natural-language prose answer grounded in retrieved corpus citations, along with ranked supporting works.
               </p>
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Specific lore inquiry, character dynamic question, or relationship comparison.</span></div>
+            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question, plot inquiry, or character dynamic question.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>8</code>) — Maximum reference works to retrieve for synthesis.</span></div>
             <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Filter candidates by medium (<code>types</code>) or genre.</span></div>
 
@@ -225,7 +225,7 @@
       "status": "finished",
       "chunks": [
         {
-          "section": "Lore / Mechanics",
+          "section": "Synopsis",
           "text": "Reading Steiner allows the subject to perceive world line shifts and maintain intact continuity of personal consciousness across timeline divergences."
         }
       ]
