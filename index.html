@@ -4,9 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anime Akashic Records — find the work you half-remember</title>
-<meta name="description" content="Anime Akashic Records is a hybrid retrieval API over anime, manga, light novels and visual novels. Describe what you remember; the catalogue returns ranked works with the passages that matched.">
+<meta name="description" content="Anime Akashic Records is a hybrid retrieval engine across anime, manga, light novels, and visual novels. Describe what you remember; the catalogue returns ranked works with the passages that matched.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
+<link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
@@ -19,21 +21,14 @@
 <header class="masthead">
   <div class="shell masthead__inner">
     <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
-      <svg class="seal" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
-        <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
-          <g id="pk"><path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/><path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/></g>
-          <use href="#pk" transform="rotate(72 12 12)"/><use href="#pk" transform="rotate(144 12 12)"/>
-          <use href="#pk" transform="rotate(216 12 12)"/><use href="#pk" transform="rotate(288 12 12)"/>
-          <circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/>
-        </g>
-      </svg>
+      <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
       <span class="wordmark">Anime Akashic Records <span class="jp">資料館</span></span>
     </a>
     <nav class="masthead__nav" aria-label="Primary">
-      <a href="search.html">Try the demo</a>
-      <a href="#api">API</a>
-      <a href="#integration">Get started</a>
-      <a href="#agents">For agents</a>
+      <a href="index.html" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Overview</a>
+      <a href="search.html">Search Demo</a>
+      <a href="api.html">API Reference</a>
+      <a href="contact.html">Telegram &amp; Contact</a>
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
@@ -42,27 +37,17 @@
   </div>
 </header>
 
-<!-- ===== The ruled page ============================================== -->
 <div class="shell">
-  <div class="leaf">
-
-    <nav class="rail" aria-label="Catalogue index">
-      <div class="rail__title micro">Index</div>
-      <ul class="rail__list">
-        <li><a href="#hero"><span class="num">01</span> The promise</a></li>
-        <li><a href="#examples"><span class="num">02</span> Example questions</a></li>
-        <li><a href="#why"><span class="num">03</span> What it does</a></li>
-        <li><a href="#api"><span class="num">04</span> API</a></li>
-        <li><a href="#integration"><span class="num">05</span> Get started</a></li>
-        <li><a href="#agents"><span class="num">06</span> For agents</a></li>
-      </ul>
-      <a class="rail__cta" href="search.html">Try the demo <span aria-hidden="true">&rarr;</span></a>
-    </nav>
-
+  <div class="leaf" style="grid-template-columns: minmax(0,1fr)">
     <main class="column" id="main">
 
-      <section class="section" id="hero" aria-labelledby="hero-title">
+      <!-- Hero Section -->
+      <section class="section" id="hero" style="padding-top:var(--space-6)">
         <div class="hero">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3)">
+            <span class="badge badge--sakura">Hybrid Retrieval Engine</span>
+            <span class="badge badge--live">180K+ Unified Works</span>
+          </div>
           <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
           <p class="lead hero__lede">
             Anime Akashic Records is a semantic retrieval engine over anime, manga, light novels, and visual
@@ -70,20 +55,71 @@
             just the vibe and mood you&rsquo;re looking for. It searches across all four media and returns ranked
             matches, each paired with the exact passages confirming why the work fits.
           </p>
-          <div class="controls">
-            <a class="btn btn--primary" href="search.html">Try the search demo &rarr;</a>
-            <a class="btn btn--quiet" href="#api">API Reference</a>
-            <a class="btn btn--quiet" href="#integration">Get started</a>
+          <div class="controls" style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+            <a class="btn btn--primary" href="search.html" style="font-size:.875rem;padding:.75rem 1.6rem">
+              <span>Try the Search Demo</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener" style="font-size:.875rem;padding:.75rem 1.6rem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+              <span>Telegram Bot</span>
+            </a>
+            <a class="btn btn--quiet" href="api.html" style="font-size:.875rem;padding:.75rem 1.6rem">API Reference</a>
           </div>
         </div>
       </section>
 
-      <section class="section" id="examples" aria-labelledby="examples-title">
+      <!-- Value Props Feature Grid -->
+      <section class="section" id="features" style="padding-top:var(--space-8)">
         <div class="section__head">
-          <h2 class="section__title" id="examples-title">Example questions</h2>
-          <p class="measure muted">Six hand-kept prompts, one for each way in &mdash; a plot, a
-          mechanic, a studio, a theme, a mood, a vibe. Each opens the demo with the question
-          already in the field.</p>
+          <h2 class="section__title" style="font-size:1.65rem">Engine Capabilities</h2>
+          <p class="measure muted">Built for the moment when you remember a feeling, not an exact spelling.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <div class="feature-card__title">Hybrid Semantic Search</div>
+            <p class="feature-card__desc">
+              Fuses dense neural vectors with BM25 lexical tokens and trigram matching into Reciprocal Rank Fusion, finished by neural reranking.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <div class="feature-card__title">Four Media, One Index</div>
+            <p class="feature-card__desc">
+              Anime, manga, light novels, and visual novels are resolved to unified canonical works, eliminating format fragmentation.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            </div>
+            <div class="feature-card__title">Grounded Citations</div>
+            <p class="feature-card__desc">
+              Every ranked match includes the exact confirming synopsis excerpt or lore passage, ensuring recommendations can be verified.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="feature-card__title">Question Answering (/ask)</div>
+            <p class="feature-card__desc">
+              Conversational synthesis that produces structured AI prose answering lore questions directly, backed by catalog citations.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Example Questions Shelf -->
+      <section class="section" id="examples" style="padding-top:var(--space-8)">
+        <div class="section__head">
+          <h2 class="section__title" style="font-size:1.65rem">Example Questions</h2>
+          <p class="measure muted">Hand-picked prompts demonstrating the catalogue's understanding &mdash; click any question to run it live in the demo.</p>
         </div>
         <ol class="shelf">
           <li><a class="shelf__item" href="search.html?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
@@ -125,162 +161,68 @@
         </ol>
       </section>
 
-      <section class="section" id="why" aria-labelledby="why-title">
-        <div class="section__head">
-          <h2 class="section__title" id="why-title">What it does</h2>
-          <p class="measure muted">Built for the moment when you remember a scene, not a name. Point it
-          at a feeling and get back the works that fit &mdash; each one with the passage that matched.</p>
+      <!-- Telegram Bot Showcase -->
+      <section class="section" id="telegram" style="padding-top:var(--space-8)">
+        <div class="telegram-card">
+          <div class="telegram-card__body">
+            <div style="display:flex;align-items:center;gap:.6rem">
+              <span class="badge badge--telegram">Live Telegram Bot</span>
+              <span class="badge badge--live">Ready to Chat</span>
+            </div>
+            <div class="telegram-card__title">@AnimeAkashicRecords_bot</div>
+            <div class="telegram-card__text">
+              Try the search engine in Telegram. Search plots, test scope filters, or ask lore questions
+              and receive real-time answers with cited excerpts.
+            </div>
+            <div class="telegram-card__chips">
+              <span class="telegram-chip">/search &lt;query&gt;</span>
+              <span class="telegram-chip">/ask &lt;lore question&gt;</span>
+              <span class="telegram-chip">/scope type=anime,year=2023</span>
+              <span class="telegram-chip">/stats</span>
+            </div>
+          </div>
+          <div>
+            <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener" style="font-size:.9375rem;padding:.85rem 1.85rem">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+              <span>Launch Telegram Bot</span>
+            </a>
+          </div>
         </div>
-        <div class="field"><span class="field__name">Find it by feel</span><span class="field__value">No title, no genre, no studio &mdash; just the vibe. &ldquo;Something bittersweet and slow,&rdquo; &ldquo;a story for a rainy evening,&rdquo; &ldquo;cozy but a little lonely&rdquo; &mdash; describe the feeling for that moment and it returns works to watch or read that match it.</span></div>
-        <div class="field"><span class="field__name">Describe, don&rsquo;t query</span><span class="field__value">Ask in plain language. A plot, a mechanic, a studio, a mood &mdash; the catalogue understands all of them.</span></div>
-        <div class="field"><span class="field__name">Four media, one index</span><span class="field__value">Anime, manga, light novels and visual novels resolve to a single canonical work.</span></div>
-        <div class="field"><span class="field__name">Built for fuzzy memory</span><span class="field__value">Half-remembered spellings, typos and romanisation drift still land on the right work.</span></div>
-        <div class="field"><span class="field__name">Grounded, not guessed</span><span class="field__value">Every result carries the passage that matched, so a recommendation can be checked, not just trusted.</span></div>
       </section>
 
-
-      <section class="section" id="api" aria-labelledby="api-title">
+      <!-- RapidAPI Integration Card -->
+      <section class="section" id="integration" style="padding-top:var(--space-8)">
         <div class="section__head">
-          <h2 class="section__title" id="api-title">API reference</h2>
-          <p class="measure muted">JSON over HTTP. Two endpoints cover the whole catalogue. The API
-          is hosted on RapidAPI, so one <code>X-RapidAPI-Key</code> header authenticates every call
-          and the rate limit is whatever your plan allows.</p>
+          <h2 class="section__title" style="font-size:1.65rem">Start Building</h2>
+          <p class="measure muted">Available on RapidAPI with instant credentials and predictable plans.</p>
         </div>
 
-        <div class="code">
-          <div class="code__bar">
-            <span class="micro">Endpoints</span>
-            <button class="btn btn--quiet" type="button" data-copy="[data-endpoints]"><span data-copy-label>Copy</span></button>
-          </div>
-          <div class="code__body"><pre data-endpoints>GET  /health   liveness check (no auth)
-POST /search   ranked works, with the passages that matched</pre></div>
-        </div>
-
-        <h3 class="subhead">The search request</h3>
-        <p class="measure muted">The demo sends exactly this shape. <code>scope</code> carries hard
-        filters; every returned work carries the passage that matched.</p>
-        <div class="code">
-          <div class="code__bar">
-            <span class="micro">POST /search</span>
-            <button class="btn btn--quiet" type="button" data-copy="[data-req-body]"><span data-copy-label>Copy</span></button>
-          </div>
-          <div class="code__body"><pre data-req-body>{
-  "question": "Time-travel visual novel with branching timelines",
-  "limit": 8,
-  "scope": { "types": ["VISUAL_NOVEL"] }
-}</pre></div>
-        </div>
-
-        <h3 class="subhead">The response envelope</h3>
-        <div class="code">
-          <div class="code__bar">
-            <span class="micro">200 OK</span>
-            <button class="btn btn--quiet" type="button" data-copy="[data-res-body]"><span data-copy-label>Copy</span></button>
-          </div>
-          <div class="code__body"><pre data-res-body>{
-  "total_documents": 1,
-  "results": [
-    {
-      "title": "Steins;Gate",
-      "type": "visual_novel",
-      "year": 2009,
-      "score": 0.9412,
-      "status": "finished",
-      "chunks": [
-        {
-          "section": "Synopsis",
-          "text": "Rintaro Okabe is a self-proclaimed mad scientist who accidentally discovers a way to send messages to the past, triggering unforeseen consequences across timelines."
-        }
-      ]
-    }
-  ]
-}</pre></div>
-        </div>
-
-      <h3 class="subhead">Scope fields</h3>
-      <p class="measure muted">Hard filters. <code>scope</code> rejects unknown fields rather than
-      ignoring them, so a typo is an error you can see.</p>
-      <div class="field"><span class="field__name">types</span><span class="field__value mono">ANIME · MANGA · LIGHT_NOVEL · VISUAL_NOVEL</span></div>
-      <div class="field"><span class="field__name">genres / tags / themes</span><span class="field__value">Free-text filter lists.</span></div>
-      <div class="field"><span class="field__name">studios</span><span class="field__value">Studio names.</span></div>
-      <div class="field"><span class="field__name">years / min_year / max_year</span><span class="field__value">Exact years or bounds.</span></div>
-      <div class="field"><span class="field__name">min_score</span><span class="field__value">Minimum score threshold.</span></div>
-      <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content filter; the default excludes 18+.</span></div>
-      <div class="field"><span class="field__name">staff_names / director_names</span><span class="field__value">People filters.</span></div>
-
-      <h3 class="subhead">Errors</h3>
-      <div class="field"><span class="field__name">401</span><span class="field__value">Missing or invalid key &mdash; <span class="mono">{"detail":"missing or invalid API key"}</span></span></div>
-      <div class="field"><span class="field__name">422</span><span class="field__value">A field failed validation (an unknown <span class="mono">scope</span> key, an empty question).</span></div>
-    </section>
-
-
-    <section class="section" id="integration" aria-labelledby="integ-title">
-        <div class="section__head">
-          <h2 class="section__title" id="integ-title">Get started</h2>
-          <p class="measure muted">Four steps from a request to rendered results. The catalogue is
-          served as a hosted API &mdash; subscribe on RapidAPI, take the base URL and key from your
-          dashboard, and call it directly.</p>
-        </div>
         <a class="listing" href="https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api"
            rel="noopener" target="_blank">
-          <span class="listing__body">
-            <span class="listing__eyebrow micro">Hosted on RapidAPI</span>
-            <span class="listing__name">Anime Akashic Records (AAR) API</span>
-            <span class="listing__note">Subscribe on the listing to get your base URL and
-            <code>X-RapidAPI-Key</code>, then call it directly. Plans and rate limits are shown there.</span>
-          </span>
-          <span class="listing__go" aria-hidden="true">Subscribe &rarr;</span>
+          <div class="listing__body">
+            <div class="listing__eyebrow">
+              <span class="badge badge--sakura">Hosted on RapidAPI</span>
+              <span class="micro" style="color:var(--ink-faint)">anime-akashic-records-aar-api.p.rapidapi.com</span>
+            </div>
+            <div class="listing__name">Anime Akashic Records (AAR) API</div>
+            <div class="listing__note">
+              Subscribe on the RapidAPI listing to get your <code>X-RapidAPI-Key</code>.
+              Call <code>POST /search</code> or <code>POST /ask</code> with JSON payloads from Python, Node, or cURL.
+            </div>
+          </div>
+          <div class="listing__go">
+            <span>Subscribe on RapidAPI</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
         </a>
-        <ol class="stages">
-          <li class="stage"><span class="stage__num">1</span><div class="stage__body">
-            <h3>Subscribe on RapidAPI</h3><p class="measure muted">Open the listing and pick a plan.
-            Your dashboard shows the base URL and the <code>X-RapidAPI-Key</code> to send with every
-            request; the origin server itself stays private.</p></div></li>
-          <li class="stage"><span class="stage__num">2</span><div class="stage__body">
-            <h3>Send a request</h3><p class="measure muted">POST <code>/search</code> with a
-            <code>question</code> and optional <code>scope</code>.</p></div></li>
-          <li class="stage"><span class="stage__num">3</span><div class="stage__body">
-            <h3>Parse the envelope</h3><p class="measure muted">Read <code>results[]</code> with
-            <code>score</code>, <code>year</code> and the matched passages.</p></div></li>
-          <li class="stage"><span class="stage__num">4</span><div class="stage__body">
-            <h3>Render</h3><p class="measure muted">One ruled line per work, expanding to the passages
-            that matched &mdash; exactly what the demo does.</p></div></li>
-        </ol>
 
-        <h3 class="subhead">Authentication</h3>
-        <p class="measure muted">Every request carries your <code>X-RapidAPI-Key</code> header. The key
-        is checked at the gateway, so the catalogue&rsquo;s own origin is never exposed and never
-        needs a second credential.</p>
-      </section>
-
-      <section class="section" id="agents" aria-labelledby="agents-title">
-        <div class="section__head">
-          <h2 class="section__title" id="agents-title">For agents &amp; chatbots</h2>
+        <div style="margin-top:var(--space-6);display:flex;gap:var(--space-3);flex-wrap:wrap">
+          <a class="btn btn--quiet" href="api.html">View Full API Reference &rarr;</a>
+          <a class="btn btn--quiet" href="contact.html">Contact &amp; Telegram &rarr;</a>
         </div>
-        <p class="lead measure--lead">General web search finds pages <em>about</em> anime. AAR finds the
-        work itself, by meaning, across four media at once.</p>
-        <div class="field"><span class="field__name">Grounded</span><span class="field__value">Every result carries the passage that matched &mdash; citable, not summarised.</span></div>
-        <div class="field"><span class="field__name">Unified</span><span class="field__value">Anime, manga, light novels and visual novels resolve to one canonical work.</span></div>
-        <div class="field"><span class="field__name">Fuzzy by design</span><span class="field__value">Typos and romanisation drift still land.</span></div>
-        <div class="field"><span class="field__name">Composable</span><span class="field__value">Hard <code>scope</code> filters in one call.</span></div>
       </section>
 
     </main>
-
-
-    <aside class="margin" aria-label="Margin notes">
-      <div class="margin__note">
-        <span class="micro">Provenance</span>
-        <p style="margin-top:.4rem">The endpoint status shown at the top of this page is read live
-        from the running service&rsquo;s own <code>/health</code>. Nothing here is invented.</p>
-      </div>
-      <div class="margin__note">
-        <span class="micro">Scope</span>
-        <p style="margin-top:.4rem">Anime &middot; Manga &middot; Light novels &middot; Visual novels. One canonical
-        index across four media.</p>
-      </div>
-    </aside>
-
   </div>
 </div>
 
@@ -288,27 +230,37 @@ POST /search   ranked works, with the passages that matched</pre></div>
   <div class="shell footer__grid">
     <div>
       <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)">
-        <svg class="seal" viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"><g id="pf"><path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/><path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/></g><use href="#pf" transform="rotate(72 12 12)"/><use href="#pf" transform="rotate(144 12 12)"/><use href="#pf" transform="rotate(216 12 12)"/><use href="#pf" transform="rotate(288 12 12)"/><circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/></g></svg>
+        <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="28" height="28">
         <span class="wordmark">Anime Akashic Records</span>
       </div>
-      <p class="faint" style="font-size:.875rem;max-width:42ch">A retrieval engine for stories you
-      half-remember. A working archive, kept by hand.</p>
+      <p class="faint" style="font-size:.875rem;max-width:42ch">
+        Semantic retrieval across stories you half-remember. Four media unified in one canonical index.
+      </p>
     </div>
     <div>
-      <div class="micro" style="margin-bottom:var(--space-2)">Docs</div>
-      <div class="stack-2"><a href="search.html">The demo</a><a href="#api">API reference</a><a href="#integration">Get started</a></div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>
+      <div class="stack-2">
+        <a href="index.html">Overview</a>
+        <a href="search.html">Interactive Demo</a>
+        <a href="api.html">API Reference</a>
+        <a href="contact.html">Telegram &amp; Contact</a>
+      </div>
     </div>
     <div>
-      <div class="micro" style="margin-bottom:var(--space-2)">Provenance</div>
-      <div class="stack-2"><a href="#agents">For agents</a><a href="#why">What it does</a><span class="faint" style="font-size:.8125rem">Fonts: Fraunces &amp; IBM Plex Mono (SIL OFL)</span></div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Agents &amp; CLI</div>
+      <div class="stack-2">
+        <a href="llms.txt">llms.txt (Agent Standard)</a>
+        <a href="index.md">index.md (Markdown)</a>
+        <a href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener">Telegram Bot (@AnimeAkashicRecords_bot)</a>
+      </div>
     </div>
   </div>
-  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule)">
-    <span class="micro">© Anime Akashic Records</span>
+  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3)">
+    <span class="micro">&copy; Anime Akashic Records &middot; Hosted on RapidAPI</span>
+    <span class="micro mono" style="color:var(--ink-faint)">$ curl -s https://meaha2000.github.io/aar-site/llms.txt</span>
   </div>
 </footer>
 
 <script type="module" src="assets/js/site.js?v=2"></script>
 </body>
 </html>
-

@@ -83,3 +83,20 @@ export function previewSearchBody(opts) {
   if (work_types && work_types.length) payload.scope = { types: work_types };
   return payload;
 }
+
+/**
+ * POST /ask — conversational question answering with grounded AI synthesis.
+ * @param {{question:string, limit?:number, work_types?:string[], signal?:AbortSignal}} opts
+ */
+export function ask(opts, signal) {
+  const { question, limit, work_types } = opts;
+  const payload = { question };
+  if (limit != null) payload.limit = limit;
+  if (work_types && work_types.length) payload.scope = { types: work_types };
+  return request("/ask", { method: "POST", body: payload, signal });
+}
+
+export function previewAskBody(opts) {
+  return previewSearchBody(opts);
+}
+

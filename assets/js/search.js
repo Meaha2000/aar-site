@@ -1,11 +1,9 @@
 /* ============================================================================
-   AAR — search demo
-   ============================================================================
-   · Before any query, the page shows the exact request preview.
-   · Honest error reporting and live status handling.
+   AAR — search & ask demo
+   Interactive playground for POST /search and POST /ask endpoints.
    ========================================================================= */
 
-import { search, previewSearchBody, ApiError } from "./api.js?v=2";
+import { search, ask, previewSearchBody, previewAskBody, ApiError } from "./api.js?v=2";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, RAPIDAPI_URL, isConfigured, endpoint }
   from "./config.js?v=2";
 
@@ -18,6 +16,7 @@ const els = {
   input:     $("[data-search-input]"),
   submit:    $("[data-search-submit]"),
   chips:     Array.from(document.querySelectorAll("[data-scope-type]")),
+  modes:     Array.from(document.querySelectorAll("[data-mode]")),
   preview:   $("[data-request-preview]"),
   status:    $("[data-search-status]"),
   results:   $("[data-results]"),
@@ -38,7 +37,8 @@ const EXAMPLES = [
 
 const state = {
   types: new Set(),   // active hard-filter scope types
-  inflight: null,     // AbortController for the current request
+  mode: "search",     // "search" or "ask"
+  inflight: null,     // AbortController for current request
   lastQuery: "",
 };
 
@@ -52,11 +52,16 @@ function currentOptions(question) {
   };
 }
 
-/** Render the request the demo would send — the honest empty state. */
+/** Render the request the demo would send — pre-flight preview. */
 function renderPreview(question) {
   if (!els.preview) return;
-  const body = previewSearchBody(currentOptions(question || "<your question>"));
-  const url = isConfigured() ? endpoint("/search") : "<API_BASE>/search";
+  const q = question || "<your question>";
+  const body = state.mode === "ask"
+    ? previewAskBody(currentOptions(q))
+    : previewSearchBody(currentOptions(q));
+  const path = state.mode === "ask" ? "/ask" : "/search";
+  const url = isConfigured() ? endpoint(path) : `<API_BASE>${path}`;
+
   els.preview.innerHTML = `
     <div class="code">
       <div class="code__bar">
@@ -91,8 +96,6 @@ function renderEmpty() {
 
 /** One result → one index row, expanding in place to its matched passages. */
 function renderRow(work, i) {
-  // The live API returns `title` / `type` / `chunks[]`; the documented shape
-  // uses `canonical_title` / `work_type` / `matched_chunk`. Accept both.
   const title = escapeHtml(work.title || work.canonical_title || "Untitled");
   const alt = work.title && work.canonical_title && work.title !== work.canonical_title
     ? escapeHtml(work.canonical_title) : "";
@@ -105,7 +108,7 @@ function renderRow(work, i) {
                : work.matched_chunk ? [work.matched_chunk] : [];
   const passages = chunks.length
     ? chunks.map((c) => {
-        const section = escapeHtml(c.section || c.kind || c.field || "passage");
+        const section = escapeHtml(c.section || c.kind || c.field || "Passage");
         const text = escapeHtml(c.text || c.excerpt || "");
         return `<figure class="passage">
             <figcaption class="passage__meta">
@@ -114,8 +117,7 @@ function renderRow(work, i) {
             <blockquote class="passage__text">${text}</blockquote>
           </figure>`;
       }).join("")
-    : `<p class="faint" style="font-size:.875rem">No passage text was returned for this work. `+
-      `Re-run with <code>include: ["text"]</code> to request excerpts.</p>`;
+    : `<p class="faint" style="font-size:.875rem">No passage text was returned for this work.</p>`;
 
   return `<article class="index-row">
       <button class="index-row__head" type="button" aria-expanded="false"
@@ -137,14 +139,27 @@ function renderTrace(trace) {
   const ms = typeof trace.total_time_ms === "number" ? trace.total_time_ms
            : typeof trace.ms === "number" ? trace.ms : null;
   if (ms == null) return "";
-  return `<div class="trace" style="margin-top:var(--space-3)"><span class="field__name">latency</span> <span class="mono">${ms.toFixed(1)}ms</span></div>`;
+  return `<div class="trace" style="margin-top:var(--space-3)"><span class="field__name">Latency</span> <span class="mono">${ms.toFixed(1)}ms</span></div>`;
 }
 
 function renderResults(data) {
   const results = Array.isArray(data?.results) ? data.results : [];
   if (els.resultsHd) els.resultsHd.hidden = false;
 
-  if (!results.length) {
+  let answerBlock = "";
+  if (data?.answer) {
+    answerBlock = `
+      <div class="answer-card" style="background:var(--paper-raised);border:1px solid var(--sakura);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-4);box-shadow:var(--card-shadow)">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
+          <span class="badge badge--sakura">AI Grounded Synthesis</span>
+        </div>
+        <div style="font-family:var(--serif);font-size:1.0625rem;line-height:1.65;color:var(--ink)">
+          ${escapeHtml(data.answer)}
+        </div>
+      </div>`;
+  }
+
+  if (!results.length && !data?.answer) {
     renderEmpty();
     statusNote("ok", "<strong>No works matched.</strong> The catalogue answered with zero rows. "+
       "Loosen the scope filters or rephrase the question.");
@@ -152,7 +167,7 @@ function renderResults(data) {
   }
 
   statusNote(null, "");
-  els.results.innerHTML = results.map(renderRow).join("") + renderTrace(data.trace);
+  els.results.innerHTML = answerBlock + results.map(renderRow).join("") + renderTrace(data.trace);
 }
 
 /* ---- Unconfigured state --------------------------------------------------- */
@@ -188,14 +203,16 @@ async function runQuery(question) {
   if (state.inflight) state.inflight.abort();
   const ctrl = new AbortController();
   state.inflight = ctrl;
-  const timeout = setTimeout(() => ctrl.abort(), 30000);
+  const timeout = setTimeout(() => ctrl.abort(), 35000);
 
   setBusy(true);
   renderPreview(q);
   statusNote(null, "");
 
   try {
-    const data = await search(currentOptions(q), ctrl.signal);
+    const data = state.mode === "ask"
+      ? await ask(currentOptions(q), ctrl.signal)
+      : await search(currentOptions(q), ctrl.signal);
     renderResults(data);
   } catch (err) {
     if (err && err.name === "AbortError" && !ctrl.signal.aborted) {
@@ -214,7 +231,7 @@ async function runQuery(question) {
 
 function renderError(err, q) {
   const retry = `<button class="btn btn--link" type="button" data-retry>Retry this query</button>`;
-  const detail = (err?.body && (err.body.message || err.body.error)) || "";
+  const detail = (err?.body && (err.body.message || err.body.error || err.body.detail)) || "";
   if (err.status === 401 || err.status === 403) {
     statusNote("error",
       `<strong>Authentication error (${err.status}).</strong> Access to the API service was denied. Please verify your credentials or subscription. ${retry}`);
@@ -226,7 +243,7 @@ function renderError(err, q) {
     statusNote("error",
       `<strong>Service unreachable.</strong> Could not establish a connection to the search endpoint. ${retry}`);
   } else if (err.status === 0) {
-    statusNote("warn", `<strong>The request timed out.</strong> The endpoint did not answer within 30 seconds. ${retry}`);
+    statusNote("warn", `<strong>The request timed out.</strong> The endpoint did not answer within 35 seconds. ${retry}`);
   } else {
     statusNote("error",
       `<strong>Service error (${err.status}).</strong> ${escapeHtml(detail || err.message)} ${retry}`);
@@ -257,14 +274,29 @@ function initChips() {
   }
 }
 
+function initModes() {
+  for (const btn of els.modes) {
+    btn.addEventListener("click", () => {
+      const mode = btn.getAttribute("data-mode");
+      if (!mode) return;
+      state.mode = mode;
+      els.modes.forEach((b) => b.classList.toggle("is-active", b === btn));
+      if (els.submit) {
+        els.submit.textContent = state.mode === "ask" ? "Ask the AI (/ask)" : "Search the catalogue (/search)";
+      }
+      renderPreview(state.lastQuery);
+      if (state.lastQuery) runQuery(state.lastQuery);
+    });
+  }
+}
+
 function init() {
   renderExamples();
   initChips();
+  initModes();
   renderPreview(state.lastQuery);
   if (!isConfigured()) renderUnconfigured();
 
-  // A link from the index page can arrive as search.html?q=… — put the
-  // question in the field and run it, so the example actually launches.
   const fromUrl = new URLSearchParams(location.search).get("q");
   if (fromUrl && els.input) {
     els.input.value = fromUrl;
@@ -312,5 +344,3 @@ if (document.readyState === "loading") {
 } else {
   init();
 }
-
-

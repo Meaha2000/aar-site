@@ -3,10 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The demo — Anime Akashic Records</title>
+<title>Interactive Demo — Anime Akashic Records</title>
 <meta name="description" content="Search the Anime Akashic Records catalogue: describe a half-remembered work and see the ranked results with the passages that matched. The request is shown before it is sent; no results are ever fabricated.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
+<link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
@@ -19,20 +21,14 @@
 <header class="masthead">
   <div class="shell masthead__inner">
     <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
-      <svg class="seal seal--spin" data-seal viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
-        <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
-          <g id="pk2"><path d="M12 12 C 12 8.6, 10.7 5.9, 12 3.4 C 13.3 5.9, 12 8.6, 12 12 Z"/><path d="M12 3.4 L 11.15 5.15 M12 3.4 L 12.85 5.15"/></g>
-          <use href="#pk2" transform="rotate(72 12 12)"/><use href="#pk2" transform="rotate(144 12 12)"/>
-          <use href="#pk2" transform="rotate(216 12 12)"/><use href="#pk2" transform="rotate(288 12 12)"/>
-          <circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/>
-        </g>
-      </svg>
+      <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
       <span class="wordmark">Anime Akashic Records <span class="jp">資料館</span></span>
     </a>
     <nav class="masthead__nav" aria-label="Primary">
       <a href="index.html">Overview</a>
-      <a href="index.html#api">API</a>
-      <a href="index.html#integration">Get started</a>
+      <a href="search.html" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Search Demo</a>
+      <a href="api.html">API Reference</a>
+      <a href="contact.html">Telegram &amp; Contact</a>
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
@@ -45,21 +41,38 @@
   <div class="leaf" style="grid-template-columns: minmax(0,1fr)">
     <main class="column" id="main">
 
-      <section class="section" aria-labelledby="demo-title">
+      <section class="section" aria-labelledby="demo-title" style="padding-top:var(--space-6)">
         <div class="section__head">
-          <h1 id="demo-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">Search the catalogue</h1>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3)">
+            <span class="badge badge--sakura">Interactive Playground</span>
+            <span class="badge badge--live">Live Gateway</span>
+          </div>
+          <h1 id="demo-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">Search the Catalogue</h1>
           <p class="lead measure--lead">Describe the work you half-remember. The request is shown
           below before it is sent, and the results are the endpoint's own &mdash; never fabricated.</p>
         </div>
 
         <div class="instrument">
           <div>
-            <form class="query-bar" data-search-form role="search">
+            <!-- Mode Switcher -->
+            <div style="display:flex;gap:.5rem;margin-bottom:var(--space-3)">
+              <button class="chip is-active" type="button" data-mode="search" aria-pressed="true" style="font-size:.75rem;padding:.45rem .85rem">
+                Search Mode (POST /search)
+              </button>
+              <button class="chip" type="button" data-mode="ask" aria-pressed="false" style="font-size:.75rem;padding:.45rem .85rem">
+                Ask AI Mode (POST /ask)
+              </button>
+            </div>
+
+            <form class="query-bar" data-search-form role="search" style="border-radius:6px;box-shadow:var(--card-shadow)">
               <div class="query-bar__row">
                 <label class="sr-only" for="q">Your question</label>
                 <input id="q" type="search" name="q" data-search-input
-                       placeholder="e.g. a swordsman who cannot die" autocomplete="off" spellcheck="false">
-                <button class="btn btn--primary" type="submit" data-search-submit>Search the catalogue</button>
+                       placeholder="e.g. a swordsman who cannot die" autocomplete="off" spellcheck="false"
+                       style="border-radius:4px">
+                <button class="btn btn--primary" type="submit" data-search-submit style="border-radius:4px">
+                  Search the catalogue
+                </button>
               </div>
               <div class="examples" data-examples aria-label="Example questions"></div>
             </form>
@@ -70,24 +83,35 @@
 
             <div class="results__head" data-results-head hidden>
               <h2 class="section__title" style="font-size:1.05rem">Ranked works</h2>
-              <span class="micro">position · title · type · year · score</span>
+              <span class="micro">position &middot; title &middot; type &middot; year &middot; score</span>
             </div>
             <div data-results></div>
           </div>
 
-          <aside aria-label="Scope and options">
-            <div class="micro" style="margin-bottom:var(--space-2)">Hard filters</div>
-            <div class="controls" style="margin-bottom:var(--space-4)">
+          <aside aria-label="Scope and options" style="background:var(--paper-raised);border:1px solid var(--rule);border-radius:8px;padding:var(--space-4);box-shadow:var(--card-shadow)">
+            <div class="micro" style="margin-bottom:var(--space-2);color:var(--ink);font-weight:600">Hard Filters</div>
+            <div class="controls" style="margin-bottom:var(--space-4);display:flex;flex-wrap:wrap;gap:.4rem">
               <button class="chip" type="button" data-scope-type="ANIME" aria-pressed="false">Anime</button>
               <button class="chip" type="button" data-scope-type="MANGA" aria-pressed="false">Manga</button>
               <button class="chip" type="button" data-scope-type="LIGHT_NOVEL" aria-pressed="false">Light novel</button>
               <button class="chip" type="button" data-scope-type="VISUAL_NOVEL" aria-pressed="false">Visual novel</button>
             </div>
-            <div class="micro" style="margin-bottom:var(--space-2)">Notes</div>
-            <p class="faint" style="font-size:.8125rem">
-              Filters are hard: a selected medium excludes the others. Leave all unselected to search
-              the whole catalogue.
+
+            <div class="micro" style="margin-bottom:var(--space-2);color:var(--ink);font-weight:600">Scope Filtering</div>
+            <p class="faint" style="font-size:.8125rem;line-height:1.55;margin-bottom:var(--space-4)">
+              Filters are hard: selecting a medium restricts the corpus to that format. Leave unselected to query across all 4 media.
             </p>
+
+            <!-- Telegram bot link in sidebar -->
+            <div style="border-top:1px solid var(--rule);padding-top:var(--space-3)">
+              <div class="micro" style="margin-bottom:var(--space-2);color:var(--ink);font-weight:600">Telegram Bot</div>
+              <p class="faint" style="font-size:.8125rem;line-height:1.55;margin-bottom:var(--space-3)">
+                Prefer querying in Telegram? Chat with our bot directly:
+              </p>
+              <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener" style="font-size:.75rem;padding:.5rem 1rem;width:100%;box-sizing:border-box">
+                Launch @AnimeAkashicRecords_bot
+              </a>
+            </div>
           </aside>
         </div>
       </section>
@@ -97,11 +121,37 @@
 </div>
 
 <footer class="footer">
-  <div class="shell" style="display:flex;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap">
-    <a href="index.html">
-      <span class="micro">← Back to the overview</span>
-    </a>
-    <span class="micro">Counts are read live from the service</span>
+  <div class="shell footer__grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)">
+        <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="28" height="28">
+        <span class="wordmark">Anime Akashic Records</span>
+      </div>
+      <p class="faint" style="font-size:.875rem;max-width:42ch">
+        Semantic retrieval across stories you half-remember. Four media unified in one canonical index.
+      </p>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>
+      <div class="stack-2">
+        <a href="index.html">Overview</a>
+        <a href="search.html">Interactive Demo</a>
+        <a href="api.html">API Reference</a>
+        <a href="contact.html">Telegram &amp; Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Agents &amp; CLI</div>
+      <div class="stack-2">
+        <a href="llms.txt">llms.txt (Agent Standard)</a>
+        <a href="index.md">index.md (Markdown)</a>
+        <a href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener">Telegram Bot (@AnimeAkashicRecords_bot)</a>
+      </div>
+    </div>
+  </div>
+  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3)">
+    <span class="micro">&copy; Anime Akashic Records &middot; Hosted on RapidAPI</span>
+    <span class="micro mono" style="color:var(--ink-faint)">$ curl -s https://meaha2000.github.io/aar-site/llms.txt</span>
   </div>
 </footer>
 
