@@ -84,7 +84,7 @@
 }
 .btn--primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 6px 20px rgba(184, 58, 80, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   transform: translateY(-2px);
   color: #ffffff !important;
 }
@@ -93,11 +93,11 @@
   background: #2AABEE;
   color: #ffffff !important;
   border: 1px solid transparent;
-  box-shadow: 0 4px 14px rgba(42, 171, 238, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .btn--telegram:hover {
   background: #229ED9;
-  box-shadow: 0 6px 22px rgba(42, 171, 238, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transform: translateY(-2px);
   color: #ffffff !important;
 }
@@ -153,19 +153,12 @@
   text-decoration: none;
   color: var(--ink);
   position: relative;
-  overflow: hidden;
   transition: all var(--dur-quiet) var(--ease-out);
-}
-.listing::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: var(--accent-gradient);
 }
 .listing:hover {
   border-color: var(--sakura);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px var(--sakura-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 25, 35, 0.08);
 }
 .listing__body {
   display: flex;
@@ -217,7 +210,7 @@
 }
 .listing:hover .listing__go {
   filter: brightness(1.1);
-  box-shadow: 0 6px 24px rgba(184, 58, 80, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   transform: translateY(-2px);
 }
 @media (max-width: 720px) {
@@ -238,25 +231,18 @@
   justify-content: space-between;
   gap: var(--space-6);
   padding: 1.875rem 2.25rem;
-  border: 1px solid rgba(42, 171, 238, 0.3);
+  border: 1px solid rgba(42, 171, 238, 0.35);
   border-radius: 8px;
   background: var(--paper-raised);
   box-shadow: var(--card-shadow);
   margin-top: var(--space-6);
   position: relative;
-  overflow: hidden;
   transition: all var(--dur-quiet) var(--ease-out);
-}
-.telegram-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%);
 }
 .telegram-card:hover {
   border-color: #2AABEE;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(42, 171, 238, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 .telegram-card__body {
   display: flex;
