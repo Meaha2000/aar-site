@@ -429,7 +429,7 @@
 /* ---- Passage: quoted excerpt --------------------------------------------- */
 
 .passage {
-  border-left: 2px solid var(--sakura);
+  border-left: 1px solid var(--sakura);
   padding: var(--space-2) 0 var(--space-2) var(--space-4);
   margin: 0 0 var(--space-3);
   background: var(--sakura-wash);

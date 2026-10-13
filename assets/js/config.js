@@ -41,7 +41,7 @@ export const RAPIDAPI_URL =
   "https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api";
 
 /** Source repository. */
-export const REPO_URL = "https://github.com/";
+export const REPO_URL = "https://github.com/Meaha2000/aar-site";
 
 /** True when a usable backend origin is configured. */
 export function isConfigured() {
