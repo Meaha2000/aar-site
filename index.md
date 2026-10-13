@@ -15,6 +15,11 @@ Anime Akashic Records (AAR) is built to solve the "tip-of-the-tongue" problem in
 - **Lore Synthesis (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
 - **Hosted on RapidAPI:** Zero-setup infrastructure, global low latency, managed rate limits, and instant API key issuance.
 
+### Intended Scope & Best Practices:
+- **Core Purpose:** Semantic retrieval, trope discovery, natural language query resolution, and grounded AI lore synthesis across 180,000+ East Asian pop culture works.
+- **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
+- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns, and use AAR when you need intelligent discovery, semantic matching, and lore reasoning.
+
 ---
 
 ## 2. Gateway, Authentication & Base URLs
