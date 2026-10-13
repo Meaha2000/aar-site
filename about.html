@@ -4,8 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About &amp; Core Selling Points — Anime Akashic Records</title>
-<meta name="description" content="Discover why Anime Akashic Records is the premier intelligent Anime API. Built for natural language discovery, plot descriptions, and AI agents.">
+<meta name="description" content="Discover Anime Akashic Records (AAR) — the intelligent Anime Discovery API. Search by plot descriptions, discover by vibe and emotional tone, and build AI agents.">
 <meta name="color-scheme" content="light dark">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="Anime Akashic Records (AAR) — Intelligent Anime Discovery API">
+<meta property="og:description" content="Find the work you can't remember. Discover the work you didn't know you wanted. Natural language plot and vibe search across anime, manga, and light novels.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meaha2000.github.io/aar-site/about.html">
+<meta property="og:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Anime Akashic Records — Discovery API">
+<meta name="twitter:description" content="Natural language plot and vibe discovery across 180,000+ anime, manga, light novels, and manhwa.">
+<meta name="twitter:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
 <link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
@@ -14,6 +28,23 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Anime Akashic Records API",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "url": "https://meaha2000.github.io/aar-site/about.html",
+  "description": "Natural language discovery and metadata API for anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua. Enables plot description search, vibe discovery, and AI assistant grounding.",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api"
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -48,14 +79,23 @@
           <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3);flex-wrap:wrap">
             <span class="badge badge--sakura">Mainly an Anime API</span>
             <span class="badge badge--live">180,000+ Titles</span>
-            <span class="badge badge--sakura">Built for Discovery</span>
+            <span class="badge badge--sakura">Vibe &amp; Story Discovery</span>
           </div>
           <h1 style="font-size:clamp(2.2rem,4.5vw,3.4rem);line-height:1.1;margin-bottom:var(--space-3)">
             The Intelligent Anime Discovery API
           </h1>
-          <p class="lead" style="font-size:1.15rem;line-height:1.65;color:var(--ink-soft);margin-bottom:var(--space-6)">
-            Anime Akashic Records (AAR) is built for the universal moment when you remember a story, a scene,
-            or a character dynamic &mdash; but the exact title is on the tip of your tongue.
+          <div style="font-size:clamp(1.25rem,2.4vw,1.65rem);color:var(--sakura-deep);font-weight:600;margin-bottom:var(--space-3);font-family:var(--serif)">
+            Find the Work You Remember. Discover the Work You Want.
+          </div>
+          <p class="lead" style="font-size:1.1rem;line-height:1.65;color:var(--ink-soft);margin-bottom:var(--space-3)">
+            Anime Akashic Records (AAR) goes beyond title lookup. Search for a work you can barely remember,
+            or discover something new by describing the story, atmosphere, character dynamics, or themes you're looking for.
+          </p>
+          <p class="faint" style="font-size:.95rem;line-height:1.6;margin-bottom:var(--space-6)">
+            Looking for a quiet fantasy journey, a psychological thriller with morally ambiguous characters,
+            or a story built around an unusual power? Describe what interests you in natural language,
+            and AAR helps surface relevant works from its cross-media catalog.
+            <strong>From forgotten titles to unexplored favorites.</strong>
           </p>
         </div>
 
@@ -68,39 +108,77 @@
           </p>
           <p style="font-size:.95rem;line-height:1.65;color:var(--ink-soft);margin:0">
             Most existing anime databases are digital phonebooks: if you already know the exact title in English or Japanese,
-            they will show you the page. But if you describe what happens in the story, they return nothing.
-            AAR flips this dynamic completely: you can describe any plot, trope, relationship, aesthetic mood, or studio style in plain English,
-            and the API returns the most relevant matching works with confirming excerpts from the synopsis.
+            they will show you the page. But if you describe what happens in the story, or the emotional tone you are craving,
+            they struggle to return relevant matches.
+            AAR expands this dynamic: you can describe any plot, trope, relationship, aesthetic mood, or studio style in plain English,
+            and the API returns relevant matching works paired with supporting synopsis excerpts.
           </p>
         </div>
 
-        <!-- The Problem with Traditional APIs -->
+        <!-- NEW SECTION: More Than Remembering / Discover by Vibe -->
+        <div style="margin-bottom:var(--space-8)">
+          <div style="margin-bottom:var(--space-4)">
+            <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-2)">More Than Remembering: Discover by Vibe &amp; Themes</h2>
+            <p class="faint" style="font-size:.95rem;margin:0">
+              AAR is designed for dual-path discovery: pinpointing works you half-remember, and surfacing fresh works that match the exact experience you want to explore.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card__title">Discover by Vibe</div>
+              <div style="font-style:italic;color:var(--sakura-deep);font-size:.875rem;margin-bottom:var(--space-2);line-height:1.5">
+                &ldquo;Find anime with a quiet, melancholic atmosphere, winter landscapes, and a slow journey of self-discovery.&rdquo;
+              </div>
+              <p class="feature-card__desc">
+                Explore new works through overarching atmosphere, emotional tone, and aesthetic vibes &mdash; even if you do not know any title beforehand or have never seen the work before.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__title">Explore Specific Themes</div>
+              <div style="font-style:italic;color:var(--sakura-deep);font-size:.875rem;margin-bottom:var(--space-2);line-height:1.5">
+                &ldquo;Find stories about characters who gradually realize that the world around them is not what it seems.&rdquo;
+              </div>
+              <p class="feature-card__desc">
+                Search for nuanced narrative patterns, psychological conflicts, and character dynamics rather than relying on generic genre checkboxes like &ldquo;Mystery&rdquo; or &ldquo;Sci-Fi&rdquo;.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__title">Build Smarter Discovery Experiences</div>
+              <p class="feature-card__desc" style="margin-top:.25rem">
+                Streaming platforms, recommendation engines, and bots can use AAR to transform conversational user descriptions into ranked candidate titles, which can then be matched against their available catalog.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Problem with Traditional APIs (Calibrated) -->
         <div style="margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">The Problem with Traditional Anime APIs</h2>
           <div class="feature-grid">
             <div class="feature-card">
-              <div class="feature-card__title">Exact Title Matching Only</div>
+              <div class="feature-card__title">Exact Title Lookup Focus</div>
               <p class="feature-card__desc">
-                If a user searches for <em>&ldquo;a boy whose arm transforms into a blade&rdquo;</em> in traditional APIs,
-                they get zero results because the title is <em>Parasyte</em>. Traditional databases require exact keyword names.
+                Traditional APIs are built around exact keyword matching. Searching for a half-remembered plot like
+                <em>&ldquo;a boy whose arm transforms into a blade&rdquo;</em> often yields no helpful results because the title is <em>Parasyte</em>.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__title">Rigid, Shallow Tag Checkboxes</div>
               <p class="feature-card__desc">
                 Filtering by &ldquo;Action&rdquo; or &ldquo;Fantasy&rdquo; still leaves thousands of unrelated titles.
-                Nuanced themes like <em>&ldquo;cozy winter solo travel&rdquo;</em> or <em>&ldquo;rivals who respect each other&rdquo;</em> cannot be expressed with checkboxes.
+                Nuanced themes like <em>&ldquo;cozy winter solo travel&rdquo;</em> or <em>&ldquo;rivals who respect each other&rdquo;</em> cannot be expressed with checkboxes alone.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">No Verified Explanations</div>
+              <div class="feature-card__title">Title-Only Output Without Context</div>
               <p class="feature-card__desc">
-                When a recommendation system suggests an anime, it usually just gives you a title.
-                You have no immediate way to know <em>why</em> it fits your query without reading third-party reviews.
+                When a traditional system recommends an anime, it usually provides only a title and an ID.
+                You have no immediate way to know <em>why</em> it fits your query without reading external third-party reviews.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Fragmented Adaptations</div>
+              <div class="feature-card__title">Cross-Medium Fragmentation</div>
               <p class="feature-card__desc">
                 Anime adaptations frequently originate from manga, light novels, visual novels, or webtoons.
                 In conventional services, these are separated into disconnected databases, breaking cross-media continuity.
@@ -109,7 +187,7 @@
           </div>
         </div>
 
-        <!-- Why Choose AAR? (Core Selling Points) -->
+        <!-- Why Choose AAR? (Core Selling Points - Calibrated) -->
         <div style="margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">Why Choose Anime Akashic Records?</h2>
           <p class="faint" style="font-size:.95rem;margin-bottom:var(--space-4)">
@@ -121,14 +199,14 @@
               <div class="feature-card__title">1. Natural Language Search</div>
               <p class="feature-card__desc">
                 Users and AI agents can query in everyday language. Describe a character's powers, a memorable twist,
-                or a specific aesthetic atmosphere, and the engine connects your description to the right title.
+                or a specific aesthetic atmosphere, and the engine connects your description to relevant titles.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">2. Verified Synopsis Citations</div>
+              <div class="feature-card__title">2. Evidence-Grounded Results</div>
               <p class="feature-card__desc">
-                Every result includes the exact sentence or excerpt from the official synopsis that matched your description.
-                This allows users and AI chatbots to immediately verify why the recommendation is accurate.
+                Results include supporting text from indexed synopses helping explain why a work matches.
+                This context helps users and AI assistants evaluate the recommendation without relying on blind guesswork.
               </p>
             </div>
             <div class="feature-card">
@@ -153,16 +231,16 @@
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">6. Zero Infrastructure Overhead</div>
+              <div class="feature-card__title">6. Managed Search Infrastructure</div>
               <p class="feature-card__desc">
-                Hosted directly on RapidAPI. No servers to maintain, instant API keys, clear rate limits,
-                and comprehensive documentation with ready-to-run Python, JavaScript, and cURL snippets.
+                Hosted directly on RapidAPI. No need to host or maintain complex vector and retrieval clusters yourself &mdash;
+                instant API keys, managed rate limits, and ready-to-run client libraries.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Comparison Table: Traditional vs AAR -->
+        <!-- Comparison Table: Traditional vs AAR (Calibrated) -->
         <div style="margin-bottom:var(--space-8);background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-6);box-shadow:var(--card-shadow)">
           <h2 style="font-size:clamp(1.5rem,2.8vw,2rem);margin-bottom:var(--space-2)">At a Glance: How AAR Compares</h2>
           <p class="faint" style="font-size:.9rem;margin-bottom:var(--space-4)">
@@ -173,36 +251,36 @@
             <table>
               <thead>
                 <tr>
-                  <th style="width:30%">Capability</th>
-                  <th style="width:35%">Traditional Anime APIs (MAL / AniList / Kitsu)</th>
-                  <th style="width:35%">Anime Akashic Records (AAR)</th>
+                  <th style="width:28%">Capability</th>
+                  <th style="width:36%">Traditional Anime APIs (MAL / AniList / Kitsu)</th>
+                  <th style="width:36%">Anime Akashic Records (AAR)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><strong>Primary Focus</strong></td>
                   <td>User watch-lists, episode broadcast schedules, forum profiles.</td>
-                  <td><strong>Intelligent anime discovery, natural language search, and AI assistant grounding.</strong></td>
+                  <td><strong>Intelligent anime discovery, natural language search, vibe retrieval, and AI assistant grounding.</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Search Input</strong></td>
                   <td>Exact or near-exact title keywords only.</td>
-                  <td><strong>Plain natural language descriptions, plot summaries, tropes, and vibes.</strong></td>
+                  <td><strong>Plain natural language descriptions, plot summaries, tropes, vibes, and themes.</strong></td>
                 </tr>
                 <tr>
-                  <td><strong>Tip-of-the-Tongue Queries</strong></td>
-                  <td>Fails (0 results or random alphabetical matches).</td>
-                  <td><strong>Excels (accurately pinpoints the work you half-remember).</strong></td>
+                  <td><strong>Tip-of-the-Tongue &amp; Vibe Queries</strong></td>
+                  <td>Limited &mdash; requires title keywords to surface results.</td>
+                  <td><strong>Built specifically to resolve descriptive memories and atmospheric requests.</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Why It Matched</strong></td>
-                  <td>No reason given &mdash; returns only title and IDs.</td>
-                  <td><strong>Returns verbatim synopsis excerpts confirming the exact match.</strong></td>
+                  <td>Returns titles and metadata IDs only.</td>
+                  <td><strong>Returns supporting synopsis excerpts providing context for why the title matches.</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Direct Q&amp;A (/ask)</strong></td>
-                  <td>Not available &mdash; you must build your own AI pipeline.</td>
-                  <td><strong>Built-in endpoint delivering factual answers with citations.</strong></td>
+                  <td>Not available &mdash; you must build your own retrieval and grounding pipeline.</td>
+                  <td><strong>Built-in endpoint delivering synthesized answers with citations.</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Cross-Media Scope</strong></td>
@@ -212,43 +290,46 @@
                 <tr>
                   <td><strong>Best Used For</strong></td>
                   <td>Tracking which episode you watched yesterday.</td>
-                  <td><strong>Finding what to watch, answering questions, and building intelligent anime apps.</strong></td>
+                  <td><strong>Finding what to watch next, exploring vibes, answering questions, and powering intelligent apps.</strong></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Who Is This For? -->
+        <!-- Commercial Target Audience (Restructured by Commercial Use Case) -->
         <div style="margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">Who Is Anime Akashic Records For?</h2>
           <div class="feature-grid">
             <div class="feature-card">
+              <div class="feature-card__title">Streaming Platforms</div>
+              <p class="feature-card__desc">
+                Add natural language search and vibe discovery to your existing catalog. Users can describe what they want to watch,
+                and your platform can match AAR candidate results against your licensed catalog.
+              </p>
+              <div class="faint" style="font-size:.8rem;margin-top:var(--space-2);line-height:1.4">
+                * Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service.
+              </div>
+            </div>
+            <div class="feature-card">
               <div class="feature-card__title">AI Chatbots &amp; Agents</div>
               <p class="feature-card__desc">
                 Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests,
-                without making up fake titles or inventing plot points.
+                grounded in real catalog metadata and supporting synopsis excerpts.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Streaming &amp; Discovery Apps</div>
+              <div class="feature-card__title">Anime Discovery &amp; Recommendation Apps</div>
               <p class="feature-card__desc">
                 Enhance your app's search bar so users don&rsquo;t need to remember exact spellings.
-                Let them search for feelings, premises, or character tropes naturally.
+                Let them explore titles matching their current mood, aesthetic vibe, or narrative interests.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Discord &amp; Telegram Community Bots</div>
+              <div class="feature-card__title">Community Bots &amp; Content Creators</div>
               <p class="feature-card__desc">
-                Build community bots that immediately answer &ldquo;What anime is this scene from?&rdquo;
-                questions for your community members in seconds.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-card__title">Content Creators &amp; Curators</div>
-              <p class="feature-card__desc">
-                Quickly discover themed anime for videos, articles, and recommendations by describing
-                unique narrative concepts and comparing matching titles.
+                Build Discord and Telegram bots that answer community questions, or quickly curate themed lists for videos,
+                articles, and discussions around specific tropes.
               </p>
             </div>
           </div>
@@ -285,7 +366,7 @@
         <span class="wordmark">Anime Akashic Records</span>
       </div>
       <p class="faint" style="font-size:.875rem;max-width:44ch">
-        Semantic retrieval across stories you half-remember. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
+        Semantic and vibe retrieval across stories you half-remember and works you want to explore. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
       </p>
       <div style="margin-top:var(--space-3);font-size:.8125rem;color:var(--ink-soft);line-height:1.6">
         Have a question, collaboration idea, bug report, or feature suggestion?<br>

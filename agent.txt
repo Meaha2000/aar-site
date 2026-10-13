@@ -1,42 +1,76 @@
 # Anime Akashic Records (AAR) API — Full Specification & Documentation
 
-> High-precision semantic and hybrid retrieval engine over 180,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and aesthetic vibes into ranked canonical works paired with confirming excerpt passages.
+> High-precision semantic and hybrid discovery engine over 180,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and aesthetic vibes into ranked canonical works paired with supporting excerpt passages.
 
 ---
 
-## 1. Executive Summary & Capabilities
+## 1. Executive Summary & Recommended Positioning
 
-Anime Akashic Records (AAR) is built to solve the "tip-of-the-tongue" problem in East Asian pop culture media. Instead of relying on exact title keywords, users and AI agents can query in plain natural language describing characters, plot twists, studios, art styles, or atmospheric feelings.
+### Recommended Positioning:
+> **Find the work you can't remember. Discover the work you didn't know you wanted.**
+>
+> Anime Akashic Records (AAR) is a discovery and metadata API for applications that need to search across works using natural-language descriptions, story concepts, and atmosphere — not only exact titles.
 
-### Key Strengths:
+### Core Architecture & Key Strengths:
 - **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
 - **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
-- **Verbatim Passage Citations:** Every retrieved candidate returns the exact synopsis chunk that satisfied the query, enabling reliable citation-backed LLM grounding.
+- **Evidence-Grounded Results:** Every retrieved candidate returns supporting text from indexed synopses helping explain why a work matches (evaluated in context).
 - **Question Answering (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
-- **Hosted on RapidAPI:** Zero-setup infrastructure, global low latency, managed rate limits, and instant API key issuance.
+- **Managed Search Infrastructure:** Hosted on RapidAPI with global availability, instant API keys, managed rate limits, and ready-to-use client libraries.
 
 ### Intended Scope & Best Practices:
-- **Core Purpose:** Semantic retrieval, trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ East Asian pop culture works.
+- **Core Purpose:** Semantic retrieval, vibe and trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ East Asian pop culture works.
 - **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
-- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
-
-### Product Positioning & Core Selling Points (Why Choose AAR?)
-Anime Akashic Records is **primarily and mainly an Anime API**, created to solve the discovery limitations of traditional anime databases.
-
-#### What Differentiates AAR from Traditional Anime APIs (MAL / AniList / Kitsu):
-1. **Natural Language Discovery vs. Exact Keywords:** Traditional anime APIs act as digital phonebooks. If you search for *"boy with a blade arm"* or *"cozy winter camping"*, they fail unless those exact words appear in the title. AAR understands natural language descriptions, plot synopses, tropes, character dynamics, and atmospheric vibes.
-2. **Verified Passage Citations:** Every match includes the exact confirming excerpt from the work's synopsis, allowing users and AI models to immediately verify why the recommendation fits.
-3. **Mainly Anime & Connected Media:** While Anime is the primary focus, East Asian stories frequently cross formats. AAR maps Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua in a single unified catalogue.
-4. **Direct Question Answering (`/ask`):** A dedicated endpoint for AI assistants that answers questions about premises and setups with factual prose backed by catalog citations.
-5. **Zero Infrastructure & Instant Keys:** Hosted on RapidAPI with global availability, instant API keys, managed rate limits, and ready-to-use client libraries.
-
-#### When to Choose AAR vs. Traditional APIs:
-- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." queries.
-- **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched) or minute-by-minute episode airing countdowns.
+- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns and watch-lists, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
 
 ---
 
-## 2. Gateway, Authentication & Base URLs
+## 2. Discovery Use Cases
+
+Anime Akashic Records (AAR) is designed for more than identifying works by title. It supports natural-language discovery across anime, manga, light novels, visual novels, manhwa, and manhua.
+
+### 2.1. Find a Work You Can't Remember
+Describe a plot, scene, character, ability, or story detail without knowing the title. AAR searches for relevant works using semantic retrieval, keyword matching, and reranking.
+- **Example:** `"An anime about a student who travels back in time to prevent a classmate's murder."`
+
+### 2.2. Discover Works by Vibe
+Describe the atmosphere, emotional tone, themes, or narrative experience you want to explore. You do not need to have seen the work before or remember a specific title.
+- **Example:** `"Find fantasy stories with a quiet, melancholic atmosphere, slow journeys, and themes of memory and the passage of time."`
+
+### 2.3. Search by Themes and Story Concepts
+Find works involving specific narrative patterns, character dynamics, abilities, conflicts, or combinations of story elements.
+- **Example:** `"Stories about an immortal protagonist who watches generations pass and struggles with the meaning of human relationships."`
+
+### 2.4. Explore Connected Media
+Discover related works across anime, manga, light novels, visual novels, manhwa, and manhua within AAR's indexed catalog. Availability and relationships depend on the indexed data.
+
+### 2.5. Build AI-Powered Discovery Products
+Developers can use AAR in AI chatbots, agents, community bots, recommendation interfaces, and discovery applications. Streaming platforms can use AAR's candidate results as an additional discovery layer and match them against their own available catalog.
+
+### 2.6. Evidence-Grounded Results
+AAR can return relevant work metadata and supporting text from indexed descriptions, helping applications explain why a result may match a query. Returned evidence should be evaluated in context; semantic relevance does not guarantee that every result is correct.
+
+---
+
+## 3. Commercial Target Audience & Product Positioning
+
+Anime Akashic Records is **primarily an Anime API**, created to solve the discovery limitations of traditional databases.
+
+### Target Personas & Value Propositions:
+| Target Audience | Practical Value Proposition | Technical Note |
+|---|---|---|
+| **Streaming Platforms** | Add natural language search and vibe discovery to your existing catalog. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. |
+| **AI Chatbots & Agents** | Find works and answer questions grounded by synopsis text. | Synthesizes answers and returns cited excerpts to avoid unsupported claims. |
+| **Anime Discovery Apps** | Help users discover titles matching their mood, aesthetic vibes, and tropes. | Replaces shallow tag checkboxes with rich conversational discovery. |
+| **Community Bots & Creators** | Quickly find works fitting a specific discussion prompt, video theme, or debate. | Rapidly surfaces thematic titles across 180,000+ indexed works. |
+
+### When to Choose AAR vs. Traditional APIs (MAL / AniList / Kitsu):
+- **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched), forum profiles, or minute-by-minute episode airing countdowns.
+- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." and vibe-based discovery queries.
+
+---
+
+## 4. Gateway, Authentication & Base URLs
 
 ### Host & Endpoints
 - **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
@@ -56,9 +90,9 @@ Accept: application/json
 
 ---
 
-## 3. Endpoints Reference
+## 5. Endpoints Reference
 
-### 3.1. `GET /health`
+### 5.1. `GET /health`
 Unauthenticated liveness probe and catalog metrics. Safe for container probes and uptime checkers.
 
 #### Request:
@@ -77,7 +111,7 @@ curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health"
 
 ---
 
-### 3.2. `POST /search`
+### 5.2. `POST /search`
 Advanced hybrid retrieval across the 6 supported mediums.
 
 #### Request Parameters
@@ -119,103 +153,97 @@ Advanced hybrid retrieval across the 6 supported mediums.
 #### Response Envelope (`200 OK`):
 ```json
 {
-  "total_documents": 1,
+  "total": 8,
   "results": [
     {
-      "title": "Solo Leveling",
-      "type": "manhwa",
+      "position": 1,
+      "score": 0.942,
+      "work_id": "c7a8b9e0-1234-5678-9abc-def012345678",
+      "canonical_title": "Solo Leveling",
+      "type": "MANHWA",
+      "country_of_origin": "KR",
       "year": 2018,
-      "score": 0.9654,
       "status": "finished",
-      "chunks": [
-        {
-          "section": "Synopsis",
-          "text": "Known as the Weakest Hunter of All Mankind, Sung Jinwoo is fatally wounded in a hidden dual dungeon. Just as he accepts death, a mysterious quest window appears granting him the unique ability to level up infinitely."
-        }
+      "genres": ["Action", "Fantasy"],
+      "tags": ["Dungeons", "Leveling", "Necromancy"],
+      "excerpts": [
+        "In a world where hunters must battle deadly monsters, Sung Jin-woo, notoriously known as the weakest hunter of all mankind, is fatally injured in a high-rank double dungeon..."
       ]
     }
-  ],
-  "trace": {
-    "total_time_ms": 382.4
-  }
+  ]
 }
 ```
 
 ---
 
-### 3.3. `POST /ask`
-Conversational question answering for chatbots and agents. Returns an AI-composed factual answer grounded in corpus citations, accompanied by supporting ranked works.
+### 5.3. `POST /ask`
+Grounded conversational question-answering with citation synthesis for AI agents.
+
+#### Request Parameters
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `question` | `string` | **Yes** | — | Question regarding an anime premise, comparison, or plot inquiry. |
+| `scope` | `object` | No | `{}` | Optional hard scope filters restricting candidate retrieval. |
 
 #### Request Example:
 ```json
 {
-  "question": "Explain the mechanics of the Reading Steiner ability in Steins;Gate and who possesses it.",
-  "limit": 5,
-  "scope": {
-    "types": ["VISUAL_NOVEL", "ANIME"]
-  }
+  "question": "What is the premise of Parasyte and what makes its relationship dynamic unique?"
 }
 ```
 
 #### Response Envelope (`200 OK`):
 ```json
 {
-  "answer": "Reading Steiner is the signature ability possessed primarily by Rintaro Okabe in Steins;Gate. When a D-Mail or time leap alters the world line, Okabe retains his intact memories of previous timelines while the memories of everyone else are rewritten to fit the newly established reality.",
-  "results": [
+  "answer": "In Parasyte (Kiseijuu: Sei no Kakuritsu), seventeen-year-old Shinichi Izumi is partially infected by an alien parasite named Migi, which fails to take over his brain and instead matures in his right hand. The dynamic is unique because Shinichi and Migi retain separate intellects and moralities, forcing an uneasy symbiotic coexistence where Migi's cold survival logic clashes with Shinichi's human empathy as they defend against other hostile parasites.",
+  "citations": [
     {
-      "title": "Steins;Gate",
-      "type": "visual_novel",
-      "year": 2009,
-      "score": 0.9540,
+      "work_id": "parasyte-kiseijuu-2014",
+      "canonical_title": "Parasyte -the maxim-",
+      "type": "ANIME",
+      "year": 2014,
       "status": "finished",
-      "chunks": [
-        {
-          "section": "Synopsis",
-          "text": "Reading Steiner allows the subject to perceive world line shifts and maintain intact continuity of personal consciousness across timeline divergences."
-        }
-      ]
+      "excerpt": "Seventeen-year-old Shinichi Izumi falls victim to one of these parasites, but it fails to take over his brain, ending up in his right hand instead."
     }
-  ],
-  "trace": {
-    "total_time_ms": 780.2
-  }
+  ]
 }
 ```
 
 ---
 
-## 4. Code Integration Examples
+## 6. Client Code Snippets
 
-### Python (using `requests`)
+### Python (`requests`)
 ```python
+import os
 import requests
 
 url = "https://anime-akashic-records-aar-api.p.rapidapi.com/search"
-
 headers = {
-    "Content-Type": "application/json",
+    "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY", "YOUR_RAPIDAPI_KEY"),
     "X-RapidAPI-Host": "anime-akashic-records-aar-api.p.rapidapi.com",
-    "X-RapidAPI-Key": "YOUR_RAPIDAPI_KEY"
+    "Content-Type": "application/json"
 }
-
 payload = {
-    "question": "Cultivator reborn 10,000 years later to rebuild his sect",
-    "limit": 6,
+    "question": "A girl traveling through desolate ruins with two small robotic companions",
+    "limit": 5,
     "scope": {
-        "types": ["MANHUA", "MANHWA"]
+        "types": ["ANIME", "MANGA"],
+        "genres": ["Sci-Fi", "Adventure"]
     }
 }
 
-response = requests.post(url, json=payload, headers=headers)
+response = requests.post(url, json=payload, headers=headers, timeout=10)
+response.raise_for_status()
 data = response.json()
 
-for work in data.get("results", []):
-    print(f"[{work['score']:.4f}] {work['title']} ({work['type']}, {work.get('year', 'N/A')})")
-    for chunk in work.get("chunks", []):
-        print(f"  Excerpt: {chunk['text']}\n")
+for item in data.get("results", []):
+    print(f"#{item['position']} {item['canonical_title']} ({item['type']}, {item['year']})")
+    for ex in item.get("excerpts", []):
+        print(f"   Excerpt: {ex[:120]}...")
 ```
 
-### TypeScript / JavaScript (Node.js & Modern Browser)
+### TypeScript / JavaScript (Node.js Fetch)
 ```typescript
 interface SearchPayload {
   question: string;
@@ -227,13 +255,13 @@ interface SearchPayload {
   };
 }
 
-async function searchAnimeRecords(payload: SearchPayload, apiKey: string) {
+async function searchAAR(payload: SearchPayload) {
   const response = await fetch("https://anime-akashic-records-aar-api.p.rapidapi.com/search", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-RapidAPI-Host": "anime-akashic-records-aar-api.p.rapidapi.com",
-      "X-RapidAPI-Key": apiKey
+      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY || "YOUR_RAPIDAPI_KEY",
+      "X-RapidAPI-Host": "anime-akashic-records-aar-api.p.rapidapi.com"
     },
     body: JSON.stringify(payload)
   });
@@ -261,7 +289,7 @@ curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
 
 ---
 
-## 5. Status Codes & Error Envelopes
+## 7. Status Codes & Error Envelopes
 
 - **`200 OK`**: Request succeeded. Returns the JSON envelope.
 - **`401 Unauthorized`**: Key rejected or missing header:
@@ -273,7 +301,7 @@ curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
 
 ---
 
-## 6. Official Telegram Bot
+## 8. Official Telegram Bot
 
 A full-featured live client is available on Telegram for conversational testing and interactive lookups:
 - **Bot Username:** `@AnimeAkashicRecords_bot`
@@ -287,7 +315,7 @@ A full-featured live client is available on Telegram for conversational testing 
 
 ---
 
-## 7. Developer Support, Collaborations & Feedback
+## 9. Developer Support, Collaborations & Feedback
 
 We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
 - **Official Contact Email:** `AnimeAkashicRecords@hotmail.com`

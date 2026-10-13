@@ -4,8 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Interactive Demo — Anime Akashic Records</title>
-<meta name="description" content="Search the Anime Akashic Records catalogue: describe a half-remembered work across anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua.">
+<meta name="description" content="Search the Anime Akashic Records catalogue: describe a half-remembered plot, a vibe, or character dynamics across anime, manga, light novels, and manhwa.">
 <meta name="color-scheme" content="light dark">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="Interactive Search Demo — Anime Akashic Records">
+<meta property="og:description" content="Test natural language queries, mood descriptions, and hard scope filters live across 180,000+ anime and manga works.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meaha2000.github.io/aar-site/search.html">
+<meta property="og:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Interactive Search Demo — Anime Akashic Records">
+<meta name="twitter:description" content="Test natural language queries, mood descriptions, and hard scope filters live.">
+<meta name="twitter:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
 <link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
@@ -14,6 +28,19 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Anime Akashic Records - Search Demo",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "url": "https://meaha2000.github.io/aar-site/search.html",
+  "description": "Interactive search playground for testing natural language queries, mood descriptions, and filters across East Asian pop culture media."
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to the instrument</a>

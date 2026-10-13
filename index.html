@@ -3,9 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anime Akashic Records — find the work you half-remember</title>
-<meta name="description" content="Anime Akashic Records is a hybrid retrieval engine across anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua. Describe what you remember; the catalogue returns ranked works with the passages that matched.">
+<title>Anime Akashic Records — Find the Work You Remember. Discover the Work You Want.</title>
+<meta name="description" content="Anime Akashic Records is a discovery and metadata API across 180,000+ anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua. Search by plot descriptions, discover by vibe and emotional tone, and build AI agents.">
 <meta name="color-scheme" content="light dark">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="Anime Akashic Records — The Intelligent Anime Discovery API">
+<meta property="og:description" content="Find the work you can't remember. Discover the work you didn't know you wanted. Natural language plot and vibe discovery across 180,000+ titles.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meaha2000.github.io/aar-site/">
+<meta property="og:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Anime Akashic Records — Discovery API">
+<meta name="twitter:description" content="Natural language plot and vibe discovery across 180,000+ anime, manga, light novels, and manhwa.">
+<meta name="twitter:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
 <link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
@@ -14,6 +28,23 @@
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Anime Akashic Records API",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All",
+  "url": "https://meaha2000.github.io/aar-site/",
+  "description": "Natural language discovery and metadata API for anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua. Enables plot description search, vibe discovery, and AI assistant grounding.",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api"
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to the catalogue</a>
@@ -51,11 +82,14 @@
             <span class="badge badge--sakura">Anime &middot; Manga &middot; Light Novels &middot; Visual Novels &middot; Korean Manhwa &middot; Chinese Manhua</span>
           </div>
           <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
+          <div style="font-size:clamp(1.2rem,2.2vw,1.5rem);color:var(--sakura-deep);font-weight:600;margin-bottom:var(--space-3);font-family:var(--serif)">
+            Find the Work You Remember. Discover the Work You Want.
+          </div>
           <p class="lead hero__lede">
-            Anime Akashic Records is a semantic retrieval engine spanning 180,000+ works across anime, manga,
-            light novels, visual novels, Korean manhwa, and Chinese manhua. Describe what you half-remember &mdash;
-            a plot, a key character dynamic, a studio, or just the vibe and mood you&rsquo;re looking for.
-            It searches across all formats and returns ranked matches, each paired with the exact passages confirming why the work fits.
+            Anime Akashic Records is a discovery and metadata engine spanning 180,000+ works across anime, manga,
+            light novels, visual novels, Korean manhwa, and Chinese manhua. Describe what you half-remember,
+            or discover something new by describing the story, atmosphere, character dynamics, or themes you&rsquo;re looking for.
+            It surfaces relevant works paired with supporting synopsis excerpts confirming why the title fits.
           </p>
           <div class="controls" style="display:flex;gap:var(--space-3);flex-wrap:wrap">
             <a class="btn btn--primary" href="search.html" style="font-size:.875rem;padding:.75rem 1.6rem">
@@ -75,7 +109,7 @@
       <section class="section" id="features" style="padding-top:var(--space-8)">
         <div class="section__head">
           <h2 class="section__title" style="font-size:1.65rem">Engine Capabilities</h2>
-          <p class="measure muted">Built for the moment when you remember a feeling, not an exact title or spelling.</p>
+          <p class="measure muted">Built for dual-path discovery: from half-remembered memories to brand-new favorites.</p>
         </div>
         <div class="feature-grid">
           <div class="feature-card">
@@ -100,9 +134,9 @@
             <div class="feature-card__icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
             </div>
-            <div class="feature-card__title">Grounded Citations</div>
+            <div class="feature-card__title">Evidence-Grounded Results</div>
             <p class="feature-card__desc">
-              Every ranked match includes the exact confirming synopsis excerpt, ensuring recommendations can be verified.
+              Ranked matches include supporting synopsis excerpts, providing context to understand why the work fits your query.
             </p>
           </div>
           <div class="feature-card">
@@ -120,53 +154,87 @@
       <!-- Example Questions Shelf -->
       <section class="section" id="examples" style="padding-top:var(--space-8)">
         <div class="section__head">
-          <h2 class="section__title" style="font-size:1.65rem">Example Questions</h2>
-          <p class="measure muted">Hand-picked prompts demonstrating the catalogue's cross-medium understanding &mdash; click any question to run it live in the demo.</p>
+          <h2 class="section__title" style="font-size:1.65rem">Example Discovery Queries</h2>
+          <p class="measure muted">Hand-picked prompts demonstrating memories, vibes, and tropes &mdash; click any query to run it live in the demo.</p>
         </div>
         <ul class="shelf">
           <li><a class="shelf__item" href="search.html?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
             <span class="shelf__pos">01</span>
             <span class="shelf__q">A swordsman who cannot die, and the woman who follows him</span>
-            <span class="shelf__tag">Anime &middot; Plot</span>
+            <span class="shelf__tag">Anime &middot; Memory</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="search.html?q=Find%20fantasy%20stories%20with%20a%20quiet%2C%20melancholic%20atmosphere%20and%20slow%20journeys">
+            <span class="shelf__pos">02</span>
+            <span class="shelf__q">Find fantasy stories with a quiet, melancholic atmosphere and slow journeys</span>
+            <span class="shelf__tag">Vibe &middot; Mood</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="search.html?q=Time-travel%20visual%20novel%20with%20branching%20timelines">
-            <span class="shelf__pos">02</span>
+            <span class="shelf__pos">03</span>
             <span class="shelf__q">Time-travel visual novel with branching timelines</span>
             <span class="shelf__tag">VN &middot; Mechanic</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="search.html?q=Weakest%20hunter%20reawakens%20in%20a%20double%20dungeon%20with%20a%20solo%20leveling%20system">
-            <span class="shelf__pos">03</span>
+            <span class="shelf__pos">04</span>
             <span class="shelf__q">Weakest hunter reawakens in a double dungeon with a solo leveling system</span>
             <span class="shelf__tag">Korean Manhwa</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
+          <li><a class="shelf__item" href="search.html?q=Stories%20about%20characters%20who%20gradually%20realize%20that%20the%20world%20around%20them%20is%20not%20what%20it%20seems">
+            <span class="shelf__pos">05</span>
+            <span class="shelf__q">Stories about characters who gradually realize that the world around them is not what it seems</span>
+            <span class="shelf__tag">Theme &middot; Mystery</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
           <li><a class="shelf__item" href="search.html?q=Studio%20that%20animated%20a%20demon-slaying%20brother%20and%20sister">
-            <span class="shelf__pos">04</span>
+            <span class="shelf__pos">06</span>
             <span class="shelf__q">Studio that animated a demon-slaying brother and sister</span>
             <span class="shelf__tag">Anime &middot; Studio</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="search.html?q=Banished%20immortal%20cultivator%20returns%2010%2C000%20years%20later%20to%20rebuild%20his%20sect">
-            <span class="shelf__pos">05</span>
+            <span class="shelf__pos">07</span>
             <span class="shelf__q">Banished immortal cultivator returns 10,000 years later to rebuild his sect</span>
             <span class="shelf__tag">Chinese Manhua</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Cyberpunk%20dystopia%20where%20memory%20can%20be%20bought">
-            <span class="shelf__pos">06</span>
-            <span class="shelf__q">Cyberpunk dystopia where memory can be bought</span>
-            <span class="shelf__tag">Sci-Fi &middot; Theme</span>
-            <span class="shelf__go" aria-hidden="true">&rarr;</span>
-          </a></li>
           <li><a class="shelf__item" href="search.html?q=Something%20cozy%20but%20a%20little%20lonely%2C%20for%20a%20rainy%20evening">
-            <span class="shelf__pos">07</span>
+            <span class="shelf__pos">08</span>
             <span class="shelf__q">Something cozy but a little lonely, for a rainy evening</span>
             <span class="shelf__tag">Atmosphere</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
         </ul>
+      </section>
+
+      <!-- Discovery Across Personas & Platforms -->
+      <section class="section" id="use-cases" style="padding-top:var(--space-8)">
+        <div class="section__head">
+          <h2 class="section__title" style="font-size:1.65rem">Built for Discovery Solutions</h2>
+          <p class="measure muted">Whether powering an AI agent or upgrading a streaming search bar.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-card__title">Streaming Platforms</div>
+            <p class="feature-card__desc">
+              Add natural language search and vibe discovery to your existing catalog. Convert user intent into ranked candidates, then match against your licensed titles.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__title">AI Chatbots &amp; Agents</div>
+            <p class="feature-card__desc">
+              Equip assistants with grounded anime recommendations and premise answers backed by supporting synopsis excerpts.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__title">Discovery &amp; Community Bots</div>
+            <p class="feature-card__desc">
+              Build Discord and Telegram bots that answer community questions and help members find what to watch next by mood.
+            </p>
+          </div>
+        </div>
       </section>
 
       <!-- Telegram Bot Showcase -->
@@ -225,6 +293,7 @@
         </a>
 
         <div style="margin-top:var(--space-6);display:flex;gap:var(--space-3);flex-wrap:wrap">
+          <a class="btn btn--quiet" href="about.html">About &amp; Core Selling Points &rarr;</a>
           <a class="btn btn--quiet" href="api.html">View Full API Reference &rarr;</a>
           <a class="btn btn--quiet" href="contact.html">Contact &amp; Telegram &rarr;</a>
         </div>
@@ -242,7 +311,7 @@
         <span class="wordmark">Anime Akashic Records</span>
       </div>
       <p class="faint" style="font-size:.875rem;max-width:44ch">
-        Semantic retrieval across stories you half-remember. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
+        Semantic and vibe retrieval across stories you half-remember and works you want to explore. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
       </p>
       <div style="margin-top:var(--space-3);font-size:.8125rem;color:var(--ink-soft);line-height:1.6">
         Have a question, collaboration idea, bug report, or feature suggestion?<br>

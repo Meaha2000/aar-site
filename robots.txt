@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://meaha2000.github.io/aar-site/sitemap.xml
