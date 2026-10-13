@@ -9,9 +9,9 @@
 Anime Akashic Records (AAR) is built to solve the "tip-of-the-tongue" problem in East Asian pop culture media. Instead of relying on exact title keywords, users and AI agents can query in plain natural language describing characters, plot twists, studios, art styles, or atmospheric feelings.
 
 ### Key Strengths:
-- **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa (한국 웹툰/만화), and Chinese Manhua (中国漫画).
-- **Hybrid Retrieval Pipeline:** Combines dense neural embeddings, lexical BM25 token matching, and title trigram index via Reciprocal Rank Fusion (RRF, constant k=60), followed by neural cross-encoder reranking.
-- **Verbatim Passage Citations:** Every retrieved candidate returns the exact synopsis chunk or lore passage that satisfied the query, enabling hallucinations-free LLM grounding.
+- **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
+- **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
+- **Verbatim Passage Citations:** Every retrieved candidate returns the exact synopsis chunk or lore passage that satisfied the query, enabling hallucination-free LLM grounding.
 - **Lore Synthesis (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
 - **Hosted on RapidAPI:** Zero-setup infrastructure, global low latency, managed rate limits, and instant API key issuance.
 
@@ -66,7 +66,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
 |---|---|---|---|---|
 | `question` | `string` | **Yes** | — | Natural language description, plot summary, character dynamic, or trope. |
 | `limit` | `integer` | No | `8` | Number of ranked works to return (clamped between 1 and 50). |
-| `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` (BM25 + vectors + rerank) or `"semantic"` (dense vectors + rerank). |
+| `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` (semantic vectors + keyword search + rerank) or `"semantic"` (dense vector search + rerank). |
 | `include` | `array[string]` | No | `["text"]` | Extra fields to include in chunks (e.g. `["text"]`). |
 | `scope` | `object` | No | `{}` | Hard filters applied to the index before retrieval. |
 
@@ -74,7 +74,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | Scope Field | Type | Description & Allowed Values |
 |---|---|---|
 | `types` | `array[string]` | Filter mediums: `["ANIME", "MANGA", "LIGHT_NOVEL", "VISUAL_NOVEL", "MANHWA", "MANHUA"]`. |
-| `statuses` | `array[string]` | Lifecycle status: `["finished", "releasing", "upcoming", "cancelled", "hiatus"]` (also accepts `"completed"`, `"airing"`, `"ongoing"`, `"منتهي"`, `"مستمر"`). |
+| `statuses` | `array[string]` | Lifecycle status: `["finished", "releasing", "upcoming", "cancelled", "hiatus"]` (also accepts `"completed"`, `"airing"`, `"ongoing"`). |
 | `genres` | `array[string]` | Genres: `["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mecha", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]`. |
 | `tags` | `array[string]` | Thematic tags: `["Time Travel", "Cyberpunk", "Isekai", "Reincarnation", "Cultivation", "Martial Arts", "Dungeons", "Necromancy", "School", "Anti-Hero"]`. |
 | `studios` | `array[string]` | Studio name or substring: `["ufotable", "MAPPA", "Kyoto Animation", "Shaft", "Madhouse", "Bones", "Wit Studio"]`. |
