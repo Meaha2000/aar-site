@@ -20,6 +20,20 @@ Anime Akashic Records (AAR) is built to solve the "tip-of-the-tongue" problem in
 - **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
 - **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
 
+### Product Positioning & Core Selling Points (Why Choose AAR?)
+Anime Akashic Records is **primarily and mainly an Anime API**, created to solve the discovery limitations of traditional anime databases.
+
+#### What Differentiates AAR from Traditional Anime APIs (MAL / AniList / Kitsu):
+1. **Natural Language Discovery vs. Exact Keywords:** Traditional anime APIs act as digital phonebooks. If you search for *"boy with a blade arm"* or *"cozy winter camping"*, they fail unless those exact words appear in the title. AAR understands natural language descriptions, plot synopses, tropes, character dynamics, and atmospheric vibes.
+2. **Verified Passage Citations:** Every match includes the exact confirming excerpt from the work's synopsis, allowing users and AI models to immediately verify why the recommendation fits.
+3. **Mainly Anime & Connected Media:** While Anime is the primary focus, East Asian stories frequently cross formats. AAR maps Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua in a single unified catalogue.
+4. **Direct Question Answering (`/ask`):** A dedicated endpoint for AI assistants that answers questions about premises and setups with factual prose backed by catalog citations.
+5. **Zero Infrastructure & Instant Keys:** Hosted on RapidAPI with global availability, instant API keys, managed rate limits, and ready-to-use client libraries.
+
+#### When to Choose AAR vs. Traditional APIs:
+- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." queries.
+- **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched) or minute-by-minute episode airing countdowns.
+
 ---
 
 ## 2. Gateway, Authentication & Base URLs
