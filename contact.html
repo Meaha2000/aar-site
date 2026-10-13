@@ -43,16 +43,16 @@
 
       <section class="section" style="padding-top:var(--space-6)">
         <div style="max-width:54rem">
-          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3)">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3);flex-wrap:wrap">
             <span class="badge badge--telegram">Live Bot Demo</span>
-            <span class="badge badge--sakura">Direct Support</span>
+            <span class="badge badge--sakura">Direct Support &middot; AnimeAkashicRecords@hotmail.com</span>
           </div>
           <h1 style="font-size:clamp(2.2rem,4.5vw,3.4rem);line-height:1.1;margin-bottom:var(--space-3)">
-            Telegram Demo &amp; Support
+            Telegram Demo &amp; Contact
           </h1>
           <p class="lead" style="font-size:1.15rem;line-height:1.65;color:var(--ink-soft);margin-bottom:var(--space-6)">
-            Experience the retrieval engine live in Telegram, explore natural-language querying,
-            or get in touch with the creator for integration assistance, feedback, and custom scopes.
+            Experience the retrieval engine live in Telegram across anime, manga, light novels, visual novels,
+            Korean manhwa, and Chinese manhua. Reach out directly for support, collaborations, bug reports, and ideas.
           </p>
         </div>
 
@@ -71,7 +71,7 @@
             <div class="telegram-card__chips">
               <span class="telegram-chip">/search &lt;query&gt;</span>
               <span class="telegram-chip">/ask &lt;lore question&gt;</span>
-              <span class="telegram-chip">/scope type=anime,genre=Sci-Fi</span>
+              <span class="telegram-chip">/scope type=manhwa</span>
               <span class="telegram-chip">/work Cowboy Bebop</span>
               <span class="telegram-chip">/stats</span>
             </div>
@@ -91,7 +91,7 @@
             <div class="feature-card">
               <div class="feature-card__title"><code>/s</code> or <code>/search &lt;query&gt;</code></div>
               <p class="feature-card__desc">
-                Executes hybrid search across all four mediums and returns top ranked works with score and matched synopsis excerpt.
+                Executes hybrid search across all six formats (Anime, Manga, Novels, Korean Manhwa, Chinese Manhua) and returns ranked works with citations.
               </p>
             </div>
             <div class="feature-card">
@@ -103,7 +103,7 @@
             <div class="feature-card">
               <div class="feature-card__title"><code>/scope &lt;filters&gt;</code></div>
               <p class="feature-card__desc">
-                Sets active filters for your conversation session (e.g. <code>/scope type=anime,year=2023</code> or <code>/scope genre=Cyberpunk</code>).
+                Sets active filters for your conversation session (e.g. <code>/scope type=manhwa,year=2023</code> or <code>/scope genre=Cyberpunk</code>).
               </p>
             </div>
             <div class="feature-card">
@@ -115,7 +115,7 @@
             <div class="feature-card">
               <div class="feature-card__title"><code>/char &lt;name&gt;</code> &amp; <code>/va</code></div>
               <p class="feature-card__desc">
-                Resolves character aliases, voice actors, and creators across Japanese and localized romanized variants.
+                Resolves character aliases, voice actors, and creators across Japanese, Korean, and localized romanized variants.
               </p>
             </div>
             <div class="feature-card">
@@ -129,16 +129,17 @@
 
         <!-- Contact Channels Section -->
         <div style="margin-top:var(--space-12);background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-6);box-shadow:var(--card-shadow)">
-          <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Direct Contact &amp; Support</h2>
+          <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Direct Contact &amp; Developer Inquiries</h2>
           <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-4)">
-            Have a question about the API, need a higher quota tier on RapidAPI, or want to discuss enterprise hosting? Reach out through any of these channels:
+            Have a question about the API, a collaboration idea, a bug report, or a feature suggestion?
+            We welcome direct feedback and developer partnerships:
           </p>
 
           <div class="field">
             <span class="field__name">Email</span>
             <span class="field__value">
-              <a href="mailto:meaha2000@gmail.com" style="color:var(--sakura-deep);font-weight:600">meaha2000@gmail.com</a>
-              <span class="faint"> &mdash; Developer &amp; Maintainer</span>
+              <a href="mailto:AnimeAkashicRecords@hotmail.com" style="color:var(--sakura-deep);font-weight:600">AnimeAkashicRecords@hotmail.com</a>
+              <span class="faint"> &mdash; Questions, collaboration ideas, bug reports &amp; feature proposals</span>
             </span>
           </div>
 
@@ -180,9 +181,13 @@
         <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="28" height="28">
         <span class="wordmark">Anime Akashic Records</span>
       </div>
-      <p class="faint" style="font-size:.875rem;max-width:42ch">
-        Semantic retrieval across stories you half-remember. Four media unified in one canonical index.
+      <p class="faint" style="font-size:.875rem;max-width:44ch">
+        Semantic retrieval across stories you half-remember. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
       </p>
+      <div style="margin-top:var(--space-3);font-size:.8125rem;color:var(--ink-soft);line-height:1.6">
+        Have a question, collaboration idea, bug report, or feature suggestion?<br>
+        Reach out directly at: <a href="mailto:AnimeAkashicRecords@hotmail.com" style="color:var(--sakura-deep);font-weight:600">AnimeAkashicRecords@hotmail.com</a>
+      </div>
     </div>
     <div>
       <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>

@@ -27,9 +27,10 @@ const els = {
 const EXAMPLES = [
   "Time-travel visual novel with branching timelines",
   "A swordsman who cannot die and the woman who follows him",
+  "Weakest hunter reawakens in a dungeon with a solo leveling system",
   "Studio that animated a demon-slaying brother and sister",
+  "Banished immortal cultivator returns 10,000 years later to rebuild his sect",
   "Cyberpunk dystopia where memory can be bought",
-  "A quiet story about grief, set in a seaside town",
   "Something cozy but a little lonely, for a rainy evening",
 ];
 
