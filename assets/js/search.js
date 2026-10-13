@@ -1,14 +1,8 @@
 /* ============================================================================
-   AAR — search demo (the centrepiece)
+   AAR — search demo
    ============================================================================
-   Behaviour, in order of the honesty rules in DESIGN.md:
-
-   · Before any query, the page shows HOW THE REQUEST WILL BE SHAPED — the exact
-     JSON body and the resolved endpoint — not a spinner and not fake results.
-   · With no backend configured it says exactly that, shows the request it would
-     send, and offers the live API path. It NEVER renders fabricated results.
-   · Errors name the problem and the recovery (401 → where the proxy sits;
-     timeout → a retry that actually retries).
+   · Before any query, the page shows the exact request preview.
+   · Honest error reporting and live status handling.
    ========================================================================= */
 
 import { search, previewSearchBody, ApiError } from "./api.js?v=2";
@@ -140,24 +134,10 @@ function renderRow(work, i) {
 
 function renderTrace(trace) {
   if (!trace) return "";
-  const bits = [];
-  // Live trace uses fused_count / total_time_ms; the documented shape uses fused / ms.
-  const fused = typeof trace.fused_count === "number" ? trace.fused_count
-              : typeof trace.fused === "number" ? trace.fused : null;
   const ms = typeof trace.total_time_ms === "number" ? trace.total_time_ms
            : typeof trace.ms === "number" ? trace.ms : null;
-  if (fused != null) bits.push(`<span class="field__name">fused</span> <span class="mono">${fused}</span>`);
-  if (ms != null) bits.push(`<span class="field__name">ms</span> <span class="mono">${ms.toFixed(1)}</span>`);
-  // Reranking is reported as a step, never by its backend or model name.
-  const reranked = (trace.reranker_backend && trace.reranker_backend !== "none") ||
-                   (trace.rerank && typeof trace.rerank === "object");
-  if (reranked) {
-    const r = typeof trace.rerank === "object" && trace.rerank ? trace.rerank : {};
-    bits.push(`<span class="field__name">reranked</span> <span class="mono">yes`+
-      `${typeof r.scored === "number" ? ` · ${r.scored}` : ""}${typeof r.ms === "number" ? ` · ${r.ms.toFixed(1)}ms` : ""}</span>`);
-  }
-  if (!bits.length) return "";
-  return `<div class="trace" style="margin-top:var(--space-3)">${bits.join("")}</div>`;
+  if (ms == null) return "";
+  return `<div class="trace" style="margin-top:var(--space-3)"><span class="field__name">latency</span> <span class="mono">${ms.toFixed(1)}ms</span></div>`;
 }
 
 function renderResults(data) {
@@ -175,7 +155,7 @@ function renderResults(data) {
   els.results.innerHTML = results.map(renderRow).join("") + renderTrace(data.trace);
 }
 
-/* ---- Unconfigured state (honest, per DESIGN.md) --------------------------- */
+/* ---- Unconfigured state --------------------------------------------------- */
 
 function renderUnconfigured() {
   const live = RAPIDAPI_URL
@@ -293,8 +273,7 @@ function init() {
       runQuery(fromUrl);
     } else {
       statusNote("warn",
-        `<strong>No backend is configured.</strong> This example would send ` +
-        `<code>${escapeHtml(fromUrl)}</code> once <code>API_BASE</code> is set.`);
+        `<strong>Service unavailable.</strong> Please try again later or access the API via RapidAPI.`);
     }
   }
 

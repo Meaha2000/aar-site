@@ -62,33 +62,18 @@
     <main class="column" id="main">
 
       <section class="section" id="hero" aria-labelledby="hero-title">
-        <div class="hero__grid">
-          <div>
-            <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
-            <p class="lead hero__lede">
-              Anime Akashic Records is a retrieval engine over anime, manga, light novels and visual
-              novels. Describe the half-remembered thing &mdash; a plot, a mechanic, a studio &mdash; or
-              just the vibe you&rsquo;re after, the feeling for that moment. It returns works to watch
-              or read, ranked, each with the passage that matched.
-            </p>
-            <div class="controls">
-              <a class="btn btn--primary" href="search.html">Try the search demo</a>
-              <a class="btn btn--quiet" href="#integration">Get started</a>
-            </div>
-          </div>
-
-          <div class="drawer" aria-labelledby="drawer-title">
-            <div class="drawer__label">
-              <span class="micro" id="drawer-title">One call, end to end</span>
-              <span class="micro">Documented shape</span>
-            </div>
-            <ul class="drawer__index">
-              <li class="drawer__row"><span class="pos">01</span><span class="q">A swordsman who cannot die, and the woman who follows him</span><span class="tag">ask</span></li>
-              <li class="drawer__row"><span class="pos">02</span><span class="q">POST /search &mdash; scope and limit</span><span class="tag">send</span></li>
-              <li class="drawer__row"><span class="pos">03</span><span class="q">Ranked works, each with the passage that matched</span><span class="tag">read</span></li>
-            </ul>
-            <p class="drawer__foot micro">This is the request&rsquo;s shape, not a stored result.
-            The demo sends it for real.</p>
+        <div class="hero">
+          <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
+          <p class="lead hero__lede">
+            Anime Akashic Records is a semantic retrieval engine over anime, manga, light novels, and visual
+            novels. Describe what you half-remember &mdash; a plot, a key character dynamic, a studio, or
+            just the vibe and mood you&rsquo;re looking for. It searches across all four media and returns ranked
+            matches, each paired with the exact passages confirming why the work fits.
+          </p>
+          <div class="controls">
+            <a class="btn btn--primary" href="search.html">Try the search demo &rarr;</a>
+            <a class="btn btn--quiet" href="#api">API Reference</a>
+            <a class="btn btn--quiet" href="#integration">Get started</a>
           </div>
         </div>
       </section>
@@ -168,7 +153,7 @@
             <button class="btn btn--quiet" type="button" data-copy="[data-endpoints]"><span data-copy-label>Copy</span></button>
           </div>
           <div class="code__body"><pre data-endpoints>GET  /health   liveness check (no auth)
-POST /search   ranked works, with the passages that matched
+POST /search   ranked works, with the passages that matched</pre></div>
         </div>
 
         <h3 class="subhead">The search request</h3>
@@ -193,16 +178,22 @@ POST /search   ranked works, with the passages that matched
             <button class="btn btn--quiet" type="button" data-copy="[data-res-body]"><span data-copy-label>Copy</span></button>
           </div>
           <div class="code__body"><pre data-res-body>{
+  "total_documents": 1,
   "results": [
     {
-      "canonical_title": "Shingeki no Kyojin",
-      "work_type": "ANIME",
-      "year": 2013,
-      "score": 0.9842,
-      "matched_chunk": { "text": "…" }
+      "title": "Steins;Gate",
+      "type": "visual_novel",
+      "year": 2009,
+      "score": 0.9412,
+      "status": "finished",
+      "chunks": [
+        {
+          "section": "Synopsis",
+          "text": "Rintaro Okabe is a self-proclaimed mad scientist who accidentally discovers a way to send messages to the past, triggering unforeseen consequences across timelines."
+        }
+      ]
     }
-  ],
-  "trace": { "fused": 150, "rerank": { "scored": 80, "ms": 340.2 }, "ms": 820.5 }
+  ]
 }</pre></div>
         </div>
 

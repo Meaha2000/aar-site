@@ -1,7 +1,6 @@
 /* ============================================================================
    AAR — API client
-   Thin, dependency-free wrapper over the public contract in aar/API.md.
-   Returns the raw envelope; rendering is the caller's business.
+   Lightweight, dependency-free wrapper for the API endpoints.
    ========================================================================= */
 
 import { API_KEY, RAPIDAPI_HOST, endpoint, isConfigured } from "./config.js?v=2";
@@ -54,7 +53,7 @@ async function request(path, { method = "GET", body = null, signal = null } = {}
   return data;
 }
 
-/* ---- Endpoints (mirror aar/API.md) --------------------------------------- */
+/* ---- Endpoints ----------------------------------------------------------- */
 
 /** GET /health — unauthenticated liveness check. */
 export function health(signal) {
