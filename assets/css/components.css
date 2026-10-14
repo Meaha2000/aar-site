@@ -403,11 +403,38 @@
 .index-row__pos   { grid-area: pos; font-family: var(--mono); font-size: .8125rem; color: var(--ink-faint); }
 .index-row__title { grid-area: title; font-family: var(--serif); font-size: 1.0625rem; color: var(--ink); }
 .index-row__title .en { color: var(--ink-soft); font-size: .875rem; }
-.index-row__meta  { grid-area: meta; display: flex; gap: var(--space-3); align-items: baseline;
+.index-row__meta  { grid-area: meta; display: grid; grid-template-columns: 8rem 3.5rem 4.5rem;
+                    gap: var(--space-3); align-items: baseline;
                     font-family: var(--mono); font-size: .75rem; color: var(--ink-faint);
                     font-variant-numeric: tabular-nums slashed-zero; }
-.index-row__type  { text-transform: uppercase; letter-spacing: .1em; color: var(--sakura-deep); font-weight: 600; }
-.index-row__score { color: var(--ink-soft); }
+.index-row__type  { text-transform: uppercase; letter-spacing: .08em; color: var(--sakura-deep); font-weight: 600;
+                    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+.index-row__year  { text-align: center; color: var(--ink-faint); }
+.index-row__score { color: var(--ink-soft); text-align: right; }
+
+/* ---- Index row column header --------------------------------------------- */
+.index-row__cols-head {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  grid-template-areas: "pos title meta";
+  gap: 0 var(--space-3);
+  align-items: baseline;
+  padding: var(--space-2) 0;
+  width: 100%;
+  border-bottom: 1px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-size: .6875rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.index-row__col-pos   { grid-area: pos; }
+.index-row__col-title { grid-area: title; }
+.index-row__col-meta  { grid-area: meta; display: grid; grid-template-columns: 8rem 3.5rem 4.5rem;
+                        gap: var(--space-3); align-items: baseline; }
+.index-row__col-type  { text-align: left; }
+.index-row__col-year  { text-align: center; }
+.index-row__col-score { text-align: right; }
 
 .index-row__body { padding: 0 0 var(--space-4) 2.5rem; }
 .index-row__body[hidden] { display: none; }

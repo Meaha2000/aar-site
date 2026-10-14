@@ -127,7 +127,7 @@ function renderRow(work, i) {
         <span class="index-row__title">${title}${alt ? ` <span class="en">${alt}</span>` : ""}</span>
         <span class="index-row__meta">
           <span class="index-row__type">${type}</span>
-          <span>${year}</span>
+          <span class="index-row__year">${year}</span>
           <span class="index-row__score">${score}</span>
         </span>
       </button>

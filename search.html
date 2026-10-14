@@ -111,8 +111,18 @@
             <div data-search-status hidden></div>
 
             <div class="results__head" data-results-head hidden>
-              <h2 class="section__title" style="font-size:1.05rem">Ranked works</h2>
-              <span class="faint mono" style="font-size:.6875rem">position &middot; title &middot; type &middot; year &middot; score</span>
+              <div class="results__head-title">
+                <h2 class="section__title" style="font-size:1.05rem;margin:0">Ranked works</h2>
+              </div>
+              <div class="index-row__cols-head" aria-hidden="true">
+                <span class="index-row__col-pos">Pos</span>
+                <span class="index-row__col-title">Title</span>
+                <div class="index-row__col-meta">
+                  <span class="index-row__col-type">Type</span>
+                  <span class="index-row__col-year">Year</span>
+                  <span class="index-row__col-score">Score</span>
+                </div>
+              </div>
             </div>
             <div data-results></div>
           </div>

@@ -176,9 +176,8 @@
 
 .request-preview { margin-top: var(--space-3); }
 
-.results__head { display: flex; justify-content: space-between; align-items: baseline;
-                 gap: var(--space-3); border-bottom: 2px solid var(--rule-strong);
-                 padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
+.results__head { margin-bottom: var(--space-2); }
+.results__head-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2); }
 
 .trace { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
 
@@ -207,6 +206,8 @@
   .stage { grid-template-columns: 2rem 1fr; }
   .field { grid-template-columns: 1fr; gap: var(--space-1); }
   .footer__grid { grid-template-columns: 1fr; }
+  .index-row__cols-head { display: none; }
+  .index-row__meta { display: flex; gap: var(--space-3); }
   .index-row__head { grid-template-columns: 2rem 1fr; grid-template-areas: "pos title" "pos meta"; }
   .index-row__body { padding-left: 2rem; }
   .shelf__item { grid-template-columns: 2rem minmax(0, 1fr) auto; }
