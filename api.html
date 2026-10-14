@@ -63,7 +63,7 @@
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
-      <button class="theme-toggle" type="button" data-theme-toggle>Light</button>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">Light</button>
     </div>
   </div>
 </header>
@@ -131,20 +131,20 @@
         <!-- Endpoints Tabs -->
         <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Endpoints</h2>
         <div class="tabs" data-api-tabs>
-          <div class="tab-nav">
-            <button class="tab-btn is-active" type="button" data-tab-target="tab-search">
+          <div class="tab-nav" role="tablist" aria-label="API Endpoints">
+            <button class="tab-btn is-active" type="button" role="tab" id="btn-tab-search" aria-selected="true" aria-controls="tab-search" data-tab-target="tab-search">
               <span class="badge badge--method badge--post">POST</span> /search
             </button>
-            <button class="tab-btn" type="button" data-tab-target="tab-ask">
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-ask" aria-selected="false" aria-controls="tab-ask" data-tab-target="tab-ask">
               <span class="badge badge--method badge--post">POST</span> /ask
             </button>
-            <button class="tab-btn" type="button" data-tab-target="tab-health">
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-health" aria-selected="false" aria-controls="tab-health" data-tab-target="tab-health">
               <span class="badge badge--method badge--get">GET</span> /health
             </button>
           </div>
 
           <!-- TAB 1: /search -->
-          <div class="tab-pane is-active" id="tab-search">
+          <div class="tab-pane is-active" id="tab-search" role="tabpanel" aria-labelledby="btn-tab-search">
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Advanced Hybrid Retrieval</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -247,7 +247,7 @@
           </div>
 
           <!-- TAB 2: /ask -->
-          <div class="tab-pane" id="tab-ask">
+          <div class="tab-pane" id="tab-ask" role="tabpanel" aria-labelledby="btn-tab-ask" hidden>
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Question Answering</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -315,7 +315,7 @@
           </div>
 
           <!-- TAB 3: /health -->
-          <div class="tab-pane" id="tab-health">
+          <div class="tab-pane" id="tab-health" role="tabpanel" aria-labelledby="btn-tab-health" hidden>
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Liveness Probe &amp; Corpus Statistics</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -442,20 +442,30 @@
 
 <script type="module" src="assets/js/site.js?v=2"></script>
 <script>
-  // Simple tabs switcher for API documentation
+  // Accessible tabs switcher for API documentation
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-tab-target]');
     if (!btn) return;
     const nav = btn.closest('.tab-nav');
     if (!nav) return;
     const targetId = btn.getAttribute('data-tab-target');
-    nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('is-active'));
+    nav.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('is-active');
+      b.setAttribute('aria-selected', 'false');
+    });
     btn.classList.add('is-active');
+    btn.setAttribute('aria-selected', 'true');
     const container = nav.closest('.tabs');
     if (container) {
-      container.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('is-active'));
+      container.querySelectorAll('.tab-pane').forEach(p => {
+        p.classList.remove('is-active');
+        p.hidden = true;
+      });
       const targetPane = document.getElementById(targetId);
-      if (targetPane) targetPane.classList.add('is-active');
+      if (targetPane) {
+        targetPane.classList.add('is-active');
+        targetPane.hidden = false;
+      }
     }
   });
 </script>

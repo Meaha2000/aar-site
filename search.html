@@ -60,7 +60,7 @@
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
-      <button class="theme-toggle" type="button" data-theme-toggle>Light</button>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">Light</button>
     </div>
   </div>
 </header>
@@ -84,7 +84,7 @@
         <div class="instrument">
           <div>
             <!-- Mode Switcher -->
-            <div style="display:flex;gap:.5rem;margin-bottom:var(--space-3)">
+            <div role="group" aria-label="Query mode" style="display:flex;gap:.5rem;margin-bottom:var(--space-3)">
               <button class="chip is-active" type="button" data-mode="search" aria-pressed="true" style="font-size:.75rem;padding:.45rem .85rem">
                 Search Mode (POST /search)
               </button>

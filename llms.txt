@@ -183,7 +183,16 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | `statuses` | `array[string]` | Lifecycle status: `["finished", "releasing", "upcoming", "cancelled", "hiatus"]` (also accepts `"completed"`, `"airing"`, `"ongoing"`). |
 | `genres` | `array[string]` | Genres: `["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mecha", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]`. |
 | `tags` | `array[string]` | Thematic tags: `["Time Travel", "Cyberpunk", "Isekai", "Reincarnation", "Cultivation", "Martial Arts", "Dungeons", "Necromancy", "School", "Anti-Hero"]`. |
+| `themes` | `array[string]` | Narrative themes and tropes. |
 | `studios` | `array[string]` | Studio name or substring: `["ufotable", "MAPPA", "Kyoto Animation", "Shaft", "Madhouse", "Bones", "Wit Studio"]`. |
+| `director_names` | `array[string]` | Credited directors (e.g. `["Shinichirou Watanabe", "Hideaki Anno"]`). |
+| `author_names` | `array[string]` | Original creators, mangaka, or novelists (e.g. `["Nisio Isin", "Naoki Urasawa"]`). |
+| `composer_names` | `array[string]` | Music composers (e.g. `["Yoko Kanno", "Hiroyuki Sawano"]`). |
+| `voice_actor_names` | `array[string]` | Voice actors / seiyuu (e.g. `["Megumi Hayashibara", "Hiroshi Kamiya"]`). |
+| `staff_names` | `array[string]` | Any credited production staff member. |
+| `character_names` | `array[string]` | Canonical character names (e.g. `["Spike Spiegel", "Rintaro Okabe"]`). |
+| `titles` | `array[string]` | Restrict search to specific work titles. |
+| `years` | `array[integer]` | Specific release years (e.g. `[1998, 2011]`). |
 | `min_year` | `integer` | Minimum release year bound (e.g. `2010`). |
 | `max_year` | `integer` | Maximum release year bound (e.g. `2024`). |
 | `min_score` | `number` | Minimum review score threshold (float between 0.0 and 10.0). |
@@ -207,24 +216,25 @@ Advanced hybrid retrieval across the 6 supported mediums.
 #### Response Envelope (`200 OK`):
 ```json
 {
-  "total": 8,
+  "total_documents": 1,
   "results": [
     {
-      "position": 1,
+      "work_id": "manhwa:solo_leveling",
+      "title": "Solo Leveling",
+      "type": "manhwa",
       "score": 0.942,
-      "work_id": "c7a8b9e0-1234-5678-9abc-def012345678",
-      "canonical_title": "Solo Leveling",
-      "type": "MANHWA",
-      "country_of_origin": "KR",
-      "year": 2018,
       "status": "finished",
-      "genres": ["Action", "Fantasy"],
-      "tags": ["Dungeons", "Leveling", "Necromancy"],
-      "excerpts": [
-        "In a world where hunters must battle deadly monsters, Sung Jin-woo, notoriously known as the weakest hunter of all mankind, is fatally injured in a high-rank double dungeon..."
+      "chunks": [
+        {
+          "section": "Synopsis",
+          "text": "In a world where hunters must battle deadly monsters, Sung Jin-woo, notoriously known as the weakest hunter of all mankind, is fatally injured in a high-rank double dungeon..."
+        }
       ]
     }
-  ]
+  ],
+  "trace": {
+    "total_time_ms": 284.5
+  }
 }
 ```
 
@@ -255,14 +265,28 @@ Grounded conversational question-answering with citation synthesis for AI agents
 ```json
 {
   "answer": "In Parasyte (Kiseijuu: Sei no Kakuritsu), seventeen-year-old Shinichi Izumi is partially infected by an alien parasite named Migi, which fails to take over his brain and instead matures in his right hand. The dynamic is unique because Shinichi and Migi retain separate intellects and moralities, forcing an uneasy symbiotic coexistence where Migi's cold survival logic clashes with Shinichi's human empathy as they defend against other hostile parasites.",
-  "citations": [
+  "sources": [
     {
-      "work_id": "parasyte-kiseijuu-2014",
-      "canonical_title": "Parasyte -the maxim-",
-      "type": "ANIME",
-      "year": 2014,
+      "ref": 1,
+      "title": "Parasyte -the maxim-",
+      "type": "anime",
+      "section": "Synopsis",
+      "confirmed": true
+    }
+  ],
+  "results": [
+    {
+      "work_id": "anime:parasyte_the_maxim",
+      "title": "Parasyte -the maxim-",
+      "type": "anime",
+      "score": 0.951,
       "status": "finished",
-      "excerpt": "Seventeen-year-old Shinichi Izumi falls victim to one of these parasites, but it fails to take over his brain, ending up in his right hand instead."
+      "chunks": [
+        {
+          "section": "Synopsis",
+          "text": "Seventeen-year-old Shinichi Izumi falls victim to one of these parasites, but it fails to take over his brain, ending up in his right hand instead."
+        }
+      ]
     }
   ]
 }
@@ -296,10 +320,10 @@ response = requests.post(url, json=payload, headers=headers, timeout=10)
 response.raise_for_status()
 data = response.json()
 
-for item in data.get("results", []):
-    print(f"#{item['position']} {item['canonical_title']} ({item['type']}, {item['year']})")
-    for ex in item.get("excerpts", []):
-        print(f"   Excerpt: {ex[:120]}...")
+for idx, item in enumerate(data.get("results", []), start=1):
+    print(f"#{idx} {item['title']} ({item['type']})")
+    for chunk in item.get("chunks", []):
+        print(f"   [{chunk.get('section')}] {chunk.get('text', '')[:120]}...")
 ```
 
 ### TypeScript / JavaScript (Node.js Fetch)
