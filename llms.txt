@@ -56,15 +56,63 @@ AAR can return relevant work metadata and supporting text from indexed descripti
 
 Anime Akashic Records is **primarily an Anime API**, created to solve the discovery limitations of traditional databases.
 
-### Target Personas & Value Propositions:
-| Target Audience | Practical Value Proposition | Technical Note |
-|---|---|---|
-| **Streaming Platforms** | Add natural language search and vibe discovery to your existing catalog. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. |
-| **AI Chatbots & Agents** | Find works and answer questions grounded by synopsis text. | Synthesizes answers and returns cited excerpts to avoid unsupported claims. |
-| **Anime Discovery Apps** | Help users discover titles matching their mood, aesthetic vibes, and tropes. | Replaces shallow tag checkboxes with rich conversational discovery. |
-| **Community Bots & Creators** | Quickly find works fitting a specific discussion prompt, video theme, or debate. | Rapidly surfaces thematic titles across 180,000+ indexed works. |
+### 3.1. The Problem with Traditional Anime APIs
+Traditional anime and manga databases perform well for administrative catalogue management and user list logging, but exhibit fundamental failure modes when applied to modern discovery, recommendation systems, and AI agent grounding:
 
-### When to Choose AAR vs. Traditional APIs (MAL / AniList / Kitsu):
+1. **Exact Title Lookup Focus:**
+   Traditional APIs are engineered around exact or near-exact keyword matching. Searching for a half-remembered plot fragment like *"a boy whose arm transforms into a blade"* yields zero helpful results because the title is *Parasyte: The Maxim*.
+2. **Rigid, Shallow Tag Checkboxes:**
+   Filtering by broad genre categories like "Action" or "Fantasy" still leaves thousands of unrelated titles. Nuanced narrative themes like *"cozy winter solo travel"*, *"rivals who respect each other"*, or *"philosophical melancholy"* cannot be expressed with checkbox tags alone.
+3. **Title-Only Output Without Context:**
+   When a traditional system recommends an anime, it usually provides only a title string and an ID. Applications have no immediate way to explain *why* it fits the user query without reading external third-party reviews or scraping web forums.
+4. **Cross-Medium Fragmentation:**
+   Anime adaptations frequently originate from manga, light novels, visual novels, or webtoons. In conventional services, these works are fractured across disconnected databases, breaking cross-media continuity and adaptation lineage.
+
+---
+
+### 3.2. Why Choose Anime Akashic Records?
+AAR is fundamentally distinct from conventional anime databases through six core architectural pillars:
+
+1. **Natural Language Search:**
+   Users and AI agents query in everyday language. Describe a character's powers, a memorable twist, or a specific aesthetic atmosphere, and the neural retrieval engine connects the description to relevant titles.
+2. **Evidence-Grounded Results:**
+   Results include supporting text passages from indexed synopses explaining *why* a work matches. This evidence enables users and AI assistants to evaluate recommendations with grounded context rather than blind guesswork.
+3. **Mainly Anime — Plus Connected Mediums:**
+   While focused primarily on Anime, the catalog unifies Japanese Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua in a single index. Multi-format franchises resolve cleanly across adaptations.
+4. **Question Answering Endpoint (`/ask`):**
+   A dedicated conversational endpoint tailored for AI chatbots and agents. Ask a direct question about an anime's premise or setup, and receive a factual, synthesized answer backed by catalog citations.
+5. **Flexible Hard Scope Filters:**
+   Combine the freedom of natural language descriptions with strict filters: narrow results by medium (`types`: anime, manga, light_novel, visual_novel, manhwa, manhua), status (Finished, Releasing), release year ranges, genres, or animation studios.
+6. **Managed Search Infrastructure:**
+   Hosted directly on RapidAPI. No need to host or maintain complex vector and retrieval clusters yourself — instant API keys, managed rate limits, and ready-to-run client libraries.
+
+---
+
+### 3.3. At a Glance: How AAR Compares
+Traditional APIs and Anime Akashic Records serve complementary roles in the anime ecosystem:
+
+| Capability | Traditional Anime APIs (MAL / AniList / Kitsu) | Anime Akashic Records (AAR) |
+|---|---|---|
+| **Primary Focus** | User watch-lists, episode broadcast schedules, forum profiles. | Intelligent anime discovery, natural language search, vibe retrieval, and AI assistant grounding. |
+| **Search Input** | Exact or near-exact title keywords only. | Plain natural language descriptions, plot summaries, tropes, vibes, and themes. |
+| **Tip-of-the-Tongue & Vibe Queries** | Limited — requires title keywords to surface results. | Built specifically to resolve descriptive memories and atmospheric requests. |
+| **Why It Matched (Evidence/Grounding)** | Returns titles and metadata IDs only. | Returns supporting synopsis excerpts providing context for why the title matches. |
+| **Direct Q&A (`/ask`)** | Not available — you must build your own retrieval and grounding pipeline. | Built-in endpoint delivering synthesized answers with citations. |
+| **Cross-Media Scope** | Often split into separate databases or IDs. | Unified index: Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, Chinese Manhua. |
+| **Best Used For** | Tracking which episode you watched yesterday. | Finding what to watch next, exploring vibes, answering questions, and powering intelligent apps. |
+
+---
+
+### 3.4. Target Personas & Integration Scenarios
+
+| Target Audience | Practical Value Proposition | Technical Integration Note |
+|---|---|---|
+| **Streaming Platforms** | Add natural language search and vibe discovery to your existing catalog. Users describe what they want to watch in their own words. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. *(Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service).* |
+| **AI Chatbots & Agents** | Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests. | Synthesizes answers and returns cited excerpts to avoid hallucinations and unsupported claims. |
+| **Anime Discovery Apps** | Enhance your app's search bar so users don't need to remember exact spellings; explore titles matching their mood or aesthetic vibe. | Replaces shallow tag checkboxes with rich conversational and thematic discovery. |
+| **Community Bots & Creators** | Build Discord and Telegram bots that answer community questions, or quickly curate themed lists around specific tropes. | Rapidly surfaces thematic titles across 180,000+ indexed works. |
+
+### 3.5. When to Choose AAR vs. Traditional APIs:
 - **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched), forum profiles, or minute-by-minute episode airing countdowns.
 - **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." and vibe-based discovery queries.
 
