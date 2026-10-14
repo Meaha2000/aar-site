@@ -171,7 +171,9 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | `question` | `string` | **Yes** | — | Natural language description, plot summary, character dynamic, or trope. |
 | `limit` | `integer` | No | `8` | Number of ranked works to return (clamped between 1 and 50). |
 | `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` (semantic vectors + keyword search + rerank) or `"semantic"` (dense vector search + rerank). |
-| `include` | `array[string]` | No | `["text"]` | Extra fields to include in chunks (e.g. `["text"]`). |
+| `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes and refines the query via LLM. When `false`, embeds directly as-is to minimize latency. |
+| `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement and proceeding directly to vector embedding. |
+| `include` | `array[string]` | No | `[]` | Extra relational fields to include: `["staff", "characters", "relations"]`. |
 | `scope` | `object` | No | `{}` | Hard filters applied to the index before retrieval. |
 
 #### Scope Filter Object Schema (`scope`)
@@ -193,6 +195,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
   "question": "A hunter who can see hidden status windows and level up alone in modern dungeons",
   "limit": 8,
   "mode": "hybrid",
+  "query_breakdown": true,
   "scope": {
     "types": ["MANHWA", "MANGA", "ANIME"],
     "statuses": ["finished", "releasing"],
@@ -234,6 +237,11 @@ Grounded conversational question-answering with citation synthesis for AI agents
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `question` | `string` | **Yes** | — | Question regarding an anime premise, comparison, or plot inquiry. |
+| `limit` | `integer` | No | `8` | Number of ranked works to return (clamped between 1 and 50). |
+| `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` or `"semantic"`. |
+| `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes query via LLM. When `false`, embeds query directly as-is to minimize latency. |
+| `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement. |
+| `include` | `array[string]` | No | `[]` | Extra relational fields to attach: `["staff", "characters", "relations"]`. |
 | `scope` | `object` | No | `{}` | Optional hard scope filters restricting candidate retrieval. |
 
 #### Request Example:
