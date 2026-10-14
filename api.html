@@ -76,7 +76,7 @@
         <div style="max-width:54rem">
           <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3)">
             <span class="badge badge--sakura">RapidAPI Specification</span>
-            <span class="badge badge--live">180K+ Works Indexed</span>
+            <span class="badge badge--live">183K+ Works &amp; 389K+ Entities</span>
           </div>
           <h1 style="font-size:clamp(2.2rem,4.5vw,3.4rem);line-height:1.1;margin-bottom:var(--space-3)">
             API Reference
@@ -110,10 +110,10 @@
         <!-- Intended Scope & Best Practices Callout -->
         <div style="background:var(--paper-raised);border:1px solid var(--sakura);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
           <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
-            <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">💡 Intended Scope &amp; Best Practices</span>
+            <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">💡 Intended Scope &amp; Relational Depth</span>
           </div>
           <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0">
-            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ works. While canonical metadata (medium type, lifecycle status, release year, genres, and studios) is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
+            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, production metadata filtering, and grounded AI answer synthesis across <strong>183,000+ canonical works and 389,000+ interconnected entities</strong> (characters, voice actors, directors, authors, composers, and work-to-work relationships). While deep production metadata is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
           </p>
         </div>
 
@@ -153,10 +153,11 @@
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question, scene description, trope, or query.</span></div>
+            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question, scene description, trope, or production query.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>8</code>, max: <code>50</code>) — Maximum number of works to return.</span></div>
             <div class="field"><span class="field__name">mode</span><span class="field__value"><strong>string</strong> (optional, default: <code>"hybrid"</code>) — <code>"hybrid"</code> for balanced keywords &amp; concepts; <code>"semantic"</code> for vector-only retrieval.</span></div>
-            <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership filters (<code>types</code>, <code>statuses</code>, <code>genres</code>, <code>tags</code>, <code>studios</code>, <code>min_year</code>, <code>max_year</code>).</span></div>
+            <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Expanded relational payloads to attach to each result: <code>["staff", "characters", "relations"]</code>.</span></div>
+            <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
 
             <h4 class="subhead">Example Request</h4>
             <div class="code">
@@ -164,18 +165,21 @@
                 <span class="micro">cURL</span>
                 <button class="btn btn--quiet" type="button" data-copy="[data-curl-search]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-search>curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
+              <div class="code__body"><pre data-curl-search><code class="language-bash">curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
   -H "Content-Type: application/json" \
   -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
   -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY" \
   -d '{
-    "question": "Time-travel visual novel with branching timelines",
-    "limit": 8,
+    "question": "Bounty hunters across the solar system with bebop jazz soundtrack",
+    "limit": 5,
     "mode": "hybrid",
+    "include": ["staff", "characters", "relations"],
     "scope": {
-      "types": ["VISUAL_NOVEL"]
+      "types": ["ANIME"],
+      "director_names": ["Shinichirou Watanabe"],
+      "composer_names": ["Yoko Kanno"]
     }
-  }'</pre></div>
+  }'</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Response (200 OK)</h4>
@@ -188,21 +192,53 @@
   "total_documents": 1,
   "results": [
     {
-      "title": "Steins;Gate",
-      "type": "visual_novel",
-      "year": 2009,
-      "score": 0.9412,
+      "work_id": "anime:cowboy_bebop",
+      "title": "Cowboy Bebop",
+      "type": "anime",
+      "score": 0.9624,
       "status": "finished",
+      "staff": [
+        {
+          "person_name": "Shinichirou Watanabe",
+          "role": "Director"
+        },
+        {
+          "person_name": "Yoko Kanno",
+          "role": "Composer"
+        }
+      ],
+      "characters": [
+        {
+          "character_name": "Spike Spiegel",
+          "role": "MAIN",
+          "voice_actor_name": "Kouichi Yamadera"
+        },
+        {
+          "character_name": "Faye Valentine",
+          "role": "MAIN",
+          "voice_actor_name": "Megumi Hayashibara"
+        }
+      ],
+      "relations": [
+        {
+          "relation_type": "adaptation",
+          "target_title": "Cowboy Bebop (Manga)"
+        },
+        {
+          "relation_type": "side_story",
+          "target_title": "Cowboy Bebop: Knockin' on Heaven's Door"
+        }
+      ],
       "chunks": [
         {
           "section": "Synopsis",
-          "text": "Rintaro Okabe is a self-proclaimed mad scientist who accidentally discovers a way to send messages to the past, triggering unforeseen consequences across timelines."
+          "text": "In the year 2071, humanity has colonized several planets and moons in the solar system, leaving the surface of Earth behind. Spike Spiegel and Jet Black lead a crew of bounty hunters aboard the spaceship Bebop..."
         }
       ]
     }
   ],
   "trace": {
-    "total_time_ms": 342.5
+    "total_time_ms": 312.4
   }
 }</pre></div>
             </div>
@@ -213,15 +249,16 @@
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Question Answering</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
-                Conversational endpoint tailored for chatbots and AI agents. Returns a synthesized,
-                factual natural-language prose answer grounded in retrieved corpus citations, along with ranked supporting works.
+                Conversational endpoint tailored for chatbots and AI agents. Synthesizes a grounded,
+                factual natural-language prose answer derived strictly from retrieved canonical catalog records, production staff, and franchise relations.
               </p>
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question, plot inquiry, or character dynamic question.</span></div>
+            <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question regarding production, staff, franchise relations, or catalog metadata.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>8</code>) — Maximum reference works to retrieve for synthesis.</span></div>
-            <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Filter candidates by medium (<code>types</code>) or genre.</span></div>
+            <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Relational payloads to attach: <code>["staff", "characters", "relations"]</code>.</span></div>
+            <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
 
             <h4 class="subhead">Example Request</h4>
             <div class="code">
@@ -229,14 +266,17 @@
                 <span class="micro">cURL</span>
                 <button class="btn btn--quiet" type="button" data-copy="[data-curl-ask]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-ask>curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/ask" \
+              <div class="code__body"><pre data-curl-ask><code class="language-bash">curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/ask" \
   -H "Content-Type: application/json" \
   -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
   -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY" \
   -d '{
-    "question": "Explain the mechanics of the Reading Steiner ability in Steins;Gate and who possesses it.",
-    "limit": 5
-  }'</pre></div>
+    "question": "What anime adaptations exist for Steins;Gate, who directed the 2011 series, and which studio produced it?",
+    "limit": 5,
+    "scope": {
+      "types": ["ANIME"]
+    }
+  }'</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Response (200 OK)</h4>
@@ -246,18 +286,18 @@
                 <button class="btn btn--quiet" type="button" data-copy="[data-res-ask]"><span data-copy-label>Copy</span></button>
               </div>
               <div class="code__body"><pre data-res-ask>{
-  "answer": "Reading Steiner is the signature ability possessed primarily by Rintaro Okabe in Steins;Gate. When a D-Mail or time leap alters the world line, Okabe retains his intact memories of previous timelines while the memories of everyone else are rewritten to fit the newly established reality.",
+  "answer": "The television anime adaptation of Steins;Gate was produced by studio White Fox and co-directed by Hiroshi Hamasaki and Takuya Satou, airing in 2011 across 24 episodes. The franchise also includes the alternate timeline sequel anime Steins;Gate 0 (2018), the theatrical film Steins;Gate: The Movie − Load Region of Déjà Vu (2013), and the Soumei Kousoku no Cognitive Computing ONA series.",
   "results": [
     {
+      "work_id": "anime:steins_gate",
       "title": "Steins;Gate",
-      "type": "visual_novel",
-      "year": 2009,
+      "type": "anime",
       "score": 0.9540,
       "status": "finished",
       "chunks": [
         {
           "section": "Synopsis",
-          "text": "Reading Steiner allows the subject to perceive world line shifts and maintain intact continuity of personal consciousness across timeline divergences."
+          "text": "Self-proclaimed mad scientist Rintaro Okabe rents out a room in a rickety old building in Akihabara, where he invents 'future gadgets' with fellow lab members..."
         }
       ]
     }
@@ -284,9 +324,9 @@
                 <span class="micro">cURL</span>
                 <button class="btn btn--quiet" type="button" data-copy="[data-curl-health]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-health>curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
+              <div class="code__body"><pre data-curl-health><code class="language-bash">curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
   -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</pre></div>
+  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Response (200 OK)</h4>
@@ -297,8 +337,8 @@
               </div>
               <div class="code__body"><pre data-res-health>{
   "status": "ok",
-  "works": 183380,
-  "chunks": 192821
+  "works": 183767,
+  "chunks": 196823
 }</pre></div>
             </div>
           </div>
@@ -308,16 +348,36 @@
         <section style="margin-top:var(--space-12)">
           <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Scope Filter Fields</h2>
           <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-4)">
-            Hard filters supplied under the <code>scope</code> object. Unrecognized fields are strictly rejected with <code>422</code> so configuration mistakes are caught immediately.
+            Hard filters supplied under the <code>scope</code> object. Unrecognized fields are strictly rejected with <code>422</code> so configuration mistakes are caught immediately. All staff and character filters support canonical romanizations and case-insensitive matching.
           </p>
+
+          <h3 style="font-size:1.15rem;margin:var(--space-6) 0 var(--space-3);color:var(--sakura-deep)">Production, Staff &amp; Entity Filters</h3>
+          <div class="field"><span class="field__name">director_names</span><span class="field__value">List of directors (e.g. <code>["Shinichirou Watanabe", "Akiyuki Shinbou", "Hideaki Anno"]</code>)</span></div>
+          <div class="field"><span class="field__name">author_names</span><span class="field__value">Original manga authors, light novel writers, or creators (e.g. <code>["Nisio Isin", "Kentarou Miura", "Naoki Urasawa"]</code>)</span></div>
+          <div class="field"><span class="field__name">composer_names</span><span class="field__value">Music and soundtrack composers (e.g. <code>["Yoko Kanno", "Hiroyuki Sawano", "Yuki Kajiura", "Satoru Kousaki"]</code>)</span></div>
+          <div class="field"><span class="field__name">voice_actor_names</span><span class="field__value">Voice cast / seiyuu (e.g. <code>["Hiroshi Kamiya", "Chiwa Saitou", "Mamoru Miyano", "Megumi Hayashibara"]</code>)</span></div>
+          <div class="field"><span class="field__name">staff_names</span><span class="field__value">General staff spanning all credited production roles (character designers, scriptwriters, sound directors)</span></div>
+          <div class="field"><span class="field__name">character_names</span><span class="field__value">Canonical characters appearing in the work (e.g. <code>["Shinobu Oshino", "Rintaro Okabe", "Spike Spiegel"]</code>)</span></div>
+          <div class="field"><span class="field__name">titles</span><span class="field__value">Filter directly by specific work titles (e.g. <code>["Cowboy Bebop", "Steins;Gate"]</code>)</span></div>
+
+          <h3 style="font-size:1.15rem;margin:var(--space-6) 0 var(--space-3);color:var(--sakura-deep)">Medium, Genre &amp; Catalog Attributes</h3>
           <div class="field"><span class="field__name">types</span><span class="field__value mono">["ANIME", "MANGA", "LIGHT_NOVEL", "VISUAL_NOVEL", "MANHWA", "MANHUA"]</span></div>
           <div class="field"><span class="field__name">statuses</span><span class="field__value mono">["finished", "releasing", "upcoming", "cancelled", "hiatus"]</span></div>
-          <div class="field"><span class="field__name">genres</span><span class="field__value">List of genre strings (e.g. <code>["Action", "Sci-Fi", "Mystery"]</code>)</span></div>
-          <div class="field"><span class="field__name">tags</span><span class="field__value">Thematic tags (e.g. <code>["Time Travel", "Cyberpunk", "Post-Apocalyptic"]</code>)</span></div>
-          <div class="field"><span class="field__name">studios</span><span class="field__value">Studio names or substrings (e.g. <code>["ufotable", "Madhouse"]</code>)</span></div>
-          <div class="field"><span class="field__name">min_year / max_year</span><span class="field__value">Integer release year boundaries (e.g. <code>2010</code>, <code>2024</code>)</span></div>
-          <div class="field"><span class="field__name">min_score</span><span class="field__value">Minimum review score threshold (float)</span></div>
-          <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content boolean; default excludes 18+ content</span></div>
+          <div class="field"><span class="field__name">genres</span><span class="field__value">Canonical genre strings (e.g. <code>["Action", "Sci-Fi", "Mystery", "Psychological"]</code>)</span></div>
+          <div class="field"><span class="field__name">tags / themes</span><span class="field__value">Thematic tags and narrative tropes (e.g. <code>["Time Travel", "Cyberpunk", "Space", "Noir", "Post-Apocalyptic"]</code>)</span></div>
+          <div class="field"><span class="field__name">studios</span><span class="field__value">Animation and production studios (e.g. <code>["ufotable", "Madhouse", "Bones", "Shaft", "White Fox"]</code>)</span></div>
+          <div class="field"><span class="field__name">min_year / max_year</span><span class="field__value">Integer release year boundaries (e.g. <code>1998</code>, <code>2024</code>)</span></div>
+          <div class="field"><span class="field__name">years</span><span class="field__value">Specific release years list (e.g. <code>[1998, 2011]</code>)</span></div>
+          <div class="field"><span class="field__name">min_score</span><span class="field__value">Minimum review score threshold (float: <code>0.0</code> to <code>10.0</code>, e.g. <code>8.5</code>)</span></div>
+          <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content boolean (default <code>false</code> excludes 18+ content; <code>true</code> returns only adult works)</span></div>
+
+          <h3 style="font-size:1.15rem;margin:var(--space-6) 0 var(--space-3);color:var(--sakura-deep)">The <code>include</code> Relational Parameter</h3>
+          <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-3)">
+            By default, retrieval payloads return canonical metadata and text chunks. Pass the <code>include</code> array in your request to hydrate rich relational sub-trees:
+          </p>
+          <div class="field"><span class="field__name">"staff"</span><span class="field__value">Attaches key credited creators (directors, series composers, writers) with their production roles.</span></div>
+          <div class="field"><span class="field__name">"characters"</span><span class="field__value">Attaches major characters with their canonical names, role tiers (<code>MAIN</code>, <code>SUPPORTING</code>), and assigned voice actors.</span></div>
+          <div class="field"><span class="field__name">"relations"</span><span class="field__value">Attaches franchise connections including source adaptations, sequels, prequels, spin-offs, and alternative versions.</span></div>
         </section>
 
         <!-- Status Codes -->
