@@ -118,16 +118,40 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 
 ---
 
-## 4. Gateway, Authentication & Base URLs
+## 4. Gateways, Authentication & Base URLs
 
-### Host & Endpoints
+### 4.1. Free Community Gateway & Public Keys
+For evaluation, open-source AI agents, and independent developers, AAR provides a direct public tunnel gateway with free access:
+- **Direct Free Gateway URL:** `https://articles-exclusive-hope-yacht.trycloudflare.com`
+- **Public Free Key:** `aar_free_access` (or alias `aar_free`)
+- **Authentication Headers / Formats:**
+  - `x-api-key: aar_free_access`
+  - `Authorization: Bearer aar_free_access`
+  - URL query parameter: `?api_key=aar_free_access`
+- **Interactive Documentation:**
+  - Swagger UI: `https://articles-exclusive-hope-yacht.trycloudflare.com/docs`
+  - ReDoc: `https://articles-exclusive-hope-yacht.trycloudflare.com/redoc`
+
+#### Public Free Key Rate Limits (Strictly Enforced Per Client IP):
+*Note: These limits apply exclusively to the public free key (`aar_free_access` / `aar_free`). Other keys have dedicated unthrottled tiers.*
+- **Search & General Endpoints (`/search`, `/health`):**
+  - **30 requests per minute** per client IP (rolling 60s window).
+  - **3 requests per second** per client IP (burst protection).
+- **Ask Endpoint (`/ask`):**
+  - **3 requests per minute** per client IP.
+  - **1 request per second** per client IP (burst protection).
+- **Rate Limit Response:** Exceeding these limits triggers an `HTTP 429 Too Many Requests` envelope with a standard `Retry-After` header.
+- **Fair Use Notice:** Hosted on experimental community infrastructure; 100% uptime and latency are not guaranteed under sudden concurrent load surges. For custom quotas, private enterprise keys, SLA support, or bug reports, email `AnimeAkashicRecords@hotmail.com`.
+
+### 4.2. RapidAPI Production Gateway
+For production applications requiring guaranteed uptime and higher quotas:
 - **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
 - **Base Request URL:** `https://anime-akashic-records-aar-api.p.rapidapi.com`
 - **RapidAPI Listing:** https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api
 - **Web Demo Playground:** https://meaha2000.github.io/aar-site/search.html
 - **Official Telegram Bot:** https://t.me/AnimeAkashicRecords_bot (@AnimeAkashicRecords_bot)
 
-### Mandatory HTTP Headers
+#### Mandatory HTTP Headers for RapidAPI
 Every request routed through the RapidAPI gateway must supply the following headers:
 ```http
 X-RapidAPI-Key: YOUR_RAPIDAPI_KEY
@@ -242,6 +266,8 @@ Advanced hybrid retrieval across the 6 supported mediums.
 
 ### 5.3. `POST /ask`
 Grounded conversational question-answering with citation synthesis for AI agents.
+
+> **Public Free Key Rate Limits:** Strictly capped at **1 request/second** and **3 requests/minute** per client IP (applies only to `aar_free_access`). Dedicated RapidAPI and enterprise keys operate on separate tiers.
 
 #### Request Parameters
 | Parameter | Type | Required | Default | Description |
