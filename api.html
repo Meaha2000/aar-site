@@ -136,26 +136,50 @@
 
           <!-- Per-IP Rate Limits Metrics -->
           <div style="margin-bottom:var(--space-5)">
-            <div class="micro" style="margin-bottom:var(--space-2);color:var(--ink-mute)">Strictly Enforced Rate Limits (Per Client IP &mdash; Free Public Key Only)</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:var(--space-3)">
-              <div style="background:var(--paper-deep);border-left:3px solid var(--moss);border-radius:4px;padding:var(--space-3)">
-                <div class="micro" style="color:var(--moss);margin-bottom:.2rem">Search &amp; General (/search)</div>
-                <div class="mono" style="font-size:1.2rem;font-weight:700;color:var(--ink)">30 req / min</div>
-                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Burst: 3 req / sec per IP</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2)">
+              <div class="micro" style="color:var(--ink-mute)">Strictly Enforced Rate Limits (Per Client IP &mdash; Free Public Key Only)</div>
+              <div class="micro" style="color:var(--ink-mute)">HTTP 429 on Overlimit with <code class="mono" style="font-size:.6875rem">Retry-After</code></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:var(--space-3)">
+              <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--moss);border-radius:6px;padding:var(--space-3) var(--space-4)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+                  <span class="micro" style="color:var(--moss);font-weight:700">Search Endpoint (<code class="mono" style="font-size:.7rem">/search</code>)</span>
+                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.625rem">Discovery</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:.25rem">
+                  <div>
+                    <span class="mono" style="font-size:1.35rem;font-weight:700;color:var(--ink)">30</span>
+                    <span class="faint" style="font-size:.8125rem"> req / min</span>
+                  </div>
+                  <div style="color:var(--rule-strong);font-size:.9rem">&middot;</div>
+                  <div>
+                    <span class="mono" style="font-size:1.35rem;font-weight:700;color:var(--ink)">3</span>
+                    <span class="faint" style="font-size:.8125rem"> req / sec</span>
+                  </div>
+                </div>
+                <div class="faint" style="font-size:.75rem">Rolling 60-second window with 3 req/sec burst limit per IP.</div>
               </div>
-              <div style="background:var(--paper-deep);border-left:3px solid var(--sakura-deep);border-radius:4px;padding:var(--space-3)">
-                <div class="micro" style="color:var(--sakura-deep);margin-bottom:.2rem">Ask Endpoint (/ask)</div>
-                <div class="mono" style="font-size:1.2rem;font-weight:700;color:var(--ink)">3 req / min</div>
-                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Burst: 1 req / sec per IP</div>
-              </div>
-              <div style="background:var(--paper-deep);border-left:3px solid var(--rule-strong);border-radius:4px;padding:var(--space-3)">
-                <div class="micro" style="color:var(--ink-mute);margin-bottom:.2rem">Exceeding Limits</div>
-                <div class="mono" style="font-size:1.2rem;font-weight:700;color:var(--ink)">HTTP 429</div>
-                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Retry-After backoff header</div>
+              <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--sakura-deep);border-radius:6px;padding:var(--space-3) var(--space-4)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+                  <span class="micro" style="color:var(--sakura-deep);font-weight:700">Ask Endpoint (<code class="mono" style="font-size:.7rem">/ask</code>)</span>
+                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.625rem">AI Synthesis</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:.25rem">
+                  <div>
+                    <span class="mono" style="font-size:1.35rem;font-weight:700;color:var(--ink)">3</span>
+                    <span class="faint" style="font-size:.8125rem"> req / min</span>
+                  </div>
+                  <div style="color:var(--rule-strong);font-size:.9rem">&middot;</div>
+                  <div>
+                    <span class="mono" style="font-size:1.35rem;font-weight:700;color:var(--ink)">1</span>
+                    <span class="faint" style="font-size:.8125rem"> req / sec</span>
+                  </div>
+                </div>
+                <div class="faint" style="font-size:.75rem">Strictly paced at 1 req/sec and 3 req/min per IP to manage LLM quota.</div>
               </div>
             </div>
-            <div class="faint" style="font-size:.75rem;margin-top:.4rem;color:var(--ink-mute)">
-              * Applicable strictly to the public free key (<code class="mono">aar_free_access</code> / <code class="mono">aar_free</code>). Dedicated RapidAPI and enterprise keys operate on separate unthrottled tiers.
+            <div class="faint" style="font-size:.75rem;margin-top:.45rem;color:var(--ink-mute)">
+              * Applicable strictly to the public free keys (<code class="mono">aar_free_access</code> / <code class="mono">aar_free</code>). RapidAPI subscribers and dedicated enterprise keys operate under separate tier allowances.
             </div>
           </div>
 
