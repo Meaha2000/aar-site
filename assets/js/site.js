@@ -88,12 +88,26 @@ async function copyText(text) {
 
 function initCopy() {
   document.addEventListener("click", async (e) => {
-    const btn = e.target.closest("[data-copy]");
+    const btn = e.target.closest("[data-copy], [data-copy-text]");
     if (!btn) return;
-    const sel = btn.getAttribute("data-copy");
-    const src = sel ? document.querySelector(sel) : null;
-    const text = btn.getAttribute("data-copy-text") || (src ? src.textContent : "");
-    const ok = await copyText(text);
+    e.preventDefault();
+
+    let text = btn.getAttribute("data-copy-text");
+    if (!text) {
+      const sel = btn.getAttribute("data-copy");
+      if (sel) {
+        try {
+          const src = document.querySelector(sel);
+          if (src) text = src.innerText || src.textContent || "";
+        } catch (_) {
+          text = sel;
+        }
+        if (!text) text = sel;
+      }
+    }
+
+    if (!text) return;
+    const ok = await copyText(text.trim());
     const label = btn.querySelector("[data-copy-label]") || btn;
     const was = label.textContent;
     label.textContent = ok ? "Copied" : "Copy failed";
