@@ -86,10 +86,10 @@
             <!-- Mode Switcher -->
             <div role="group" aria-label="Query mode" style="display:flex;gap:.5rem;margin-bottom:var(--space-3)">
               <button class="chip is-active" type="button" data-mode="search" aria-pressed="true" style="font-size:.75rem;padding:.45rem .85rem">
-                Search Mode (POST /search)
+                Search Mode (GET /search)
               </button>
               <button class="chip" type="button" data-mode="ask" aria-pressed="false" style="font-size:.75rem;padding:.45rem .85rem">
-                Ask AI Mode (POST /ask)
+                Ask AI Mode (GET /ask)
               </button>
             </div>
 
@@ -105,6 +105,122 @@
               </div>
               <div class="examples" data-examples aria-label="Example questions"></div>
             </form>
+
+            <!-- Advanced Options Toggle Bar -->
+            <div class="advanced-toggle-bar">
+              <button type="button" class="advanced-toggle" data-toggle-advanced aria-expanded="false" aria-controls="advanced-panel">
+                <svg class="advanced-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <span>Advanced Options</span>
+                <span class="advanced-toggle__summary" data-advanced-summary>GET &middot; Breakdown On &middot; Hybrid &middot; Limit 8 &middot; Safe</span>
+              </button>
+              <button type="button" class="btn btn--quiet btn--reset-mini" data-reset-advanced title="Reset options to defaults">
+                Reset
+              </button>
+            </div>
+
+            <!-- Advanced Options Drawer Panel -->
+            <div class="advanced-panel" id="advanced-panel" data-advanced-panel hidden>
+              <div class="advanced-grid">
+                <!-- 1. HTTP Method -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>HTTP Method</span>
+                    <span class="badge badge--method badge--get" data-badge-method>GET</span>
+                  </label>
+                  <div class="advanced-chips" role="group" aria-label="HTTP Method">
+                    <button class="chip is-active" type="button" data-opt-method="GET" aria-pressed="true">GET (Query String)</button>
+                    <button class="chip" type="button" data-opt-method="POST" aria-pressed="false">POST (JSON Body)</button>
+                  </div>
+                  <p class="advanced-desc">GET transmits parameters in the URL query string (simpler &amp; faster). POST sends a JSON body.</p>
+                </div>
+
+                <!-- 2. Query Breakdown -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>Query Breakdown</span>
+                    <span class="badge badge--sakura" data-badge-breakdown>LLM On</span>
+                  </label>
+                  <div class="advanced-chips" role="group" aria-label="Query Breakdown">
+                    <button class="chip is-active" type="button" data-opt-breakdown="true" aria-pressed="true">Enabled (true)</button>
+                    <button class="chip" type="button" data-opt-breakdown="false" aria-pressed="false">Bypassed (false)</button>
+                  </div>
+                  <p class="advanced-desc">When disabled, skips LLM query decomposition and embeds prompt directly as-is (essential for exact queries like &ldquo;samurais and aliens&rdquo; to rank Gintama #1).</p>
+                </div>
+
+                <!-- 3. Retrieval Mode -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>Retrieval Mode</span>
+                    <span class="badge badge--sakura" data-badge-mode>Hybrid</span>
+                  </label>
+                  <div class="advanced-chips" role="group" aria-label="Retrieval Mode">
+                    <button class="chip is-active" type="button" data-opt-mode="hybrid" aria-pressed="true">Hybrid (BM25 + Vectors)</button>
+                    <button class="chip" type="button" data-opt-mode="semantic" aria-pressed="false">Semantic (Vector Only)</button>
+                  </div>
+                  <p class="advanced-desc">Hybrid balances keyword and phrase matching with dense vectors. Semantic uses pure conceptual similarity.</p>
+                </div>
+
+                <!-- 4. Result Limit -->
+                <div class="advanced-group">
+                  <label class="advanced-label" for="opt-limit">
+                    <span>Result Limit</span>
+                    <span class="mono" data-limit-val>8</span>
+                  </label>
+                  <div class="range-wrap">
+                    <span class="micro faint">1</span>
+                    <input id="opt-limit" type="range" data-opt-limit min="1" max="50" step="1" value="8" style="flex:1">
+                    <span class="micro faint">50</span>
+                  </div>
+                  <p class="advanced-desc">Number of ranked works to return (clamped between 1 and 50).</p>
+                </div>
+
+                <!-- 5. Content Rating -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>Content Rating</span>
+                    <span class="badge badge--sakura" data-badge-nsfw>Safe</span>
+                  </label>
+                  <div class="advanced-chips" role="group" aria-label="Content Rating">
+                    <button class="chip is-active" type="button" data-opt-nsfw="false" aria-pressed="true">Safe (Filtered)</button>
+                    <button class="chip" type="button" data-opt-nsfw="true" aria-pressed="false">Adult / NSFW (18+)</button>
+                  </div>
+                  <p class="advanced-desc">Explicitly flags query as adult content, bypassing LLM refinement directly to vector embedding.</p>
+                </div>
+
+                <!-- 6. Scope Filters -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>Scope: Year &amp; Score</span>
+                  </label>
+                  <div class="advanced-inputs">
+                    <input type="number" class="advanced-input" data-opt-min-year placeholder="Min Year (1990)" min="1950" max="2035" aria-label="Minimum Release Year">
+                    <input type="number" class="advanced-input" data-opt-max-year placeholder="Max Year (2026)" min="1950" max="2035" aria-label="Maximum Release Year">
+                    <input type="number" class="advanced-input" data-opt-min-score placeholder="Min Score (7.5)" min="0" max="10" step="0.1" aria-label="Minimum Review Score">
+                  </div>
+                  <p class="advanced-desc">Hard scope constraints. Leave blank to match without boundary restrictions.</p>
+                </div>
+
+                <!-- 7. Relational Hydration -->
+                <div class="advanced-group">
+                  <label class="advanced-label">
+                    <span>Relational Hydration (include)</span>
+                  </label>
+                  <div class="advanced-chips" role="group" aria-label="Relational Details">
+                    <button class="chip" type="button" data-opt-include="staff" aria-pressed="false">Staff</button>
+                    <button class="chip" type="button" data-opt-include="characters" aria-pressed="false">Characters</button>
+                    <button class="chip" type="button" data-opt-include="relations" aria-pressed="false">Relations</button>
+                  </div>
+                  <p class="advanced-desc">Attaches rich relational sub-trees to returned documents in the JSON response.</p>
+                </div>
+              </div>
+
+              <div class="advanced-footer">
+                <div class="micro faint">All advanced parameters match the official API specification for both /search and /ask.</div>
+                <button type="button" class="btn btn--quiet" data-reset-advanced>Reset to Defaults</button>
+              </div>
+            </div>
 
             <div class="request-preview" data-request-preview></div>
 

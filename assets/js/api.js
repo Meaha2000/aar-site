@@ -1,6 +1,7 @@
 /* ============================================================================
    AAR — API client
    Lightweight, dependency-free wrapper for the API endpoints.
+   Supports both GET (query string) and POST (JSON body) contracts.
    ========================================================================= */
 
 import { API_KEY, RAPIDAPI_HOST, endpoint, isConfigured } from "./config.js?v=2";
@@ -53,6 +54,92 @@ async function request(path, { method = "GET", body = null, signal = null } = {}
   return data;
 }
 
+/* ---- Serialization helpers ------------------------------------------------ */
+
+export function buildSearchParams(opts) {
+  const {
+    question = "",
+    limit,
+    work_types,
+    mode,
+    query_breakdown,
+    nsfw,
+    min_year,
+    max_year,
+    min_score,
+    include,
+  } = opts;
+
+  const p = new URLSearchParams();
+  p.set("q", question);
+
+  if (limit != null && limit !== "") {
+    p.set("limit", String(limit));
+  }
+  if (mode) {
+    p.set("mode", mode);
+  }
+  if (query_breakdown !== undefined && query_breakdown !== null) {
+    p.set("query_breakdown", query_breakdown ? "true" : "false");
+  }
+  if (nsfw) {
+    p.set("nsfw", "true");
+  }
+  if (work_types && work_types.length) {
+    p.set("type", work_types.map((t) => t.toLowerCase()).join(","));
+  }
+  if (min_year != null && min_year !== "") {
+    p.set("min_year", String(min_year));
+  }
+  if (max_year != null && max_year !== "") {
+    p.set("max_year", String(max_year));
+  }
+  if (min_score != null && min_score !== "") {
+    p.set("min_score", String(min_score));
+  }
+  if (include && include.length) {
+    p.set("include", include.join(","));
+  }
+
+  return p;
+}
+
+export function buildSearchPayload(opts) {
+  const {
+    question = "",
+    limit,
+    work_types,
+    mode,
+    query_breakdown,
+    nsfw,
+    min_year,
+    max_year,
+    min_score,
+    include,
+  } = opts;
+
+  const payload = { question };
+  if (limit != null && limit !== "") payload.limit = Number(limit);
+  if (mode) payload.mode = mode;
+  if (query_breakdown !== undefined && query_breakdown !== null) {
+    payload.query_breakdown = Boolean(query_breakdown);
+  }
+  if (nsfw != null) payload.nsfw = Boolean(nsfw);
+  if (include && include.length) payload.include = include;
+
+  const scope = {};
+  if (work_types && work_types.length) {
+    scope.types = work_types.map((t) => t.toLowerCase());
+  }
+  if (min_year != null && min_year !== "") scope.min_year = Number(min_year);
+  if (max_year != null && max_year !== "") scope.max_year = Number(max_year);
+  if (min_score != null && min_score !== "") scope.min_score = Number(min_score);
+
+  if (Object.keys(scope).length > 0) payload.scope = scope;
+
+  return payload;
+}
+
 /* ---- Endpoints ----------------------------------------------------------- */
 
 /** GET /health — quota-free liveness check (requires gateway key). */
@@ -61,42 +148,36 @@ export function health(signal) {
 }
 
 /**
- * POST /search — full hybrid retrieval.
- * @param {{question:string, limit?:number, work_types?:string[],
- *          include?:string[], mode?:string, signal?:AbortSignal}} opts
+ * /search — hybrid retrieval supporting GET and POST methods.
  */
 export function search(opts, signal) {
-  const { question, limit, work_types, include, mode } = opts;
-  const payload = { question };
-  if (limit != null) payload.limit = limit;
-  if (work_types && work_types.length) payload.scope = { types: work_types };
-  if (include && include.length) payload.include = include;
-  if (mode) payload.mode = mode;
+  const method = (opts.method || "GET").toUpperCase();
+  if (method === "GET") {
+    const params = buildSearchParams(opts);
+    return request(`/search?${params.toString()}`, { method: "GET", signal });
+  }
+  const payload = buildSearchPayload(opts);
   return request("/search", { method: "POST", body: payload, signal });
 }
 
-/** The exact request the demo would send, for the pre-flight preview. */
-export function previewSearchBody(opts) {
-  const { question, limit, work_types } = opts;
-  const payload = { question };
-  if (limit != null) payload.limit = limit;
-  if (work_types && work_types.length) payload.scope = { types: work_types };
-  return payload;
-}
-
 /**
- * POST /ask — conversational question answering with grounded AI synthesis.
- * @param {{question:string, limit?:number, work_types?:string[], signal?:AbortSignal}} opts
+ * /ask — conversational question answering with grounded AI synthesis.
  */
 export function ask(opts, signal) {
-  const { question, limit, work_types } = opts;
-  const payload = { question };
-  if (limit != null) payload.limit = limit;
-  if (work_types && work_types.length) payload.scope = { types: work_types };
+  const method = (opts.method || "GET").toUpperCase();
+  if (method === "GET") {
+    const params = buildSearchParams(opts);
+    return request(`/ask?${params.toString()}`, { method: "GET", signal });
+  }
+  const payload = buildSearchPayload(opts);
   return request("/ask", { method: "POST", body: payload, signal });
 }
 
-export function previewAskBody(opts) {
-  return previewSearchBody(opts);
+/** Backwards-compatible body preview */
+export function previewSearchBody(opts) {
+  return buildSearchPayload(opts);
 }
 
+export function previewAskBody(opts) {
+  return buildSearchPayload(opts);
+}
