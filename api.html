@@ -52,7 +52,7 @@
   <div class="shell masthead__inner">
     <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
       <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
-      <span class="wordmark">Anime Akashic Records <span class="jp">資料館</span></span>
+      <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
     </a>
     <nav class="masthead__nav" aria-label="Primary">
       <a href="index.html">Overview</a>
@@ -85,6 +85,103 @@
             Full specification for integrating Anime Akashic Records directly into your applications, AI agents,
             and chatbots. Hosted through RapidAPI for zero infrastructure overhead, global rate limiting, and instant key issuance.
           </p>
+        </div>
+
+                <!-- Free Public Beta Gateway & Community Access Card -->
+        <div style="background:var(--paper-raised);border:1px solid var(--moss);border-radius:8px;padding:var(--space-6);margin-bottom:var(--space-8);box-shadow:var(--card-shadow);position:relative;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+              <span class="badge" style="background:rgba(126,175,133,0.15);color:var(--moss);border:1px solid var(--moss)">Free Community Tier</span>
+              <span class="badge-beta">BETA</span>
+              <span class="micro" style="color:var(--ink-mute)">Direct Tunnel Gateway Active</span>
+            </div>
+            <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+              <a href="https://articles-exclusive-hope-yacht.trycloudflare.com/docs" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.6875rem;padding:.3rem .7rem">
+                <span>Swagger UI</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+              <a href="https://articles-exclusive-hope-yacht.trycloudflare.com/redoc" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.6875rem;padding:.3rem .7rem">
+                <span>ReDoc</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div>
+
+          <h2 style="font-size:1.4rem;line-height:1.25;margin-bottom:var(--space-2)">
+            Free Public API Access &amp; Per-IP Rate Limits
+          </h2>
+          <p class="faint" style="font-size:.9375rem;line-height:1.6;margin-bottom:var(--space-4);max-width:68ch">
+            For evaluation, open-source AI agents, and independent developers, the complete AAR semantic retrieval engine is currently open for free testing through our direct tunnel gateway. No registration or credit card required.
+          </p>
+
+          <!-- Gateway & Public Key Cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:var(--space-3);margin-bottom:var(--space-5)">
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Gateway Base URL</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)">
+                <code class="mono" style="font-size:.8125rem;color:var(--ink);word-break:break-all">https://articles-exclusive-hope-yacht.trycloudflare.com</code>
+                <button class="btn btn--quiet" type="button" data-copy="https://articles-exclusive-hope-yacht.trycloudflare.com" style="padding:.25rem .55rem"><span data-copy-label>Copy</span></button>
+              </div>
+            </div>
+
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Public Free API Key</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)">
+                <code class="mono" style="font-size:.875rem;font-weight:600;color:var(--moss)">aar_free_access</code>
+                <button class="btn btn--quiet" type="button" data-copy="aar_free_access" style="padding:.25rem .55rem"><span data-copy-label>Copy</span></button>
+              </div>
+              <div class="faint" style="font-size:.75rem;margin-top:.25rem">Short key alias: <code class="mono" style="font-size:.75rem">aar_free</code> is also accepted</div>
+            </div>
+          </div>
+
+          <!-- Per-IP Rate Limits Metrics -->
+          <div style="margin-bottom:var(--space-5)">
+            <div class="micro" style="margin-bottom:var(--space-2);color:var(--ink-mute)">Strictly Enforced Rate Limits (Per Client IP)</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));gap:var(--space-3)">
+              <div style="background:var(--paper-deep);border-left:3px solid var(--moss);border-radius:4px;padding:var(--space-3)">
+                <div class="mono" style="font-size:1.25rem;font-weight:700;color:var(--ink)">30 req / min</div>
+                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Rolling 60-second window per IP</div>
+              </div>
+              <div style="background:var(--paper-deep);border-left:3px solid var(--moss);border-radius:4px;padding:var(--space-3)">
+                <div class="mono" style="font-size:1.25rem;font-weight:700;color:var(--ink)">3 req / sec</div>
+                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Microsecond burst limit per IP</div>
+              </div>
+              <div style="background:var(--paper-deep);border-left:3px solid var(--rule-strong);border-radius:4px;padding:var(--space-3)">
+                <div class="mono" style="font-size:1.25rem;font-weight:700;color:var(--ink)">HTTP 429</div>
+                <div class="faint" style="font-size:.8125rem;margin-top:.2rem">Automatic backoff with Retry-After header</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- How to authenticate -->
+          <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);margin-bottom:var(--space-4)">
+            <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Authentication Methods Supported</div>
+            <div class="field" style="margin-bottom:.25rem"><span class="field__name">Header</span><span class="field__value mono">x-api-key: aar_free_access</span></div>
+            <div class="field" style="margin-bottom:.25rem"><span class="field__name">Query Param</span><span class="field__value mono">https://.../search?q=Bleach&amp;api_key=aar_free_access</span></div>
+            <div class="field" style="margin-bottom:0"><span class="field__name">Bearer Auth</span><span class="field__value mono">Authorization: Bearer aar_free_access</span></div>
+          </div>
+
+          <!-- Fair Use & Heavy Load SLA Notice -->
+          <div style="border-top:1px solid var(--rule);padding-top:var(--space-4);display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)">
+            <div style="max-width:54ch">
+              <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem">
+                <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.625rem">Operational Notice</span>
+                <span style="font-size:.8125rem;font-weight:600;color:var(--ink)">Community Tier Reliability</span>
+              </div>
+              <p class="faint" style="font-size:.8125rem;line-height:1.55;margin:0">
+                This promotional tier is hosted on shared experimental community infrastructure. While thoroughly optimized for sub-second responses, <strong>100% uninterrupted uptime and peak latency are not unconditionally guaranteed during sudden concurrent traffic surges</strong>.
+              </p>
+            </div>
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);min-width:260px">
+              <div class="micro" style="color:var(--sakura-deep);margin-bottom:.25rem">Higher Limits &amp; Direct Support</div>
+              <div style="font-size:.8125rem;color:var(--ink-soft);line-height:1.5">
+                For custom rate limits, enterprise SLA, bug reports, or partnership inquiries:
+              </div>
+              <div style="margin-top:.4rem">
+                <a href="mailto:AnimeAkashicRecords@hotmail.com" style="color:var(--sakura-deep);font-weight:700;font-size:.875rem;text-decoration:underline">AnimeAkashicRecords@hotmail.com</a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- RapidAPI Integration Banner -->
@@ -191,57 +288,41 @@
                 <button class="btn btn--quiet" type="button" data-copy="[data-res-search]"><span data-copy-label>Copy</span></button>
               </div>
               <div class="code__body"><pre data-res-search>{
+  "total": 1,
   "total_documents": 1,
   "results": [
     {
-      "work_id": "anime:cowboy_bebop",
+      "work_id": "work:anime:mal_1_al_1",
       "title": "Cowboy Bebop",
+      "title_english": "Cowboy Bebop",
+      "title_romaji": "Cowboy Bebop",
+      "title_native": "カウボーイビバップ",
       "type": "anime",
-      "score": 0.9624,
+      "bucket": "anime",
       "status": "finished",
-      "staff": [
-        {
-          "person_name": "Shinichirou Watanabe",
-          "role": "Director"
-        },
-        {
-          "person_name": "Yoko Kanno",
-          "role": "Composer"
-        }
-      ],
-      "characters": [
-        {
-          "character_name": "Spike Spiegel",
-          "role": "MAIN",
-          "voice_actor_name": "Kouichi Yamadera"
-        },
-        {
-          "character_name": "Faye Valentine",
-          "role": "MAIN",
-          "voice_actor_name": "Megumi Hayashibara"
-        }
-      ],
-      "relations": [
-        {
-          "relation_type": "adaptation",
-          "target_title": "Cowboy Bebop (Manga)"
-        },
-        {
-          "relation_type": "side_story",
-          "target_title": "Cowboy Bebop: Knockin' on Heaven's Door"
-        }
-      ],
+      "score": 0.9624,
+      "community_score": 87.5,
+      "popularity": 43,
+      "release_year": 1998,
+      "genres": ["Action", "Sci-Fi", "Adult Cast", "Space"],
+      "themes": ["Space Noir", "Bounty Hunters"],
+      "studios": ["Sunrise", "Bandai Visual"],
+      "description": "In the year 2071, humanity has colonized several planets and moons in the solar system, leaving the surface of Earth behind. Spike Spiegel and Jet Black lead a crew of bounty hunters aboard the spaceship Bebop...",
+      "image_url": "https://cdn.myanimelist.net/images/anime/4/19644.jpg",
+      "url": "https://myanimelist.net/anime/1/Cowboy_Bebop",
+      "mal_id": 1,
+      "anilist_id": 1,
+      "vndb_id": null,
+      "is_adult": false,
       "chunks": [
         {
+          "chunk_id": "chunk:anime:1:synopsis:0",
           "section": "Synopsis",
           "text": "In the year 2071, humanity has colonized several planets and moons in the solar system, leaving the surface of Earth behind. Spike Spiegel and Jet Black lead a crew of bounty hunters aboard the spaceship Bebop..."
         }
       ]
     }
-  ],
-  "trace": {
-    "total_time_ms": 312.4
-  }
+  ]
 }</pre></div>
             </div>
           </div>
@@ -292,13 +373,29 @@
               </div>
               <div class="code__body"><pre data-res-ask>{
   "answer": "The television anime adaptation of Steins;Gate was produced by studio White Fox and co-directed by Hiroshi Hamasaki and Takuya Satou, airing in 2011 across 24 episodes. The franchise also includes the alternate timeline sequel anime Steins;Gate 0 (2018), the theatrical film Steins;Gate: The Movie − Load Region of Déjà Vu (2013), and the Soumei Kousoku no Cognitive Computing ONA series.",
+  "sources": ["work:anime:mal_9253_al_9253"],
+  "used_citations": ["chunk:anime:9253:synopsis:0"],
+  "total": 1,
+  "total_documents": 1,
   "results": [
     {
-      "work_id": "anime:steins_gate",
+      "work_id": "work:anime:mal_9253_al_9253",
       "title": "Steins;Gate",
+      "title_english": "Steins;Gate",
       "type": "anime",
-      "score": 0.9540,
+      "bucket": "anime",
       "status": "finished",
+      "score": 0.9540,
+      "community_score": 90.7,
+      "release_year": 2011,
+      "genres": ["Drama", "Sci-Fi", "Suspense", "Time Travel"],
+      "studios": ["White Fox"],
+      "description": "Self-proclaimed mad scientist Rintaro Okabe rents out a room in a rickety old building in Akihabara, where he invents 'future gadgets' with fellow lab members...",
+      "image_url": "https://cdn.myanimelist.net/images/anime/1935/127974.jpg",
+      "url": "https://myanimelist.net/anime/9253/Steins_Gate",
+      "mal_id": 9253,
+      "anilist_id": 9253,
+      "is_adult": false,
       "chunks": [
         {
           "section": "Synopsis",
@@ -306,10 +403,7 @@
         }
       ]
     }
-  ],
-  "trace": {
-    "total_time_ms": 780.2
-  }
+  ]
 }</pre></div>
             </div>
           </div>
