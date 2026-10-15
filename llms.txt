@@ -145,6 +145,8 @@ For evaluation, open-source AI agents, and independent developers, AAR provides 
 
 ### 4.2. RapidAPI Production Gateway
 For production applications requiring guaranteed uptime and higher quotas:
+- **Public Free Gateway URL:** `https://articles-exclusive-hope-yacht.trycloudflare.com`
+- **Public Free Key:** `aar_free_access` (or `aar_free`)
 - **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
 - **Base Request URL:** `https://anime-akashic-records-aar-api.p.rapidapi.com`
 - **RapidAPI Listing:** https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api
@@ -170,9 +172,8 @@ Liveness probe and catalog metrics. Requires standard RapidAPI key headers, but 
 
 #### Request:
 ```bash
-curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
-  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"
+curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/health" \
+  -H "x-api-key: aar_free_access"
 ```
 
 #### Response (`200 OK`):
@@ -385,10 +386,9 @@ async function searchAAR(payload: SearchPayload) {
 
 ### cURL CLI
 ```bash
-curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
+curl -X POST "https://articles-exclusive-hope-yacht.trycloudflare.com/search" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY" \
+  -H "x-api-key: aar_free_access" \
   -d '{
     "question": "Time-travel visual novel with branching timelines",
     "limit": 5,

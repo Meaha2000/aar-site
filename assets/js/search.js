@@ -133,15 +133,15 @@ function renderPreview(question) {
   if (!els.preview) return;
   const q = question || "<your question>";
   const opts = currentOptions(q);
+  const baseUrl = "https://articles-exclusive-hope-yacht.trycloudflare.com";
   const path = state.endpointMode === "ask" ? "/ask" : "/search";
   const method = state.httpMethod;
 
   if (method === "GET") {
     const params = buildSearchParams(opts);
-    const displayUrl = `https://${RAPIDAPI_HOST}${path}?${params.toString()}`;
+    const displayUrl = `${baseUrl}${path}?${params.toString()}`;
     const curlCmd = `curl -X GET "${displayUrl}" \
-  -H "X-RapidAPI-Host: ${RAPIDAPI_HOST}" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY"`;
+  -H "x-api-key: aar_free_access"`;
 
     els.preview.innerHTML = `
       <div class="code">
@@ -163,12 +163,11 @@ function renderPreview(question) {
       </div>`;
   } else {
     const body = buildSearchPayload(opts);
-    const displayUrl = `https://${RAPIDAPI_HOST}${path}`;
+    const displayUrl = `${baseUrl}${path}`;
     const jsonStr = JSON.stringify(body, null, 2);
     const curlCmd = `curl -X POST "${displayUrl}" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Host: ${RAPIDAPI_HOST}" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY" \
+  -H "x-api-key: aar_free_access" \
   -d '${jsonStr}'`;
 
     els.preview.innerHTML = `

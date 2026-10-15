@@ -260,10 +260,10 @@
         <div class="tabs" data-api-tabs>
           <div class="tab-nav" role="tablist" aria-label="API Endpoints">
             <button class="tab-btn is-active" type="button" role="tab" id="btn-tab-search" aria-selected="true" aria-controls="tab-search" data-tab-target="tab-search">
-              <span class="badge badge--method badge--post">POST</span> /search
+              <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /search
             </button>
             <button class="tab-btn" type="button" role="tab" id="btn-tab-ask" aria-selected="false" aria-controls="tab-ask" data-tab-target="tab-ask">
-              <span class="badge badge--method badge--post">POST</span> /ask
+              <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /ask
             </button>
             <button class="tab-btn" type="button" role="tab" id="btn-tab-health" aria-selected="false" aria-controls="tab-health" data-tab-target="tab-health">
               <span class="badge badge--method badge--get">GET</span> /health
@@ -288,23 +288,34 @@
             <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Expanded relational payloads to attach to each result: <code>["staff", "characters", "relations"]</code>.</span></div>
             <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
 
-            <h4 class="subhead">Example Request</h4>
+            <h4 class="subhead">Example Request (GET — Recommended)</h4>
             <div class="code">
               <div class="code__bar">
-                <span class="micro">cURL</span>
-                <button class="btn btn--quiet" type="button" data-copy="[data-curl-search]"><span data-copy-label>Copy</span></button>
+                <span class="micro">cURL (GET)</span>
+                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/search?q=Bounty+hunters+across+the+solar+system+with+bebop+jazz+soundtrack&limit=5&mode=hybrid&include=staff,characters,relations&type=anime" \
+  -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-search><code class="language-bash">curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/search" \
+              <div class="code__body"><pre data-curl-search><code class="language-bash">curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/search?q=Bounty+hunters+across+the+solar+system+with+bebop+jazz+soundtrack&amp;limit=5&amp;mode=hybrid&amp;include=staff,characters,relations&amp;type=anime" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
+            </div>
+
+            <h4 class="subhead">Example Request (POST — JSON Payload)</h4>
+            <div class="code">
+              <div class="code__bar">
+                <span class="micro">cURL (POST)</span>
+                <button class="btn btn--quiet" type="button" data-copy="[data-curl-search-post]"><span data-copy-label>Copy</span></button>
+              </div>
+              <div class="code__body"><pre data-curl-search-post><code class="language-bash">curl -X POST "https://articles-exclusive-hope-yacht.trycloudflare.com/search" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY" \
+  -H "x-api-key: aar_free_access" \
   -d '{
     "question": "Bounty hunters across the solar system with bebop jazz soundtrack",
     "limit": 5,
     "mode": "hybrid",
+    "query_breakdown": true,
     "include": ["staff", "characters", "relations"],
     "scope": {
-      "types": ["ANIME"],
+      "types": ["anime"],
       "director_names": ["Shinichirou Watanabe"],
       "composer_names": ["Yoko Kanno"]
     }
@@ -381,21 +392,32 @@
             <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Relational payloads to attach: <code>["staff", "characters", "relations"]</code>.</span></div>
             <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
 
-            <h4 class="subhead">Example Request</h4>
+            <h4 class="subhead">Example Request (GET — Recommended)</h4>
             <div class="code">
               <div class="code__bar">
-                <span class="micro">cURL</span>
-                <button class="btn btn--quiet" type="button" data-copy="[data-curl-ask]"><span data-copy-label>Copy</span></button>
+                <span class="micro">cURL (GET)</span>
+                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/ask?q=What+anime+adaptations+exist+for+Steins+Gate+who+directed+the+2011+series&limit=5&type=anime" \
+  -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-ask><code class="language-bash">curl -X POST "https://anime-akashic-records-aar-api.p.rapidapi.com/ask" \
+              <div class="code__body"><pre data-curl-ask><code class="language-bash">curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/ask?q=What+anime+adaptations+exist+for+Steins+Gate+who+directed+the+2011+series&amp;limit=5&amp;type=anime" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
+            </div>
+
+            <h4 class="subhead">Example Request (POST — JSON Payload)</h4>
+            <div class="code">
+              <div class="code__bar">
+                <span class="micro">cURL (POST)</span>
+                <button class="btn btn--quiet" type="button" data-copy="[data-curl-ask-post]"><span data-copy-label>Copy</span></button>
+              </div>
+              <div class="code__body"><pre data-curl-ask-post><code class="language-bash">curl -X POST "https://articles-exclusive-hope-yacht.trycloudflare.com/ask" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY" \
+  -H "x-api-key: aar_free_access" \
   -d '{
     "question": "What anime adaptations exist for Steins;Gate, who directed the 2011 series, and which studio produced it?",
     "limit": 5,
+    "query_breakdown": true,
     "scope": {
-      "types": ["ANIME"]
+      "types": ["anime"]
     }
   }'</code></pre></div>
             </div>
@@ -458,9 +480,8 @@
                 <span class="micro">cURL</span>
                 <button class="btn btn--quiet" type="button" data-copy="[data-curl-health]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre data-curl-health><code class="language-bash">curl -X GET "https://anime-akashic-records-aar-api.p.rapidapi.com/health" \
-  -H "X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com" \
-  -H "X-RapidAPI-Key: YOUR_RAPIDAPI_KEY"</code></pre></div>
+              <div class="code__body"><pre data-curl-health><code class="language-bash">curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/health" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Response (200 OK)</h4>
