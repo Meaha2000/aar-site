@@ -1,6 +1,6 @@
 # Anime Akashic Records (AAR) API — Full Specification & Documentation
 
-> High-precision semantic and hybrid discovery engine over 180,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and aesthetic vibes into ranked canonical works paired with supporting excerpt passages.
+> High-precision semantic and hybrid discovery engine over 144,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and aesthetic vibes into ranked canonical works paired with supporting excerpt passages.
 
 ---
 
@@ -19,7 +19,7 @@
 - **Managed Search Infrastructure:** Hosted on RapidAPI with global availability, instant API keys, managed rate limits, and ready-to-use client libraries.
 
 ### Intended Scope & Best Practices:
-- **Core Purpose:** Semantic retrieval, vibe and trope discovery, natural language query resolution, and grounded AI answer synthesis across 180,000+ East Asian pop culture works.
+- **Core Purpose:** Semantic retrieval, vibe and trope discovery, natural language query resolution, and grounded AI answer synthesis across 144,000+ East Asian pop culture works.
 - **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
 - **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns and watch-lists, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
 
@@ -110,7 +110,7 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 | **Streaming Platforms** | Add natural language search and vibe discovery to your existing catalog. Users describe what they want to watch in their own words. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. *(Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service).* |
 | **AI Chatbots & Agents** | Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests. | Synthesizes answers and returns cited excerpts to avoid hallucinations and unsupported claims. |
 | **Anime Discovery Apps** | Enhance your app's search bar so users don't need to remember exact spellings; explore titles matching their mood or aesthetic vibe. | Replaces shallow tag checkboxes with rich conversational and thematic discovery. |
-| **Community Bots & Creators** | Build Discord and Telegram bots that answer community questions, or quickly curate themed lists around specific tropes. | Rapidly surfaces thematic titles across 180,000+ indexed works. |
+| **Community Bots & Creators** | Build Discord and Telegram bots that answer community questions, or quickly curate themed lists around specific tropes. | Rapidly surfaces thematic titles across 144,000+ indexed works. |
 
 ### 3.5. When to Choose AAR vs. Traditional APIs:
 - **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched), forum profiles, or minute-by-minute episode airing countdowns.
@@ -121,7 +121,7 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 ## 4. Gateway, Authentication & Base URLs
 
 ### Host & Endpoints
-- **Public Free Gateway URL:** `https://articles-exclusive-hope-yacht.trycloudflare.com`
+- **Public Free Gateway URL:** `https://download-equality-productions-arab.trycloudflare.com`
 - **Public Free Key:** `aar_free_access` (or `aar_free`)
 - **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
 - **Base Request URL:** `https://anime-akashic-records-aar-api.p.rapidapi.com`
@@ -148,7 +148,7 @@ Liveness probe and catalog metrics. Requires standard RapidAPI key headers, but 
 
 #### Request:
 ```bash
-curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/health" \
+curl -X GET "https://download-equality-productions-arab.trycloudflare.com/health" \
   -H "x-api-key: aar_free_access"
 ```
 
@@ -156,8 +156,8 @@ curl -X GET "https://articles-exclusive-hope-yacht.trycloudflare.com/health" \
 ```json
 {
   "status": "ok",
-  "works": 183380,
-  "chunks": 192821
+  "works": 144025,
+  "chunks": 157340
 }
 ```
 
@@ -295,6 +295,96 @@ Grounded conversational question-answering with citation synthesis for AI agents
 
 ---
 
+### 5.4. `POST /recommend` & `GET /recommend/{work_id}`
+Work-to-work semantic recommendation based on narrative DNA, thematic essence, character dynamics, and emotional tone.
+
+#### Request Parameters
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `work_id` | `string` | No (if `title` provided) | — | Canonical work ID (e.g. `"work:anime:mal_9253_al_9253"`). |
+| `title` | `string` | No (if `work_id` provided) | — | Title of reference work (e.g. `"Steins;Gate"`). |
+| `limit` | `integer` | No | `10` | Number of recommendations to return (1–50). |
+
+#### Request Example (GET):
+```bash
+curl -X GET "https://download-equality-productions-arab.trycloudflare.com/recommend/work:anime:mal_9253_al_9253?limit=5" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Request Example (POST):
+```json
+{
+  "title": "Steins;Gate",
+  "limit": 5
+}
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "work_id": "work:anime:mal_9253_al_9253",
+  "title": "Steins;Gate",
+  "total_recommendations": 5,
+  "recommendations": [
+    {
+      "position": 1,
+      "work_id": "work:anime:mal_30484_al_21127",
+      "title": "Steins;Gate 0",
+      "type": "anime",
+      "similarity_score": 0.9412
+    },
+    {
+      "position": 2,
+      "work_id": "work:anime:mal_22535_al_20665",
+      "title": "Kiseijuu: Sei no Kakuritsu",
+      "type": "anime",
+      "similarity_score": 0.8125
+    }
+  ]
+}
+```
+
+---
+
+### 5.5. `POST /suggest` & `GET /contributions/grouped`
+Community proposals and catalog contributions endpoint. Allows users and AI agents to submit missing titles, rich narrative descriptions, or metadata corrections.
+
+> **🤝 We Actively Welcome Contributions Here:**
+> We actively welcome community and AI agent contributions through this endpoint — whether proposing missing titles, providing rich narrative plot descriptions, or suggesting corrections to existing works. All submissions are automatically clustered, deduplicated, and reviewed for inclusion in canonical catalog updates.
+
+#### Request Parameters (`POST /suggest` or `POST /contributions`):
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `media_type` | `string` | **Yes** | — | One of `"anime"`, `"manga"`, `"light_novel"`, `"visual_novel"`, `"manhwa"`, `"manhua"`. |
+| `title` | `string` | **Yes** | — | Canonical or primary title. |
+| `custom_description` | `string` | No | `""` | Detailed narrative synopsis, worldbuilding, character dynamics (up to 10k chars). |
+| `aliases` | `array[string]` | No | `[]` | Alternative names, Romaji titles, or English titles. |
+| `author` | `string` | No | `""` | Original creator, author, or director. |
+| `release_year` | `integer` | No | `null` | Release year (e.g. `2024`). |
+| `tags` | `array[string]` | No | `[]` | Thematic tags or genres. |
+
+#### Request Example (`POST /suggest`):
+```bash
+curl -X POST "https://download-equality-productions-arab.trycloudflare.com/suggest" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "media_type": "anime",
+    "title": "Sousou no Frieren",
+    "custom_description": "An elf mage embarks on a peaceful, decades-long journey reflecting on human mortality and connection.",
+    "aliases": ["Frieren: Beyond Journey\'s End"],
+    "author": "Kanehito Yamada",
+    "release_year": 2023,
+    "tags": ["Fantasy", "Adventure", "Drama"]
+  }'
+```
+
+#### Inspect Clustered Submissions (`GET /contributions/grouped`):
+```bash
+curl -X GET "https://download-equality-productions-arab.trycloudflare.com/contributions/grouped" \
+  -H "x-api-key: aar_free_access"
+```
+
 ## 6. Client Code Snippets
 
 ### Python (`requests`)
@@ -360,7 +450,7 @@ async function searchAAR(payload: SearchPayload) {
 
 ### cURL CLI
 ```bash
-curl -X POST "https://articles-exclusive-hope-yacht.trycloudflare.com/search" \
+curl -X POST "https://download-equality-productions-arab.trycloudflare.com/search" \
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{
