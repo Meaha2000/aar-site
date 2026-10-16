@@ -514,8 +514,9 @@
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (optional if <code>title</code> provided) &mdash; Canonical work identifier (e.g. <code>"work:anime:mal_9253_al_9253"</code>).</span></div>
-            <div class="field"><span class="field__name">title</span><span class="field__value"><strong>string</strong> (optional if <code>work_id</code> provided) &mdash; Canonical or English title of the reference work (e.g. <code>"Steins;Gate"</code>).</span></div>
+            <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 canonical work identifiers (e.g. <code>["work:anime:mal_9253_al_9253"]</code>).</span></div>
+            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Canonical work ID (e.g. <code>/recommend/work:anime:mal_9253_al_9253</code>).</span></div>
+            <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, etc.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>50</code>) &mdash; Number of recommended titles to return.</span></div>
 
             <h4 class="subhead">Example Request (GET)</h4>
@@ -533,7 +534,7 @@
                 <span class="micro">cURL (POST)</span>
               </div>
               <div class="code__body"><pre><code class="language-bash">curl -X POST "https://download-equality-productions-arab.trycloudflare.com/recommend"   -H "Content-Type: application/json"   -H "x-api-key: aar_free_access"   -d '{
-    "title": "Steins;Gate",
+    "seed_work_ids": ["work:anime:mal_9253_al_9253"],
     "limit": 5
   }'</code></pre></div>
             </div>
@@ -587,6 +588,7 @@
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters (POST /suggest or /contributions)</h4>
+            <div class="field"><span class="field__name">contribution_type</span><span class="field__value"><strong>string</strong> (required) &mdash; One of <code>"ADD_WORK"</code>, <code>"ADD_ALIAS"</code>, <code>"EDIT_METADATA"</code>, <code>"FEATURE_OR_VIBE"</code>.</span></div>
             <div class="field"><span class="field__name">media_type</span><span class="field__value"><strong>string</strong> (required) &mdash; One of <code>"anime"</code>, <code>"manga"</code>, <code>"light_novel"</code>, <code>"visual_novel"</code>, <code>"manhwa"</code>, <code>"manhua"</code>.</span></div>
             <div class="field"><span class="field__name">title</span><span class="field__value"><strong>string</strong> (required) &mdash; Primary or canonical title of the work.</span></div>
             <div class="field"><span class="field__name">custom_description</span><span class="field__value"><strong>string</strong> (optional, up to 10,000 characters) &mdash; Detailed story synopsis, worldbuilding rules, character motivations, and thematic progression.</span></div>
@@ -601,13 +603,14 @@
                 <span class="micro">cURL (POST)</span>
               </div>
               <div class="code__body"><pre><code class="language-bash">curl -X POST "https://download-equality-productions-arab.trycloudflare.com/suggest"   -H "Content-Type: application/json"   -H "x-api-key: aar_free_access"   -d '{
+    "contribution_type": "ADD_WORK",
     "media_type": "anime",
     "title": "Sousou no Frieren",
     "custom_description": "An elf mage embarks on a peaceful, decades-long journey across the lands where she once defeated the Demon King, reflecting on the fleeting nature of human life and the bonds forged along the way.",
-    "aliases": ["Frieren: Beyond Journey&apos;s End"],
+    "alt_titles": ["Frieren: Beyond Journey&apos;s End"],
     "author": "Kanehito Yamada",
     "release_year": 2023,
-    "tags": ["Fantasy", "Adventure", "Slice of Life", "Drama"]
+    "suggested_tags": ["Fantasy", "Adventure", "Slice of Life", "Drama"]
   }'</code></pre></div>
             </div>
 

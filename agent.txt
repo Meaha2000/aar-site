@@ -295,14 +295,16 @@ Grounded conversational question-answering with citation synthesis for AI agents
 
 ---
 
+---
+
 ### 5.4. `POST /recommend` & `GET /recommend/{work_id}`
 Work-to-work semantic recommendation based on narrative DNA, thematic essence, character dynamics, and emotional tone.
 
 #### Request Parameters
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `work_id` | `string` | No (if `title` provided) | — | Canonical work ID (e.g. `"work:anime:mal_9253_al_9253"`). |
-| `title` | `string` | No (if `work_id` provided) | — | Title of reference work (e.g. `"Steins;Gate"`). |
+| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 canonical work IDs (e.g. `["work:anime:mal_9253_al_9253"]`). |
+| `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. |
 | `limit` | `integer` | No | `10` | Number of recommendations to return (1–50). |
 
 #### Request Example (GET):
@@ -314,7 +316,7 @@ curl -X GET "https://download-equality-productions-arab.trycloudflare.com/recomm
 #### Request Example (POST):
 ```json
 {
-  "title": "Steins;Gate",
+  "seed_work_ids": ["work:anime:mal_9253_al_9253"],
   "limit": 5
 }
 ```
@@ -355,6 +357,7 @@ Community proposals and catalog contributions endpoint. Allows users and AI agen
 #### Request Parameters (`POST /suggest` or `POST /contributions`):
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
+| `contribution_type` | `string` | **Yes** | — | One of `"ADD_WORK"`, `"ADD_ALIAS"`, `"EDIT_METADATA"`, `"FEATURE_OR_VIBE"`. |
 | `media_type` | `string` | **Yes** | — | One of `"anime"`, `"manga"`, `"light_novel"`, `"visual_novel"`, `"manhwa"`, `"manhua"`. |
 | `title` | `string` | **Yes** | — | Canonical or primary title. |
 | `custom_description` | `string` | No | `""` | Detailed narrative synopsis, worldbuilding, character dynamics (up to 10k chars). |
@@ -369,13 +372,14 @@ curl -X POST "https://download-equality-productions-arab.trycloudflare.com/sugge
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{
+    "contribution_type": "ADD_WORK",
     "media_type": "anime",
     "title": "Sousou no Frieren",
     "custom_description": "An elf mage embarks on a peaceful, decades-long journey reflecting on human mortality and connection.",
-    "aliases": ["Frieren: Beyond Journey\'s End"],
+    "alt_titles": ["Frieren: Beyond Journey\'s End"],
     "author": "Kanehito Yamada",
     "release_year": 2023,
-    "tags": ["Fantasy", "Adventure", "Drama"]
+    "suggested_tags": ["Fantasy", "Adventure", "Drama"]
   }'
 ```
 
