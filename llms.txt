@@ -7,7 +7,7 @@
 ## 1. Executive Summary & Recommended Positioning
 
 ### Recommended Positioning:
-> **BEST PAIRED WITH TRADITIONAL ANIME APIS:**
+> **BEST PAIRED WITH TRADITIONAL ANIME APIS for exact metadata and images:**
 > AAR is engineered to be paired seamlessly with traditional anime APIs (Jikan, AniList, Kitsu).
 > Use traditional APIs for user watchlists, episode airing countdowns, and schedule trackers.
 > Use AAR as the intelligence and semantic discovery layer for natural language trope search, vibe discovery, narrative recommendations, and AI agent integration.

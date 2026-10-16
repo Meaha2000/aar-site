@@ -1,6 +1,6 @@
 # Anime Akashic Records
 
-> **💡 Pro-Tip:** BEST PAIRED WITH TRADITIONAL ANIME APIS (Use AniList/Jikan for schedules & watchlists, and AAR for semantic search & recommendations).
+> **💡 Pro-Tip:** BEST PAIRED WITH TRADITIONAL ANIME APIS for exact metadata and images (Use AniList/Jikan for schedules & watchlists, and AAR for semantic search & recommendations).
  â€” official website
 
 This folder is **self-contained**. It is the complete, standalone public website for Anime Akashic
