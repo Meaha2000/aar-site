@@ -211,6 +211,103 @@ function renderEmpty() {
   if (els.results) els.results.innerHTML = "";
 }
 
+const KNOWN_LABELS = [
+  "Alternative Titles",
+  "Characters & Cast",
+  "Creators & Studios",
+  "Tags & Themes",
+  "Theme Songs",
+  "Alternative Title",
+  "Title",
+  "Synopsis",
+  "Genres",
+  "Themes",
+  "Tags",
+  "Type",
+  "Characters",
+  "Creators",
+  "Studios",
+  "Staff",
+  "Background",
+  "Relations",
+  "Score",
+  "Status"
+];
+
+function cleanTagValue(val) {
+  return String(val || "")
+    .replace(/\[\s*"([^"]+)"\s*\]/g, "$1")
+    .replace(/["\[\]]/g, "")
+    .trim();
+}
+
+function parsePassageSections(rawText) {
+  if (!rawText) return [];
+  const escaped = KNOWN_LABELS.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+  const regex = new RegExp(`(?:^|\\n|\\b)(${escaped}):\\s*`, "g");
+
+  const matches = [];
+  let m;
+  while ((m = regex.exec(rawText)) !== null) {
+    matches.push({ label: m[1], index: m.index, matchLen: m[0].length });
+  }
+
+  if (!matches.length) {
+    return [{ label: null, content: rawText.trim() }];
+  }
+
+  const sections = [];
+  for (let i = 0; i < matches.length; i++) {
+    const cur = matches[i];
+    const start = cur.index + cur.matchLen;
+    const end = (i + 1 < matches.length) ? matches[i + 1].index : rawText.length;
+    let content = rawText.slice(start, end).trim();
+    if (content) {
+      sections.push({ label: cur.label, content });
+    }
+  }
+  return sections;
+}
+
+function renderPassage(c) {
+  const rawSection = (c.section || c.kind || c.field || "Passage").toString();
+  const sectionCaption = rawSection.includes("+")
+    ? "Matched Passage · Overview & Context"
+    : `Matched Passage · ${rawSection}`;
+
+  const text = (c.text || c.excerpt || "").toString();
+  const sections = parsePassageSections(text);
+
+  let bodyHtml = "";
+  if (!sections.length) {
+    bodyHtml = `<div class="passage__content faint">No excerpt available.</div>`;
+  } else {
+    bodyHtml = sections.map((s) => {
+      if (!s.label) {
+        return `<div class="passage__section"><div class="passage__content">${escapeHtml(s.content)}</div></div>`;
+      }
+      let val = escapeHtml(cleanTagValue(s.content));
+      let contentClass = "passage__content";
+      if (s.label === "Synopsis") {
+        contentClass += " passage__content--synopsis";
+      } else if (["Alternative Titles", "Characters & Cast", "Creators & Studios", "Staff", "Relations"].includes(s.label)) {
+        contentClass += " faint";
+      }
+      return `<div class="passage__section">
+          <h4 class="passage__subheading">${escapeHtml(s.label)}</h4>
+          <div class="${contentClass}">${val}</div>
+        </div>`;
+    }).join("");
+  }
+
+  return `<figure class="passage">
+      <figcaption class="passage__meta">
+        <span class="micro">${escapeHtml(sectionCaption)}</span>
+      </figcaption>
+      <div class="passage__body">${bodyHtml}</div>
+    </figure>`;
+}
+
 /** One result → one index row, expanding in place to its matched passages. */
 function renderRow(work, i) {
   const title = escapeHtml(work.title || work.canonical_title || "Untitled");
@@ -224,16 +321,7 @@ function renderRow(work, i) {
                : Array.isArray(work.matched_chunks) ? work.matched_chunks
                : work.matched_chunk ? [work.matched_chunk] : [];
   const passages = chunks.length
-    ? chunks.map((c) => {
-        const section = escapeHtml(c.section || c.kind || c.field || "Passage");
-        const text = escapeHtml(c.text || c.excerpt || "");
-        return `<figure class="passage">
-            <figcaption class="passage__meta">
-              <span class="micro">${section}</span>
-            </figcaption>
-            <blockquote class="passage__text">${text}</blockquote>
-          </figure>`;
-      }).join("")
+    ? chunks.map(renderPassage).join("")
     : `<p class="faint" style="font-size:.875rem">No passage text was returned for this work.</p>`;
 
   let relBlocks = "";
