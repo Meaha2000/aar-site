@@ -7,6 +7,12 @@
 ## 1. Executive Summary & Recommended Positioning
 
 ### Recommended Positioning:
+> **BEST PAIRED WITH TRADITIONAL ANIME APIS:**
+> AAR is engineered to be paired seamlessly with traditional anime APIs (Jikan, AniList, Kitsu).
+> Use traditional APIs for user watchlists, episode airing countdowns, and schedule trackers.
+> Use AAR as the intelligence and semantic discovery layer for natural language trope search, vibe discovery, narrative recommendations, and AI agent integration.
+
+
 > **Find the work you can't remember. Discover the work you didn't know you wanted.**
 >
 > Anime Akashic Records (AAR) is a discovery and metadata API for applications that need to search across works using natural-language descriptions, story concepts, and atmosphere — not only exact titles.

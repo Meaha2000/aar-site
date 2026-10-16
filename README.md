@@ -1,4 +1,7 @@
-# Anime Akashic Records â€” official website
+# Anime Akashic Records
+
+> **💡 Pro-Tip:** BEST PAIRED WITH TRADITIONAL ANIME APIS (Use AniList/Jikan for schedules & watchlists, and AAR for semantic search & recommendations).
+ â€” official website
 
 This folder is **self-contained**. It is the complete, standalone public website for Anime Akashic
 Records (AAR). It does not read from, write to, or depend on any other folder in this workspace.
