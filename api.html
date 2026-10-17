@@ -46,8 +46,6 @@
 </script>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to documentation</a>
-
 <header class="masthead">
   <div class="shell masthead__inner">
     <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
@@ -84,7 +82,7 @@
           </h1>
           <p class="lead" style="font-size:1.15rem;line-height:1.65;color:var(--ink-soft);margin-bottom:var(--space-6)">
             <strong>Best paired with traditional anime APIs for exact metadata and images:</strong> use traditional APIs (Jikan, AniList) for user watchlists and episode airing schedules, and pair with AAR for semantic search, thematic recommendations, and deep vector discovery.<br><br>Full specification for integrating Anime Akashic Records directly into your applications, AI agents,
-            and chatbots. Hosted through RapidAPI for zero infrastructure overhead, global rate limiting, and instant key issuance.
+            and chatbots.
           </p>
         </div>
 
@@ -245,17 +243,6 @@
           </p>
         </div>
 
-        <!-- Authentication Box -->
-        <div style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
-          <h2 style="font-size:1.25rem;margin-bottom:var(--space-2)">Authentication Headers</h2>
-          <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-3)">
-            Every request routed through the RapidAPI gateway requires your authentication headers. All endpoints (including <code>GET /health</code>) require your RapidAPI key to pass through the gateway, though <code>GET /health</code> does not consume any plan request quota (quota-free).
-          </p>
-          <div class="field"><span class="field__name">X-RapidAPI-Key</span><span class="field__value mono">&lt;your-rapidapi-key&gt;</span></div>
-          <div class="field"><span class="field__name">X-RapidAPI-Host</span><span class="field__value mono">anime-akashic-records-aar-api.p.rapidapi.com</span></div>
-          <div class="field"><span class="field__name">Content-Type</span><span class="field__value mono">application/json</span></div>
-        </div>
-
         <!-- Endpoints Tabs -->
         <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Endpoints</h2>
         <div class="tabs" data-api-tabs>
@@ -291,6 +278,31 @@
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
                 Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+              </div>
+            </div>
+
+            <!-- Architecture & Speed: Dual Query Processing Modes -->
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--moss);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+              <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+                <span class="badge" style="background:rgba(126,175,133,0.14);color:var(--moss);border:1px solid var(--moss);font-size:.65rem;font-weight:700">Architecture &amp; Speed</span>
+                <span style="font-weight:700;font-size:.9375rem;color:var(--ink)">Dual Query Processing Modes: Fast Native vs. LLM Breakdown</span>
+              </div>
+              <p style="font-size:.84rem;line-height:1.55;color:var(--ink-soft);margin-bottom:var(--space-3)">
+                AAR is engineered to serve real-time user-facing search and automated agents at maximum velocity:
+              </p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:var(--space-3)">
+                <div style="background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+                  <div style="font-weight:700;color:var(--moss);font-size:.8125rem;margin-bottom:.25rem">Default Mode (<code class="mono" style="font-size:.75rem">query_breakdown: false</code>)</div>
+                  <p class="faint" style="font-size:.78rem;line-height:1.5;margin:0">
+                    <strong>Sub-second speed (~500ms).</strong> Native hybrid pipeline fusing ScaNN-cascade dense vectors (Qdrant int8), FTS5 BM25, in-memory character synergy aggregation, and deep Cross-Encoder reranking without any LLM delay. Active by default for all requests.
+                  </p>
+                </div>
+                <div style="background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+                  <div style="font-weight:700;color:var(--sakura-deep);font-size:.8125rem;margin-bottom:.25rem">Opt-In LLM Breakdown (<code class="mono" style="font-size:.75rem">query_breakdown: true</code>)</div>
+                  <p class="faint" style="font-size:.78rem;line-height:1.5;margin:0">
+                    <strong>Compound Query Decomposition.</strong> Pass <code class="mono" style="font-size:.75rem">"query_breakdown": true</code> in your request body when you want an LLM to decompose complex multi-part comparative queries (e.g. <em>"anime like Cowboy Bebop with themes like Psycho-Pass"</em>) into targeted sub-probes before retrieval (adds ~400&ndash;800ms).
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -493,7 +505,7 @@
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Liveness Probe &amp; Corpus Statistics</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
-                Lightweight health check and catalog statistics endpoint. Requires RapidAPI authentication headers (<code>X-RapidAPI-Key</code> and <code>X-RapidAPI-Host</code>), but <strong>does not consume request quota</strong> (quota-free). Safe for uptime monitors, container liveness checks, and integration smoke tests.
+                Lightweight health check and catalog statistics endpoint. Requires an API key header (such as <code>x-api-key: aar_free_access</code>), but <strong>does not consume request quota</strong> (quota-free). Safe for uptime monitors, container liveness checks, and integration smoke tests.
               </p>
             </div>
 
@@ -692,9 +704,9 @@
         <section style="margin-top:var(--space-12)">
           <h2 style="font-size:1.5rem;margin-bottom:var(--space-2)">Status Codes &amp; Errors</h2>
           <div class="field"><span class="field__name">200 OK</span><span class="field__value">Successful query; returns JSON envelope.</span></div>
-          <div class="field"><span class="field__name">401 Unauthorized</span><span class="field__value">Missing or invalid RapidAPI key &mdash; <span class="mono">{"detail": "missing or invalid API key"}</span></span></div>
+          <div class="field"><span class="field__name">401 Unauthorized</span><span class="field__value">Missing or invalid API key &mdash; <span class="mono">{"detail": "missing or invalid API key"}</span></span></div>
           <div class="field"><span class="field__name">422 Unprocessable</span><span class="field__value">Validation failure (invalid parameter type, unknown scope key, empty question).</span></div>
-          <div class="field"><span class="field__name">429 Rate Limited</span><span class="field__value">Your RapidAPI plan rate quota has been reached. Upgrade or wait for window reset.</span></div>
+          <div class="field"><span class="field__name">429 Rate Limited</span><span class="field__value">Your rate limit quota has been reached. Upgrade or wait for window reset.</span></div>
         </section>
 
       </section>
