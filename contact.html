@@ -149,32 +149,35 @@
             </div>
           </div>
 
-          <!-- Community Ingestion & Catalog Contributions Section -->
-          <div style="margin-top:var(--space-12);background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-6);box-shadow:var(--card-shadow)" id="contribute">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2)">
-              <h2 style="font-size:1.5rem;margin:0">Community Ingestion &amp; Catalog Contributions</h2>
-              <span class="badge badge--live">POST /contributions</span>
+                    <!-- Community Ingestion & Catalog Contributions Section -->
+          <div class="catalog-contribute" id="contribute">
+            <div class="catalog-contribute__header">
+              <h2 class="catalog-contribute__title">Community Ingestion &amp; Catalog Additions</h2>
+              <span class="catalog-contribute__badge">POST /contributions</span>
             </div>
-            <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-4);line-height:1.6">
-              Suggest missing anime, manga, or visual novels, propose alternative titles and localized aliases, or submit metadata corrections. Submissions are automatically deduplicated against the 144k catalog and clustered for review.
+            <p class="catalog-contribute__desc">
+              Suggest missing anime, manga, or visual novels, propose alternative titles and localized aliases, or submit metadata corrections. Submissions are automatically deduplicated against the 144k corpus and queued for index clustering.
             </p>
 
-            <!-- Mode Selector -->
-            <div style="display:inline-flex;background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:3px;margin-bottom:var(--space-4)" role="tablist" aria-label="Contribution Mode">
-              <button type="button" class="segment-btn is-active" id="btn-mode-form" role="tab" aria-selected="true" data-mode-toggle="form">
-                Interactive Form
+            <!-- Mode Selector Tabs -->
+            <div class="ledger-tabs" role="tablist" aria-label="Contribution Submission Mode">
+              <button type="button" class="segment-btn ledger-tab is-active" id="btn-mode-form" role="tab" aria-selected="true" data-mode-toggle="form">
+                Interactive Ledger
               </button>
-              <button type="button" class="segment-btn" id="btn-mode-json" role="tab" aria-selected="false" data-mode-toggle="json">
-                JSON File Upload / Editor
+              <button type="button" class="segment-btn ledger-tab" id="btn-mode-json" role="tab" aria-selected="false" data-mode-toggle="json">
+                JSON Batch &amp; Editor
               </button>
             </div>
 
             <!-- Mode A: Interactive Form -->
             <form id="contrib-form" class="stack-4" style="margin-top:var(--space-2)">
-              <div class="form-grid">
+              <div class="ledger-grid">
                 <div>
-                  <label for="contrib-type" class="micro" style="display:block;margin-bottom:var(--space-1)">Contribution Type</label>
-                  <select id="contrib-type" class="advanced-input" style="font-family:var(--sans);font-size:.875rem">
+                  <label for="contrib-type" class="ledger-label">
+                    <span>Contribution Type</span>
+                    <span class="ledger-hint">Classification</span>
+                  </label>
+                  <select id="contrib-type" class="ledger-select">
                     <option value="ADD_WORK" selected>Add Missing Work</option>
                     <option value="ADD_ALIAS">Add Title Alias / Translation</option>
                     <option value="EDIT_METADATA">Edit Synopsis or Metadata</option>
@@ -182,9 +185,12 @@
                   </select>
                 </div>
                 <div>
-                  <label for="contrib-media" class="micro" style="display:block;margin-bottom:var(--space-1)">Medium</label>
-                  <select id="contrib-media" class="advanced-input" style="font-family:var(--sans);font-size:.875rem">
-                    <option value="anime" selected>Anime</option>
+                  <label for="contrib-media" class="ledger-label">
+                    <span>Medium Format</span>
+                    <span class="ledger-hint">Corpus Target</span>
+                  </label>
+                  <select id="contrib-media" class="ledger-select">
+                    <option value="anime" selected>Anime (Series / Movie / OVA)</option>
                     <option value="manga">Manga</option>
                     <option value="visual_novel">Visual Novel</option>
                     <option value="light_novel">Light Novel</option>
@@ -194,73 +200,97 @@
                 </div>
               </div>
 
-              <div>
-                <label for="contrib-title" class="micro" style="display:block;margin-bottom:var(--space-1)">Work Title <span style="color:var(--rust)">*</span></label>
-                <input type="text" id="contrib-title" class="advanced-input" placeholder="e.g. Dennou Coil Special or Baccano! Extra" required style="font-size:.9375rem">
+              <div class="ledger-row">
+                <label for="contrib-title" class="ledger-label">
+                  <span>Work Title <span class="ledger-required">*</span></span>
+                  <span class="ledger-hint">Canonical or primary title</span>
+                </label>
+                <input type="text" id="contrib-title" class="ledger-input" placeholder="e.g. Dennou Coil Special or Baccano! Extra" required>
               </div>
 
-              <div id="contrib-target-id-row" style="display:none">
-                <label for="contrib-target-id" class="micro" style="display:block;margin-bottom:var(--space-1)">Target Work ID</label>
-                <input type="text" id="contrib-target-id" class="advanced-input mono" placeholder="e.g. work:anime:mal_1_al_1 (Required for aliases and edits)">
+              <div id="contrib-target-id-row" class="ledger-row" style="display:none">
+                <label for="contrib-target-id" class="ledger-label">
+                  <span>Target Work ID <span class="ledger-required">*</span></span>
+                  <span class="ledger-hint">work:medium:id</span>
+                </label>
+                <input type="text" id="contrib-target-id" class="ledger-input ledger-input--mono" placeholder="e.g. work:anime:mal_1_al_1 (Required for aliases and edits)">
               </div>
 
-              <div class="form-grid">
+              <div class="ledger-grid">
                 <div>
-                  <label for="contrib-alt-titles" class="micro" style="display:block;margin-bottom:var(--space-1)">Alternative Titles / Localized Names</label>
-                  <input type="text" id="contrib-alt-titles" class="advanced-input" placeholder="Comma-separated (e.g. Kauboi Bibappu, Space Cowboy)">
+                  <label for="contrib-alt-titles" class="ledger-label">
+                    <span>Alternative Titles</span>
+                    <span class="ledger-hint">Comma-separated</span>
+                  </label>
+                  <input type="text" id="contrib-alt-titles" class="ledger-input" placeholder="e.g. Kauboi Bibappu, Space Cowboy">
                 </div>
                 <div>
-                  <label for="contrib-tags" class="micro" style="display:block;margin-bottom:var(--space-1)">Suggested Tags / Themes</label>
-                  <input type="text" id="contrib-tags" class="advanced-input" placeholder="Comma-separated (e.g. Cyberpunk, Space Western, Noir)">
-                </div>
-              </div>
-
-              <div>
-                <label for="contrib-url" class="micro" style="display:block;margin-bottom:var(--space-1)">Reference Link (MAL, AniList, VNDB, or Official URL)</label>
-                <input type="url" id="contrib-url" class="advanced-input mono" placeholder="https://myanimelist.net/anime/...">
-              </div>
-
-              <div>
-                <label for="contrib-desc" class="micro" style="display:block;margin-bottom:var(--space-1)">Custom Synopsis or Overview</label>
-                <textarea id="contrib-desc" class="advanced-input" rows="3" placeholder="Provide a descriptive synopsis to assist semantic search vector indexing..."></textarea>
-              </div>
-
-              <div class="form-grid">
-                <div>
-                  <label for="contrib-note" class="micro" style="display:block;margin-bottom:var(--space-1)">Curator Remarks / Notes</label>
-                  <input type="text" id="contrib-note" class="advanced-input" placeholder="Reason for suggestion or contextual notes">
-                </div>
-                <div>
-                  <label for="contrib-submitter" class="micro" style="display:block;margin-bottom:var(--space-1)">Submitter Handle (Optional)</label>
-                  <input type="text" id="contrib-submitter" class="advanced-input mono" placeholder="anonymous" value="anonymous">
+                  <label for="contrib-tags" class="ledger-label">
+                    <span>Suggested Tags &amp; Themes</span>
+                    <span class="ledger-hint">Comma-separated</span>
+                  </label>
+                  <input type="text" id="contrib-tags" class="ledger-input" placeholder="e.g. Cyberpunk, Space Western, Noir">
                 </div>
               </div>
 
-              <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding-top:var(--space-2);border-top:1px solid var(--rule)">
-                <button type="submit" class="btn btn--primary" id="btn-submit-form">
-                  <span>Submit Contribution</span>
+              <div class="ledger-row">
+                <label for="contrib-url" class="ledger-label">
+                  <span>Reference Link</span>
+                  <span class="ledger-hint">MAL, AniList, VNDB, or Official</span>
+                </label>
+                <input type="url" id="contrib-url" class="ledger-input ledger-input--mono" placeholder="https://myanimelist.net/anime/...">
+              </div>
+
+              <div class="ledger-row">
+                <label for="contrib-desc" class="ledger-label">
+                  <span>Custom Synopsis or Overview</span>
+                  <span class="ledger-hint">Vector search grounding</span>
+                </label>
+                <textarea id="contrib-desc" class="ledger-textarea" rows="4" placeholder="Provide a descriptive synopsis or plot overview to assist semantic search vector indexing..."></textarea>
+              </div>
+
+              <div class="ledger-grid">
+                <div>
+                  <label for="contrib-note" class="ledger-label">
+                    <span>Curator Remarks &amp; Context</span>
+                    <span class="ledger-hint">Reviewer notes</span>
+                  </label>
+                  <input type="text" id="contrib-note" class="ledger-input" placeholder="Context for submission or source details">
+                </div>
+                <div>
+                  <label for="contrib-submitter" class="ledger-label">
+                    <span>Submitter Handle</span>
+                    <span class="ledger-hint">Optional</span>
+                  </label>
+                  <input type="text" id="contrib-submitter" class="ledger-input ledger-input--mono" placeholder="anonymous" value="anonymous">
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding-top:var(--space-4);border-top:1px solid var(--rule)">
+                <button type="submit" class="btn btn--primary" id="btn-submit-form" style="padding:.75rem 1.85rem;font-size:.9375rem">
+                  <span>Submit Contribution to Catalog</span>
                 </button>
               </div>
             </form>
 
             <!-- Mode B: JSON Upload & Editor -->
-            <div id="contrib-json-wrap" class="stack-3" style="display:none;margin-top:var(--space-2)">
+            <div id="contrib-json-wrap" class="stack-4" style="display:none;margin-top:var(--space-2)">
               <!-- Dropzone -->
-              <div class="dropzone" id="contrib-dropzone" style="padding:var(--space-5) var(--space-4)">
+              <div class="dropzone" id="contrib-dropzone">
                 <input type="file" id="contrib-file-input" accept=".json,application/json" style="display:none">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sakura-deep);margin-bottom:var(--space-1)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <div style="font-family:var(--serif);font-size:1.0625rem;font-weight:600;color:var(--ink)">Drop a .json contribution file here, or click to browse</div>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sakura-deep);margin-bottom:var(--space-2);display:inline-block"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div style="font-family:var(--serif);font-size:1.0625rem;font-weight:600;color:var(--ink)">Drop a .json contribution payload here, or click to browse</div>
                 <div class="mono faint" style="font-size:.75rem;margin-top:.25rem">Conforms to ContributionCreateRequest schema</div>
               </div>
 
               <!-- Templates -->
               <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2)">
-                <div style="display:flex;gap:.4rem;flex-wrap:wrap">
-                  <button type="button" class="btn" data-tmpl="ADD_WORK" style="font-size:.6875rem">Add Work Template</button>
-                  <button type="button" class="btn" data-tmpl="ADD_ALIAS" style="font-size:.6875rem">Add Alias Template</button>
-                  <button type="button" class="btn" data-tmpl="EDIT_METADATA" style="font-size:.6875rem">Edit Metadata Template</button>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                  <button type="button" class="template-pill" data-tmpl="ADD_WORK">Add Work Template</button>
+                  <button type="button" class="template-pill" data-tmpl="ADD_ALIAS">Add Alias Template</button>
+                  <button type="button" class="template-pill" data-tmpl="EDIT_METADATA">Edit Metadata Template</button>
                 </div>
-                <button type="button" class="btn" id="btn-format-json" style="font-size:.6875rem">Format JSON</button>
+                <button type="button" class="template-pill" id="btn-format-json" style="border-color:var(--rule-strong)">Format JSON</button>
               </div>
 
               <!-- Live Validation Indicator -->
@@ -269,10 +299,10 @@
               </div>
 
               <!-- Editor -->
-              <textarea id="contrib-json-editor" class="advanced-input mono" rows="12" spellcheck="false" style="font-size:.8125rem;line-height:1.6;tab-size:2;background:var(--paper-deep);color:var(--ink);width:100%"></textarea>
+              <textarea id="contrib-json-editor" class="ledger-editor mono" rows="12" spellcheck="false"></textarea>
 
-              <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding-top:var(--space-2);border-top:1px solid var(--rule)">
-                <button type="button" class="btn btn--primary" id="btn-submit-json">
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding-top:var(--space-4);border-top:1px solid var(--rule)">
+                <button type="button" class="btn btn--primary" id="btn-submit-json" style="padding:.75rem 1.85rem;font-size:.9375rem">
                   <span>Submit JSON Payload</span>
                 </button>
               </div>

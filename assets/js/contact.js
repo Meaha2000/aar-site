@@ -305,16 +305,22 @@ function showOutcome(res) {
   const isCatalog = res.status === "ALREADY_IN_CATALOG";
 
   let badgeHtml = "";
+  let cardClass = "submission-card";
   if (isSuccess) {
     badgeHtml = `<span class="badge badge--live">✓ Registered in Queue</span>`;
+    cardClass = "submission-card submission-card--success";
   } else if (isUpvoted) {
     badgeHtml = `<span class="badge badge--sakura">▲ Upvoted Existing Submission</span>`;
+    cardClass = "submission-card submission-card--upvote";
   } else if (isCatalog) {
     badgeHtml = `<span class="badge" style="background:var(--paper-deep);color:var(--amber);border:1px solid var(--amber)">ℹ Already in Catalog</span>`;
+    cardClass = "submission-card submission-card--catalog";
   } else {
     badgeHtml = `<span class="badge" style="background:rgba(156,59,46,0.15);color:var(--rust);border:1px solid var(--rust)">✗ Error</span>`;
+    cardClass = "submission-card submission-card--error";
   }
 
+  card.className = cardClass;
   card.style.display = "block";
   card.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-2);flex-wrap:wrap;gap:var(--space-2)">
