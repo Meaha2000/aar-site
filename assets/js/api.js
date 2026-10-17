@@ -4,7 +4,15 @@
    Supports both GET (query string) and POST (JSON body) contracts.
    ========================================================================= */
 
-import { API_KEY, RAPIDAPI_HOST, endpoint, isConfigured } from "./config.js?v=2";
+import {
+  API_KEY,
+  RAPIDAPI_HOST,
+  API_BASE,
+  TUNNEL_BASE,
+  FREE_PUBLIC_KEY,
+  endpoint,
+  isConfigured,
+} from "./config.js?v=2";
 
 /** Error carrying an HTTP status so callers can name the recovery. */
 export class ApiError extends Error {
@@ -44,7 +52,13 @@ async function request(path, { method = "GET", body = null, signal = null } = {}
 
   const text = await res.text();
   let data = null;
-  if (text) { try { data = JSON.parse(text); } catch { data = null; } }
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = null;
+    }
+  }
 
   if (!res.ok) {
     const detail = (data && (data.detail || data.error || data.message)) || res.statusText;
@@ -171,6 +185,35 @@ export function ask(opts, signal) {
   }
   const payload = buildSearchPayload(opts);
   return request("/ask", { method: "POST", body: payload, signal });
+}
+
+/**
+ * /contributions — Submit community additions or metadata corrections.
+ */
+export async function submitContribution(payload, { signal = null } = {}) {
+  try {
+    return await request("/contributions", { method: "POST", body: payload, signal });
+  } catch (err) {
+    if (err && (err.status === 404 || err.status === 0) && TUNNEL_BASE) {
+      const tunnelUrl = TUNNEL_BASE.replace(/\/+$/, "") + "/contributions";
+      const res = await fetch(tunnelUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-API-Key": FREE_PUBLIC_KEY,
+        },
+        body: JSON.stringify(payload),
+        signal,
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new ApiError(data?.detail || "Failed to submit contribution", { status: res.status, body: data });
+      }
+      return data;
+    }
+    throw err;
+  }
 }
 
 /** Backwards-compatible body preview */

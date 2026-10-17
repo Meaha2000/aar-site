@@ -15,9 +15,32 @@
      POST /search
      POST /ask
      GET  /health
+     POST /contributions
+     POST /suggest
+     GET  /contributions/queue
+     GET  /suggest/queue
+     GET  /contributions/grouped
+     GET  /suggest/grouped
    ========================================================================= */
 
-const ALLOWED = new Set(["/search", "/ask", "/health"]);
+const ALLOWED = new Set([
+  "/search",
+  "/ask",
+  "/health",
+  "/contributions",
+  "/suggest",
+  "/contributions/queue",
+  "/suggest/queue",
+  "/contributions/grouped",
+  "/suggest/grouped",
+]);
+
+const POST_ROUTES = new Set([
+  "/search",
+  "/ask",
+  "/contributions",
+  "/suggest",
+]);
 
 /** Origins allowed to call this Worker from a browser. '*' by default. */
 function corsHeaders(request, env) {
@@ -89,10 +112,10 @@ export default {
     }
 
     if (!ALLOWED.has(url.pathname)) {
-      return json({ detail: "Not found. This proxy forwards only /search, /ask, and /health." }, 404, cors);
+      return json({ detail: "Not found. This proxy forwards only search, ask, contributions, and health." }, 404, cors);
     }
 
-    if (url.pathname === "/search" || url.pathname === "/ask") {
+    if (POST_ROUTES.has(url.pathname)) {
       if (request.method !== "POST") {
         return json({ detail: "Method not allowed; use POST." }, 405, cors);
       }
