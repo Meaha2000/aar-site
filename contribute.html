@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community Contributions &amp; Ingestion — Anime Akashic Records</title>
+<meta name="description" content="Contribute to the Anime Akashic Records archive: suggest missing anime, manga, visual novels, or light novels, submit alternative titles, or propose metadata corrections.">
+<meta name="color-scheme" content="light dark">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="Community Contributions — Anime Akashic Records">
+<meta property="og:description" content="Suggest missing works, submit alternative Arabic/English titles, or propose metadata corrections with automated deduplication and upvoting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meaha2000.github.io/aar-site/contribute.html">
+<meta property="og:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Community Contributions — Anime Akashic Records">
+<meta name="twitter:description" content="Suggest missing works, submit alternative titles, or propose metadata corrections.">
+<meta name="twitter:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+
+<link rel="icon" href="assets/img/logo.png" type="image/png">
+<link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
+<link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/site.css">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "AAR Community Contributions & Ingestion",
+  "description": "Submit missing works, suggest aliases, or propose metadata corrections to the Anime Akashic Records catalog.",
+  "url": "https://meaha2000.github.io/aar-site/contribute.html"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to contribution form</a>
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
+      <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
+      <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
+    </a>
+    <nav class="masthead__nav" aria-label="Primary">
+      <a href="index.html">Overview</a>
+      <a href="about.html">About</a>
+      <a href="search.html">Search Demo</a>
+      <a href="contribute.html" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Contribute</a>
+      <a href="api.html">API Reference</a>
+      <a href="contact.html">Telegram &amp; Contact</a>
+    </nav>
+    <div class="masthead__tools">
+      <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">Light</button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <div class="leaf" style="grid-template-columns: minmax(0,1fr)">
+    <main class="column" id="main">
+
+      <!-- Header Banner -->
+      <section class="section" style="padding-top:var(--space-6);padding-bottom:var(--space-4)">
+        <div style="max-width:54rem">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3)">
+            <span class="badge badge--sakura">Community Ingestion</span>
+            <span class="badge badge--live">POST /contributions</span>
+            <span class="badge" style="background:var(--paper-deep);color:var(--ink-soft);border:1px solid var(--rule)">Automated Deduplication &amp; Upvoting</span>
+          </div>
+
+          <h1 class="h1" style="margin-bottom:var(--space-2)">Contribute to the Records</h1>
+          <p class="lede" style="margin-bottom:var(--space-4)">
+            Help expand the archive. Suggest missing anime, manga, or visual novels, propose alternative Arabic/English titles, or correct metadata tags. Every submission is automatically cross-referenced against the 144,000+ catalog to prevent duplicates and cluster community upvotes.
+          </p>
+
+          <!-- Mode Navigation Tabs -->
+          <div class="contribute-tabs" role="tablist" aria-label="Contribution Mode">
+            <button class="contribute-tab-btn is-active" type="button" role="tab" id="tab-btn-form" aria-controls="panel-form" aria-selected="true" data-tab-btn="panel-form">
+              <span>✍ Structured Form</span>
+            </button>
+            <button class="contribute-tab-btn" type="button" role="tab" id="tab-btn-json" aria-controls="panel-json" aria-selected="false" data-tab-btn="panel-json">
+              <span>📄 JSON Upload &amp; Editor</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: Structured Form -->
+      <div id="panel-form" data-tab-panel role="tabpanel" aria-labelledby="tab-btn-form">
+        <section class="section" style="padding-top:0">
+          <div style="max-width:54rem">
+            <form data-contrib-form class="stack-4" style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-5);box-shadow:var(--card-shadow)">
+
+              <!-- Contribution Type Chips -->
+              <div>
+                <label class="micro" style="display:block;margin-bottom:var(--space-2)">1. Contribution Type (نوع المساهمة)</label>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem" role="radiogroup" aria-label="Contribution Type">
+                  <button type="button" class="chip is-active" aria-pressed="true" data-contrib-type="ADD_WORK">
+                    + Add Missing Work (عمل ناقص)
+                  </button>
+                  <button type="button" class="chip" aria-pressed="false" data-contrib-type="ADD_ALIAS">
+                    🏷 Add Alias / Title (اسم بديل)
+                  </button>
+                  <button type="button" class="chip" aria-pressed="false" data-contrib-type="EDIT_METADATA">
+                    ✏ Edit Metadata (تصحيح بيانات)
+                  </button>
+                  <button type="button" class="chip" aria-pressed="false" data-contrib-type="FEATURE_OR_VIBE">
+                    ✨ Suggest Vibe / Feature (اقتراح ميزة)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Media Type Chips -->
+              <div>
+                <label class="micro" style="display:block;margin-bottom:var(--space-2)">2. Media Type (نوع العمل)</label>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem" role="radiogroup" aria-label="Media Type">
+                  <button type="button" class="chip is-active" aria-pressed="true" data-media-type="anime">Anime (أنمي)</button>
+                  <button type="button" class="chip" aria-pressed="false" data-media-type="manga">Manga (مانجا)</button>
+                  <button type="button" class="chip" aria-pressed="false" data-media-type="visual_novel">Visual Novel (رواية مرئية)</button>
+                  <button type="button" class="chip" aria-pressed="false" data-media-type="light_novel">Light Novel (رواية خفيفة)</button>
+                  <button type="button" class="chip" aria-pressed="false" data-media-type="manhwa">Manhwa (مانهوا)</button>
+                  <button type="button" class="chip" aria-pressed="false" data-media-type="manhua">Manhua (مانها)</button>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--rule);margin:var(--space-2) 0"></div>
+
+              <!-- Form Inputs -->
+              <div class="stack-3">
+                <!-- Title Field -->
+                <div>
+                  <label for="field-title" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Work Title or Summary <span style="color:var(--rust)">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="field-title"
+                    name="title"
+                    class="advanced-input"
+                    placeholder="e.g., Cowboy Bebop, Steins;Gate, or Dennou Coil Special"
+                    required
+                    style="font-size:1rem;padding:.6rem .8rem"
+                  >
+                  <span class="mono faint" style="font-size:.6875rem">The primary or canonical title of the work you want to report.</span>
+                </div>
+
+                <!-- Target Work ID (Shown for ALIAS / EDIT) -->
+                <div data-field-target-id style="display:none">
+                  <label for="field-target-id" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Target Work ID (معرف العمل في الأرشيف)
+                  </label>
+                  <input
+                    type="text"
+                    id="field-target-id"
+                    name="target_work_id"
+                    class="advanced-input mono"
+                    placeholder="e.g., work:anime:mal_1_al_1"
+                  >
+                  <span class="mono faint" style="font-size:.6875rem">Required when adding an alias or correcting existing catalog metadata.</span>
+                </div>
+
+                <!-- 2-Column Inputs Grid -->
+                <div class="form-grid">
+                  <!-- Alternative Titles -->
+                  <div>
+                    <label for="field-alt-titles" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                      Alternative Titles / Aliases (أسماء بديلة)
+                    </label>
+                    <input
+                      type="text"
+                      id="field-alt-titles"
+                      name="alt_titles"
+                      class="advanced-input"
+                      placeholder="e.g. كابوي بيبوب, Space Cowboy (comma-separated)"
+                    >
+                    <span class="mono faint" style="font-size:.6875rem">English, Arabic, romanized, or colloquial titles.</span>
+                  </div>
+
+                  <!-- Suggested Tags -->
+                  <div>
+                    <label for="field-tags" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                      Suggested Tags / Themes (تصنيفات ووسوم)
+                    </label>
+                    <input
+                      type="text"
+                      id="field-tags"
+                      name="suggested_tags"
+                      class="advanced-input"
+                      placeholder="e.g. Cyberpunk, Space Western, Noir"
+                    >
+                    <span class="mono faint" style="font-size:.6875rem">Genres, vibes, themes, or setting tags.</span>
+                  </div>
+                </div>
+
+                <!-- Reference URL -->
+                <div>
+                  <label for="field-ref-url" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Reference URL (رابط المصدر)
+                  </label>
+                  <input
+                    type="url"
+                    id="field-ref-url"
+                    name="reference_url"
+                    class="advanced-input mono"
+                    placeholder="https://myanimelist.net/anime/... or https://vndb.org/..."
+                  >
+                  <span class="mono faint" style="font-size:.6875rem">Link to MyAnimeList, AniList, VNDB, Bangumi, or official site for verification.</span>
+                </div>
+
+                <!-- Custom Description -->
+                <div>
+                  <label for="field-desc" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Custom Synopsis or Description (الوصف أو القصة)
+                  </label>
+                  <textarea
+                    id="field-desc"
+                    name="custom_description"
+                    class="advanced-input"
+                    rows="4"
+                    placeholder="Provide a detailed synopsis, character dynamics, or setting summary to power natural language semantic matching..."
+                    style="line-height:1.6"
+                  ></textarea>
+                </div>
+
+                <!-- Curator Remarks / Note -->
+                <div>
+                  <label for="field-note" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Curator Remarks or Reason (ملاحظات التقديم)
+                  </label>
+                  <textarea
+                    id="field-note"
+                    name="synopsis_or_note"
+                    class="advanced-input"
+                    rows="2"
+                    placeholder="e.g., Arabic localization officially used on TV broadcast; OVA episode omitted from season listing..."
+                    style="line-height:1.6"
+                  ></textarea>
+                </div>
+
+                <!-- Submitter Handle -->
+                <div>
+                  <label for="field-submitter" class="micro" style="display:block;margin-bottom:var(--space-1)">
+                    Submitter Handle (اسمك أو معرفك - اختياري)
+                  </label>
+                  <input
+                    type="text"
+                    id="field-submitter"
+                    name="submitter_id"
+                    class="advanced-input mono"
+                    placeholder="anonymous"
+                    value="anonymous"
+                  >
+                </div>
+              </div>
+
+              <!-- Form Submission Actions -->
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--rule)">
+                <button type="reset" class="btn" style="color:var(--ink-soft)">Reset Fields</button>
+                <button type="submit" class="btn btn--primary" data-form-submit>
+                  <span data-btn-label>Submit Contribution</span>
+                  <span data-btn-spinner class="seal seal--spin is-turning" style="display:none;margin-left:.35rem">✦</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <!-- TAB 2: JSON Upload & Editor -->
+      <div id="panel-json" data-tab-panel role="tabpanel" aria-labelledby="tab-btn-json" style="display:none" aria-hidden="true">
+        <section class="section" style="padding-top:0">
+          <div style="max-width:54rem">
+            <div class="stack-4" style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-5);box-shadow:var(--card-shadow)">
+
+              <!-- File Dropzone -->
+              <div class="dropzone" id="json-dropzone">
+                <input type="file" id="json-file-input" accept=".json,application/json" style="display:none">
+                <div class="dropzone__icon">📥</div>
+                <div class="dropzone__title">Drag &amp; drop a ready .json file here</div>
+                <div class="dropzone__hint">Or click to browse from your computer. Accepts standard ContributionCreateRequest JSON.</div>
+              </div>
+
+              <!-- Presets & Quick Templates -->
+              <div>
+                <label class="micro" style="display:block;margin-bottom:var(--space-2)">Load Schema Template (تحميل قالب جاهز)</label>
+                <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+                  <button type="button" class="btn" data-template="ADD_WORK" style="font-size:.6875rem">Template: Add Work</button>
+                  <button type="button" class="btn" data-template="ADD_ALIAS" style="font-size:.6875rem">Template: Add Alias</button>
+                  <button type="button" class="btn" data-template="EDIT_METADATA" style="font-size:.6875rem">Template: Edit Metadata</button>
+                </div>
+              </div>
+
+              <!-- Live JSON Status -->
+              <div id="json-status" class="json-status json-status--valid">
+                <span>Checking payload…</span>
+              </div>
+
+              <!-- JSON Textarea Editor -->
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-1)">
+                  <label for="json-editor" class="micro">Direct JSON Payload Editor</label>
+                  <button type="button" class="btn" id="json-prettify" style="font-size:.625rem;padding:.2rem .5rem">Format JSON</button>
+                </div>
+                <textarea
+                  id="json-editor"
+                  class="advanced-input mono"
+                  rows="14"
+                  spellcheck="false"
+                  style="font-size:.875rem;line-height:1.6;tab-size:2;background:var(--paper-deep);color:var(--ink);width:100%;resize:vertical"
+                ></textarea>
+              </div>
+
+              <!-- JSON Submit Button -->
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--rule)">
+                <button type="button" class="btn btn--primary" id="json-submit">
+                  <span data-btn-label>Submit JSON Payload</span>
+                  <span data-btn-spinner class="seal seal--spin is-turning" style="display:none;margin-left:.35rem">✦</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Outcome / Result Card (Shared) -->
+      <section class="section" style="padding-top:0">
+        <div style="max-width:54rem">
+          <div id="submission-outcome" class="submission-card" style="display:none"></div>
+        </div>
+      </section>
+
+      <!-- Recent Community Queue Feed -->
+      <section class="section" style="padding-top:var(--space-2)">
+        <div style="max-width:54rem">
+          <div style="border-top:1px solid var(--rule-strong);padding-top:var(--space-5);margin-bottom:var(--space-4)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2)">
+              <h2 class="h2" style="margin:0">Recent Community Queue</h2>
+              <span class="badge badge--live">Live Ingestion Feed</span>
+            </div>
+            <p class="faint" style="font-size:.875rem;margin:0">
+              Submissions awaiting community upvoting or automated ingestion. If your proposed title is already in the queue, submitting it automatically upvotes its priority.
+            </p>
+          </div>
+
+          <div id="queue-container" style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;overflow:hidden;box-shadow:var(--card-shadow)">
+            <div style="padding:var(--space-4);text-align:center" class="mono faint">Loading community submissions…</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="shell footer__inner">
+    <div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-2)">
+        <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="28" height="28">
+        <span class="mono" style="font-size:.875rem;font-weight:700">Anime Akashic Records</span>
+      </div>
+      <p class="faint" style="margin:0;font-size:.875rem;max-width:32rem;line-height:1.6">
+        A community-driven, natural language discovery engine and semantic archive across anime, manga, light novels, and visual novels.
+      </p>
+      <div style="margin-top:var(--space-3);font-size:.8125rem;color:var(--ink-soft);line-height:1.6">
+        Have a question or collaboration proposal?<br>
+        Reach out directly at: <a href="mailto:AnimeAkashicRecords@hotmail.com" style="color:var(--sakura-deep);font-weight:600">AnimeAkashicRecords@hotmail.com</a>
+      </div>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Navigation</div>
+      <div class="stack-2">
+        <a href="index.html">Overview</a>
+        <a href="about.html">About AAR</a>
+        <a href="search.html">Interactive Demo</a>
+        <a href="contribute.html" style="color:var(--sakura-deep);font-weight:600">Community Contributions</a>
+        <a href="api.html">API Reference</a>
+        <a href="contact.html">Telegram &amp; Contact</a>
+      </div>
+    </div>
+    <div>
+      <div class="micro" style="margin-bottom:var(--space-2)">Agents &amp; API</div>
+      <div class="stack-2">
+        <a href="llms.txt">llms.txt (Agent Standard)</a>
+        <a href="index.md">index.md (Markdown)</a>
+        <a href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener">Telegram Bot (@AnimeAkashicRecords_bot)</a>
+      </div>
+    </div>
+  </div>
+  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3)">
+    <span class="faint" style="font-size:.8125rem">&copy; Anime Akashic Records</span>
+    <code class="mono" style="font-size:.8125rem;color:var(--ink-faint);background:none;border:none">$ curl -X POST https://api/contributions</code>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/site.js?v=2"></script>
+<script type="module" src="assets/js/contribute.js?v=2"></script>
+</body>
+</html>
