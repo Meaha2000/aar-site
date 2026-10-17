@@ -286,11 +286,19 @@
               </p>
             </div>
 
+                        <!-- Integration Profiles Callout -->
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--sakura-deep);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+              <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
+              <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+              </div>
+            </div>
+
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
             <div class="field"><span class="field__name">question</span><span class="field__value"><strong>string</strong> (required) — Natural language question, scene description, trope, or production query.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>8</code>, max: <code>50</code>) — Maximum number of works to return.</span></div>
             <div class="field"><span class="field__name">mode</span><span class="field__value"><strong>string</strong> (optional, default: <code>"hybrid"</code>) — <code>"hybrid"</code> for balanced keywords &amp; concepts; <code>"semantic"</code> for vector-only retrieval.</span></div>
-            <div class="field"><span class="field__name">query_breakdown</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) — When <code>true</code>, the query passes through LLM query decomposition and refinement. When <code>false</code>, LLM breakdown is bypassed and the prompt is embedded directly as-is (significantly reducing latency).</span></div>
+            <div class="field"><span class="field__name">query_breakdown</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) — Default is <code>false</code> for ultra-low-latency native hybrid retrieval (~500ms) without LLM query rewriting delay. Pass <code>true</code> only when you want an LLM to decompose complex multi-part or comparative queries (e.g. <em>"anime like X but with themes like Y"</em>) into targeted sub-probes before retrieval (adds ~400&ndash;800ms).</span></div>
             <div class="field"><span class="field__name">nsfw</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) — Explicitly marks query as adult/NSFW, skipping LLM query refinement and proceeding directly to vector embedding.</span></div>
             <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Expanded relational payloads to attach to each result: <code>["staff", "characters", "relations"]</code>.</span></div>
             <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
@@ -388,6 +396,14 @@
             <!-- Ask Rate Limit Alert -->
             <div style="background:rgba(212,122,138,0.08);border:1px solid var(--sakura);border-left:3px solid var(--sakura-deep);border-radius:4px;padding:var(--space-2) var(--space-3);margin-bottom:var(--space-4);font-size:.8125rem;color:var(--ink)">
               <strong style="color:var(--sakura-deep)">Public Free Key Rate Limits:</strong> Strictly capped at <strong>1 request/second</strong> and <strong>3 requests/minute</strong> per IP. For higher ask quotas or unthrottled SLA, contact <a href="mailto:AnimeAkashicRecords@hotmail.com" style="color:var(--sakura-deep);text-decoration:underline">AnimeAkashicRecords@hotmail.com</a>.
+            </div>
+
+                        <!-- Integration Profiles Callout -->
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--sakura-deep);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+              <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
+              <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+              </div>
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
@@ -512,6 +528,14 @@
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
                 Discover titles with matching narrative DNA, emotional tone, and thematic essence to any specified work. Unlike superficial genre checkboxes, this endpoint computes deep vector proximity across plot complexity, character dynamics, and aesthetic pacing.
               </p>
+            </div>
+
+                        <!-- Integration Profiles Callout -->
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-left:3px solid var(--sakura-deep);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+              <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
+              <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+              </div>
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>

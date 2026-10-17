@@ -17,6 +17,15 @@
 >
 > Anime Akashic Records (AAR) is a discovery and metadata API for applications that need to search across works using natural-language descriptions, story concepts, and atmosphere — not only exact titles.
 
+### Target Integration Profiles:
+- **Streaming Platforms & Media Catalogs:** Powers sub-second (~500ms) search-as-you-type and discoverability across obscure character descriptions, complex plot tropes, and canonical aliases with strict SQL metadata bounds (e.g. streaming availability, formats, airing status).
+- **AI Chatbots & Conversational RAG:** Serves as a high-density factual context source. Delivers verified, deduplicated chunks with full cross-work character synergy to prevent hallucinations and provide exact citations.
+- **Autonomous AI Agents & Tool Calling:** Serves as a deterministic, low-latency API tool for agentic workflows with zero conversational bloat, strict type safety, and predictable execution latency.
+
+### Query Breakdown Execution Modes:
+- `query_breakdown: false` (Default): Native hybrid pipeline fusing ScaNN-cascade dense vectors (Qdrant int8), FTS5 BM25, in-memory character synergy aggregation, and deep Cross-Encoder reranking (~500ms) without LLM delay.
+- `query_breakdown: true` (Opt-in): Decomposes compound, multi-part, or comparative queries via an LLM before vector retrieval (adds ~400-800ms).
+
 ### Core Architecture & Key Strengths:
 - **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
 - **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.

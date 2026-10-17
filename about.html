@@ -297,39 +297,60 @@
           </div>
         </div>
 
-        <!-- Commercial Target Audience (Restructured by Commercial Use Case) -->
+                <!-- Commercial Target Audience (Restructured by Commercial Use Case) -->
         <div style="margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">Who Is Anime Akashic Records For?</h2>
           <div class="feature-grid">
             <div class="feature-card">
-              <div class="feature-card__title">Streaming Platforms</div>
+              <div class="feature-card__title">Streaming Services &amp; Video Platforms</div>
               <p class="feature-card__desc">
-                Add natural language search and vibe discovery to your existing catalog. Users can describe what they want to watch,
-                and your platform can match AAR candidate results against your licensed catalog.
+                Power instant, sub-second (~500ms) search-as-you-type bars. Allow viewers to find works by describing character traits, memorable scenes, or vague plot memories without knowing exact Japanese or English titles, with strict metadata filtering for available catalog titles.
               </p>
               <div class="faint" style="font-size:.8rem;margin-top:var(--space-2);line-height:1.4">
                 * Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service.
               </div>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">AI Chatbots &amp; Agents</div>
+              <div class="feature-card__title">AI Chatbots &amp; Conversational RAG</div>
               <p class="feature-card__desc">
-                Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests,
-                grounded in real catalog metadata and supporting synopsis excerpts.
+                Equip conversational assistants with high-density, evidence-grounded context blocks. In-memory character synergy aggregation unites plot descriptions and cast details, completely eliminating hallucinations with verifiable title provenance and citations.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Anime Discovery &amp; Recommendation Apps</div>
+              <div class="feature-card__title">Autonomous AI Agents &amp; Tool Calling</div>
               <p class="feature-card__desc">
-                Enhance your app's search bar so users don&rsquo;t need to remember exact spellings.
-                Let them explore titles matching their current mood, aesthetic vibe, or narrative interests.
+                Deploy AAR as a high-precision, deterministic tool in agentic frameworks (LangChain, LlamaIndex, AutoGen). With strict OpenAPI validation, zero conversational fluff in retrieval mode, and sub-second execution, agents can query and filter catalog data with predictable latency.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Community Bots &amp; Content Creators</div>
+              <div class="feature-card__title">Discovery &amp; Community Bots</div>
               <p class="feature-card__desc">
-                Build Discord and Telegram bots that answer community questions, or quickly curate themed lists for videos,
-                articles, and discussions around specific tropes.
+                Build Discord and Telegram bots that answer community questions, recommend titles by vibe or aesthetic tone, or automatically curate themed lists for content creators and reviewers.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Query Breakdown & Performance Modes Callout -->
+        <div style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-left:4px solid var(--moss);border-radius:8px;padding:var(--space-5);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:var(--space-2)">
+            <span class="badge" style="background:rgba(126,175,133,0.14);color:var(--moss);border:1px solid var(--moss);font-size:.7rem;font-weight:700">Architecture &amp; Speed</span>
+            <span style="font-weight:700;font-size:1.05rem;color:var(--ink)">Dual Query Processing Modes: Fast Native vs. LLM Breakdown</span>
+          </div>
+          <p style="font-size:.9375rem;line-height:1.65;color:var(--ink-soft);margin-bottom:var(--space-3)">
+            AAR is engineered to serve real-time user-facing search and automated agents at maximum velocity:
+          </p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:var(--space-3)">
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div style="font-weight:700;color:var(--moss);font-size:.875rem;margin-bottom:.25rem">Default Mode (<code>query_breakdown: false</code>)</div>
+              <p class="faint" style="font-size:.8125rem;line-height:1.55;margin:0">
+                <strong>Sub-second speed (~500ms).</strong> Native hybrid pipeline fusing ScaNN-cascade dense vectors (Qdrant int8), FTS5 BM25, in-memory character synergy aggregation, and deep Cross-Encoder reranking without any LLM delay. Active by default for all requests.
+              </p>
+            </div>
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div style="font-weight:700;color:var(--sakura-deep);font-size:.875rem;margin-bottom:.25rem">Opt-In LLM Breakdown (<code>query_breakdown: true</code>)</div>
+              <p class="faint" style="font-size:.8125rem;line-height:1.55;margin:0">
+                <strong>Compound Query Decomposition.</strong> Pass <code>"query_breakdown": true</code> in your request body when you want an LLM to decompose complex multi-part comparative queries (e.g. <em>"anime like Cowboy Bebop with themes like Psycho-Pass"</em>) into targeted sub-probes before retrieval (adds ~400&ndash;800ms).
               </p>
             </div>
           </div>
