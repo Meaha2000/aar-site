@@ -11,18 +11,23 @@
 <meta property="og:title" content="Anime Akashic Records — The Intelligent Anime Discovery API">
 <meta property="og:description" content="Find the work you can't remember. Discover the work you didn't know you wanted. Natural language plot and story description discovery across 144,000+ titles.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://meaha2000.github.io/aar-site/">
-<meta property="og:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+<meta property="og:url" content="https://aarecords.tech/">
+<meta property="og:image" content="https://aarecords.tech/assets/img/logo.png">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Anime Akashic Records — Discovery API">
 <meta name="twitter:description" content="Natural language plot and story description discovery across 144,000+ anime, manga, light novels, and manhwa.">
-<meta name="twitter:image" content="https://meaha2000.github.io/aar-site/assets/img/logo.png">
+<meta name="twitter:image" content="https://aarecords.tech/assets/img/logo.png">
 
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="alternate" type="text/plain" href="llms.txt" title="LLM Context">
-<link rel="alternate" type="text/markdown" href="index.md" title="Markdown Version">
+<!-- Machine-Readable Agent Discovery (RFC 8288 / RFC 9727 / Auth.md / MCP) -->
+<link rel="api-catalog" type="application/linkset+json" href="/.well-known/api-catalog">
+<link rel="service-desc" type="application/vnd.oai.openapi+json" href="https://api.aarecords.tech/openapi.json">
+<link rel="service-doc" href="https://api.aarecords.tech/docs">
+<link rel="describedby" href="/auth.md">
+<link rel="alternate" type="text/markdown" href="/index.md" title="Markdown Version">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
@@ -37,7 +42,7 @@
   "name": "Anime Akashic Records API",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "All",
-  "url": "https://meaha2000.github.io/aar-site/",
+  "url": "https://aarecords.tech/",
   "description": "Natural language discovery and metadata API for anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua. Enables plot description search, narrative discovery, and AI assistant grounding.",
   "offers": {
     "@type": "Offer",
@@ -352,7 +357,7 @@
   </div>
   <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3)">
     <span class="faint" style="font-size:.8125rem">&copy; Anime Akashic Records</span>
-    <code class="mono" style="font-size:.8125rem;color:var(--ink-faint);background:none;border:none">$ curl -s https://meaha2000.github.io/aar-site/llms.txt</code>
+    <code class="mono" style="font-size:.8125rem;color:var(--ink-faint);background:none;border:none">$ curl -s https://aarecords.tech/llms.txt</code>
   </div>
 </footer>
 

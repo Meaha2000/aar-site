@@ -1,0 +1,68 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://api.aarecords.tech/",
+      "service-desc": [
+        {
+          "href": "https://api.aarecords.tech/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://api.aarecords.tech/docs",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://api.aarecords.tech/health",
+          "type": "application/json"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://aarecords.tech/auth.md",
+          "type": "text/markdown"
+        }
+      ],
+      "author": [
+        {
+          "href": "mailto:contact@aarecords.tech"
+        }
+      ]
+    },
+    {
+      "anchor": "https://mcp.aarecords.tech/",
+      "service-desc": [
+        {
+          "href": "https://aarecords.tech/.well-known/mcp/server-card.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://aarecords.tech/api.html#mcp",
+          "type": "text/html"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://mcp.aarecords.tech/health",
+          "type": "application/json"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://aarecords.tech/auth.md",
+          "type": "text/markdown"
+        }
+      ],
+      "author": [
+        {
+          "href": "mailto:contact@aarecords.tech"
+        }
+      ]
+    }
+  ]
+}

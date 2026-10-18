@@ -131,7 +131,7 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 - **Public Free Key:** `aar_free_access` (or `aar_free`)
 - **Interactive OpenAPI / Swagger UI:** `https://api.aarecords.tech/docs`
 - **ReDoc Documentation:** `https://api.aarecords.tech/redoc`
-- **Web Demo Playground:** https://meaha2000.github.io/aar-site/search.html
+- **Web Demo Playground:** https://aarecords.tech/search.html
 - **Official Telegram Bot:** https://t.me/AnimeAkashicRecords_bot (@AnimeAkashicRecords_bot)
 
 ### HTTP Authentication Headers

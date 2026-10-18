@@ -6,7 +6,7 @@
 
   **The Universal Semantic Search & Neural Retrieval Engine for Anime, Manga, and Light Novels.**
 
-  [![Live Demo](https://img.shields.io/badge/Demo-Live%20Website-B83A50?style=flat-square&logo=github)](https://meaha2000.github.io/aar-site/)
+  [![Live Demo](https://img.shields.io/badge/Demo-Live%20Website-B83A50?style=flat-square&logo=github)](https://aarecords.tech/)
   [![API Gateway](https://img.shields.io/badge/API%20Gateway-api.aarecords.tech-3D6B48?style=flat-square)](https://api.aarecords.tech)
   [![Swagger Docs](https://img.shields.io/badge/Docs-Swagger%20UI-387b97?style=flat-square)](https://api.aarecords.tech/docs)
   [![Indexed Works](https://img.shields.io/badge/Indexed%20Works-144K%2B-blueviolet?style=flat-square)](#)
@@ -33,12 +33,12 @@ Traditional databases require exact spelling or keyword matches. AAR understands
 
 | Resource | URL |
 |---|---|
-| 🌐 **Interactive Web Demo** | [https://meaha2000.github.io/aar-site/](https://meaha2000.github.io/aar-site/) |
+| 🌐 **Interactive Web Demo** | [https://aarecords.tech/](https://aarecords.tech/) |
 | ⚡ **Production API Gateway** | [https://api.aarecords.tech](https://api.aarecords.tech) |
 | 📖 **Swagger UI (OpenAPI)** | [https://api.aarecords.tech/docs](https://api.aarecords.tech/docs) |
 | 📑 **ReDoc Documentation** | [https://api.aarecords.tech/redoc](https://api.aarecords.tech/redoc) |
 | 🤖 **Telegram Bot** | [@AnimeAkashicRecords_bot](https://t.me/AnimeAkashicRecords_bot) |
-| 🤖 **LLM Context File** | [`llms.txt`](https://meaha2000.github.io/aar-site/llms.txt) |
+| 🤖 **LLM Context File** | [`llms.txt`](https://aarecords.tech/llms.txt) |
 
 ---
 

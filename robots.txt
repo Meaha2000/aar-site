@@ -1,4 +1,16 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://meaha2000.github.io/aar-site/sitemap.xml
+# Anime Akashic Records (AAR) — Bot & Content Usage Policies
+# Official Contact: contact@aarecords.tech
+# Content Signals declaration per https://contentsignals.org/
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
+# Machine-Readable Agent Discovery Resources
+# RFC 9727 API Catalog: https://aarecords.tech/.well-known/api-catalog
+# Auth.md Registration: https://aarecords.tech/auth.md
+# MCP Server Card: https://aarecords.tech/.well-known/mcp/server-card.json
+# LLM Context: https://aarecords.tech/llms.txt
+# Raw Markdown Docs: https://aarecords.tech/index.md
+
+Sitemap: https://aarecords.tech/sitemap.xml

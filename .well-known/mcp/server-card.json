@@ -1,0 +1,44 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/server-card.json",
+  "serverInfo": {
+    "name": "anime-akashic-records-mcp",
+    "version": "1.0.0",
+    "description": "High-precision semantic discovery and Q&A engine over 144,000+ anime, manga, and visual novel works.",
+    "contact": "contact@aarecords.tech"
+  },
+  "endpoints": {
+    "sse": "https://mcp.aarecords.tech/sse"
+  },
+  "authentication": {
+    "type": "apiKey",
+    "header": "X-API-Key",
+    "queryParam": "api_key",
+    "freeTierKey": "aar_free_access",
+    "contact": "contact@aarecords.tech"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    },
+    "resources": {
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "aar_search",
+      "description": "Search 144,000+ canonical anime, manga, novels, and visual novel works by natural language description, plot synopsis, trope, or theme."
+    },
+    {
+      "name": "aar_ask",
+      "description": "Ask questions about anime, manga, light novels, and visual novels to receive grounded factual prose answers with citations."
+    },
+    {
+      "name": "aar_health",
+      "description": "Check operational status of the Anime Akashic Records API and indexing cluster."
+    }
+  ]
+}
