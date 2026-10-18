@@ -92,7 +92,7 @@
             <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
               <span class="badge" style="background:rgba(126,175,133,0.15);color:var(--moss);border:1px solid var(--moss)">Free Community Tier</span>
               <span class="badge-beta">BETA</span>
-              <span class="micro" style="color:var(--ink-mute)">Direct Tunnel Gateway Active</span>
+              <span class="micro" style="color:var(--moss);font-weight:600">● Production Gateway Active</span>
             </div>
             <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
               <a href="https://api.aarecords.tech/docs" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.6875rem;padding:.3rem .7rem">
@@ -110,26 +110,53 @@
             Free Public API Access &amp; Per-IP Rate Limits
           </h2>
           <p class="faint" style="font-size:.9375rem;line-height:1.6;margin-bottom:var(--space-4);max-width:68ch">
-            For evaluation, open-source AI agents, and independent developers, the complete AAR semantic retrieval engine is currently open for free testing through our direct tunnel gateway. No registration or credit card required.
+            For evaluation, open-source AI agents, and independent developers, the complete AAR semantic retrieval engine is currently open for free testing through our production API gateway (<code class="mono" style="font-size:.85rem;color:var(--ink)">api.aarecords.tech</code>). No registration or credit card required.
           </p>
 
           <!-- Gateway & Public Key Cards -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:var(--space-3);margin-bottom:var(--space-5)">
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
-              <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Gateway Base URL</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)">
-                <code class="mono" style="font-size:.8125rem;color:var(--ink);word-break:break-all">https://api.aarecords.tech</code>
-                <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech" style="padding:.25rem .55rem"><span data-copy-label>Copy</span></button>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:var(--space-4);margin-bottom:var(--space-5)">
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:8px;padding:var(--space-3) var(--space-4);display:flex;flex-direction:column;justify-content:space-between">
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
+                  <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">GATEWAY BASE URL</span>
+                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.625rem;padding:.15rem .45rem">Live Gateway</span>
+                </div>
+                <div style="display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;margin-bottom:.4rem">
+                  <div style="flex:1;min-width:0;padding:.45rem .7rem;display:flex;align-items:center;overflow:hidden">
+                    <code class="mono" style="font-size:.8125rem;font-weight:600;color:var(--ink);user-select:all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">https://api.aarecords.tech</code>
+                  </div>
+                  <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech" style="border:none;border-left:1px solid var(--rule);border-radius:0;padding:0 .75rem;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;background:var(--paper-deep);flex-shrink:0">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span data-copy-label>Copy</span>
+                  </button>
+                </div>
+              </div>
+              <div class="faint" style="font-size:.75rem;display:flex;align-items:center;gap:.35rem;color:var(--ink-soft)">
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--moss)"></span>
+                <span>Production Gateway &bull; HTTP/2 &amp; HTTP/3 Enabled</span>
               </div>
             </div>
 
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
-              <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Public Free API Key</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-2)">
-                <code class="mono" style="font-size:.875rem;font-weight:600;color:var(--moss)">aar_free_access</code>
-                <button class="btn btn--quiet" type="button" data-copy-text="aar_free_access" style="padding:.25rem .55rem"><span data-copy-label>Copy</span></button>
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:8px;padding:var(--space-3) var(--space-4);display:flex;flex-direction:column;justify-content:space-between">
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
+                  <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">PUBLIC FREE API KEY</span>
+                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.625rem;padding:.15rem .45rem">Free Tier</span>
+                </div>
+                <div style="display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;margin-bottom:.4rem">
+                  <div style="flex:1;min-width:0;padding:.45rem .7rem;display:flex;align-items:center;overflow:hidden">
+                    <code class="mono" style="font-size:.875rem;font-weight:700;color:var(--moss);user-select:all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">aar_free_access</code>
+                  </div>
+                  <button class="btn btn--quiet" type="button" data-copy-text="aar_free_access" style="border:none;border-left:1px solid var(--rule);border-radius:0;padding:0 .75rem;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;background:var(--paper-deep);flex-shrink:0">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span data-copy-label>Copy</span>
+                  </button>
+                </div>
               </div>
-              <div class="faint" style="font-size:.75rem;margin-top:.25rem">Short key alias: <code class="mono" style="font-size:.75rem">aar_free</code> is also accepted</div>
+              <div class="faint" style="font-size:.75rem;display:flex;align-items:center;gap:.35rem;color:var(--ink-soft)">
+                <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--moss)"></span>
+                <span>Short key alias: <code class="mono" style="font-size:.75rem;color:var(--ink)">aar_free</code> is also accepted</span>
+              </div>
             </div>
           </div>
 
@@ -186,7 +213,7 @@
           <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);margin-bottom:var(--space-4)">
             <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Authentication Methods Supported</div>
             <div class="field" style="margin-bottom:.25rem"><span class="field__name">Header</span><span class="field__value mono">x-api-key: aar_free_access</span></div>
-            <div class="field" style="margin-bottom:.25rem"><span class="field__name">Query Param</span><span class="field__value mono">https://.../search?q=Bleach&amp;api_key=aar_free_access</span></div>
+            <div class="field" style="margin-bottom:.25rem"><span class="field__name">Query Param</span><span class="field__value mono" style="word-break:break-all">https://api.aarecords.tech/search?q=Bleach&amp;api_key=aar_free_access</span></div>
             <div class="field" style="margin-bottom:0"><span class="field__name">Bearer Auth</span><span class="field__value mono">Authorization: Bearer aar_free_access</span></div>
           </div>
 
@@ -266,6 +293,18 @@
 
           <!-- TAB 1: /search -->
           <div class="tab-pane is-active" id="tab-search" role="tabpanel" aria-labelledby="btn-tab-search">
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/search</code>
+              </div>
+              <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/search" style="padding:.25rem .6rem;font-size:.75rem">
+                <span data-copy-label>Copy Endpoint</span>
+              </button>
+            </div>
+
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Advanced Hybrid Retrieval</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -397,6 +436,18 @@
 
           <!-- TAB 2: /ask -->
           <div class="tab-pane" id="tab-ask" role="tabpanel" aria-labelledby="btn-tab-ask" hidden>
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/ask</code>
+              </div>
+              <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/ask" style="padding:.25rem .6rem;font-size:.75rem">
+                <span data-copy-label>Copy Endpoint</span>
+              </button>
+            </div>
+
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Question Answering</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -502,6 +553,17 @@
 
           <!-- TAB 3: /health -->
           <div class="tab-pane" id="tab-health" role="tabpanel" aria-labelledby="btn-tab-health" hidden>
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/health</code>
+              </div>
+              <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/health" style="padding:.25rem .6rem;font-size:.75rem">
+                <span data-copy-label>Copy Endpoint</span>
+              </button>
+            </div>
+
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Liveness Probe &amp; Corpus Statistics</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -535,6 +597,18 @@
 
           <!-- TAB 4: /recommend -->
           <div class="tab-pane" id="tab-recommend" role="tabpanel" aria-labelledby="btn-tab-recommend" hidden>
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/recommend</code>
+              </div>
+              <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/recommend" style="padding:.25rem .6rem;font-size:.75rem">
+                <span data-copy-label>Copy Endpoint</span>
+              </button>
+            </div>
+
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Work-to-Work Semantic Recommendation</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -552,7 +626,7 @@
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
             <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 canonical work identifiers (e.g. <code>["work:anime:mal_9253_al_9253"]</code>).</span></div>
-            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Canonical work ID (e.g. <code>/recommend/work:anime:mal_9253_al_9253</code>).</span></div>
+            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Canonical work ID (e.g. <code>https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253</code>).</span></div>
             <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, etc.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>50</code>) &mdash; Number of recommended titles to return.</span></div>
 
@@ -569,8 +643,12 @@
             <div class="code">
               <div class="code__bar">
                 <span class="micro">cURL (POST)</span>
+                <button class="btn btn--quiet" type="button" data-copy="[data-curl-recommend-post]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre><code class="language-bash">curl -X POST "https://api.aarecords.tech/recommend"   -H "Content-Type: application/json"   -H "x-api-key: aar_free_access"   -d '{
+              <div class="code__body"><pre data-curl-recommend-post><code class="language-bash">curl -X POST "https://api.aarecords.tech/recommend" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
     "seed_work_ids": ["work:anime:mal_9253_al_9253"],
     "limit": 5
   }'</code></pre></div>
@@ -607,6 +685,28 @@
 
           <!-- TAB 5: /suggest & /contributions -->
           <div class="tab-pane" id="tab-suggest" role="tabpanel" aria-labelledby="btn-tab-suggest" hidden>
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.6rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2)">
+                <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                  <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                  <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/suggest</code>
+                </div>
+                <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/suggest" style="padding:.25rem .6rem;font-size:.75rem">
+                  <span data-copy-label>Copy Endpoint</span>
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);padding-top:.4rem;border-top:1px dashed var(--rule)">
+                <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                  <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                  <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/contributions/grouped</code>
+                </div>
+                <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/contributions/grouped" style="padding:.25rem .6rem;font-size:.75rem">
+                  <span data-copy-label>Copy Endpoint</span>
+                </button>
+              </div>
+            </div>
+
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Community Suggestions &amp; Catalog Contributions</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
@@ -638,8 +738,12 @@
             <div class="code">
               <div class="code__bar">
                 <span class="micro">cURL (POST)</span>
+                <button class="btn btn--quiet" type="button" data-copy="[data-curl-suggest-post]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre><code class="language-bash">curl -X POST "https://api.aarecords.tech/suggest"   -H "Content-Type: application/json"   -H "x-api-key: aar_free_access"   -d '{
+              <div class="code__body"><pre data-curl-suggest-post><code class="language-bash">curl -X POST "https://api.aarecords.tech/suggest" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
     "contribution_type": "ADD_WORK",
     "media_type": "anime",
     "title": "Sousou no Frieren",
@@ -658,8 +762,10 @@
             <div class="code">
               <div class="code__bar">
                 <span class="micro">cURL (GET)</span>
+                <button class="btn btn--quiet" type="button" data-copy="[data-curl-contributions-get]"><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/contributions/grouped"   -H "x-api-key: aar_free_access"</code></pre></div>
+              <div class="code__body"><pre data-curl-contributions-get><code class="language-bash">curl -X GET "https://api.aarecords.tech/contributions/grouped" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
             </div>
           </div>
         </div>
