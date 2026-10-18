@@ -1,71 +1,134 @@
-# Anime Akashic Records
+<div align="center">
 
-> **💡 Pro-Tip:** BEST PAIRED WITH TRADITIONAL ANIME APIS for exact metadata and images (Use AniList/Jikan for schedules & watchlists, and AAR for semantic search & recommendations).
- â€” official website
+  <img src="assets/img/logo.png" alt="Anime Akashic Records" width="100" height="100" style="border-radius:20px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
 
-This folder is **self-contained**. It is the complete, standalone public website for Anime Akashic
-Records (AAR). It does not read from, write to, or depend on any other folder in this workspace.
+  # Anime Akashic Records (AAR)
 
-> **Independence note.** The backend project lives in a sibling folder (`../aar/`). This site talks to
-> that backend **only over its public HTTP API**. Nothing in this folder imports backend code, shares
-> a Python environment, or references a relative backend path. Deleting the backend folder would not
-> break any file here.
+  **The Universal Semantic Search & Neural Retrieval Engine for Anime, Manga, and Light Novels.**
 
-## What is here
+  [![Live Demo](https://img.shields.io/badge/Demo-Live%20Website-B83A50?style=flat-square&logo=github)](https://meaha2000.github.io/aar-site/)
+  [![API Gateway](https://img.shields.io/badge/API%20Gateway-api.aarecords.tech-3D6B48?style=flat-square)](https://api.aarecords.tech)
+  [![Swagger Docs](https://img.shields.io/badge/Docs-Swagger%20UI-387b97?style=flat-square)](https://api.aarecords.tech/docs)
+  [![Indexed Works](https://img.shields.io/badge/Indexed%20Works-144K%2B-blueviolet?style=flat-square)](#)
+  [![Telegram Bot](https://img.shields.io/badge/Telegram-@AnimeAkashicRecords__bot-2CA5E0?style=flat-square&logo=telegram)](https://t.me/AnimeAkashicRecords_bot)
 
-| Path | What it is |
-|---|---|
-| `PRODUCT.md` | The product brief: what AAR is, who it is for, the six user goals. |
-| `DESIGN.md` | The design foundation: the world, palette, typography, layout, motion, components, page inventory, refusals. |
-| `assets/fonts/` | Self-hosted WOFF2 (Fraunces + IBM Plex Mono) and `fonts.css`. No CDN, no external requests. |
-| `assets/css/` | `tokens.css` (colour/type/space/motion), `base.css` (reset, typography, browser surfaces), `components.css`, `site.css` (layout). |
-| `assets/js/` | `config.js` (the one backend constant), `api.js` (contract client), `site.js` (chrome), `search.js` (the demo). Vanilla ES modules. |
-| `assets/img/` | Original SVG art: `seal.svg`, `mark.svg` (lockup), `monogram.svg`, `favicon.svg`. |
-| `index.html` | The landing page: hero drawer, what it does, API reference, get started, for agents. |
-| `search.html` | The search demo â€” the centrepiece. Shows the request before sending; never fabricates results. |
-| `.nojekyll` | Tells GitHub Pages not to run Jekyll. |
-
-## Search demo behaviour
-
-- **Before a query** it renders the exact JSON body and resolved endpoint it *would* send â€” no
-  spinner, no placeholder results.
-- **With no backend configured** it says so plainly and links the hosted listing; it never invents
-  retrieval output.
-- **On error** it names the problem and the recovery (401 — check the API key; timeout — a Retry
-  that actually retries).
-- **Scope chips** are hard filters over the four media types.
-
-## How to run
-
-No build step. Serve the folder over HTTP (opening `index.html` as `file://` will block ES modules):
-
-```sh
-# any static server, for example
-python -m http.server 5173 --directory .
-```
-
-Then open `http://localhost:5173/`.
-
-## How to point it at a backend
-
-All backend wiring lives in one file, `assets/js/config.js`. The catalogue is served via the production gateway (`https://api.aarecords.tech`):
-
-- `API_BASE` — the API gateway base URL.
-- `API_KEY` — optional API key for authenticated requests. Leave it empty to keep the demo
-  in its honest unconfigured state.
-
-Changing the key never requires a rebuild, because there is nothing to build.
-
-## Deployment
-
-Static host / GitHub Pages. Publish the contents of this folder; ship `.nojekyll`. There is no server
-component in this repository.
-
-## Security boundary
-
-The site is public. Therefore `config.js` ships with an **empty** `API_KEY`; each visitor supplies
-their own API key, and the origin server stays private behind the gateway.
+</div>
 
 ---
 
-*Moved here from the workspace root to keep the website fully separate from the backend project.*
+## 🌟 Overview
+
+**Anime Akashic Records (AAR)** is a deep semantic search and retrieval engine covering over **144,000+ works** (anime, manga, light novels, visual novels, manhwa, and manhua) and **444,000+ interconnected production entities** (characters, voice actors, directors, authors, composers).
+
+Traditional databases require exact spelling or keyword matches. AAR understands natural language concepts, vague plot memories, thematic vibes, character dynamics, and obscure plot tropes:
+- *"Anime where a high schooler finds a notebook that kills people"*
+- *"Psychological space thriller with bebop jazz soundtrack"*
+- *"Fantasy with an elf mage journeying after defeating the demon king"*
+
+> **💡 Best Paired with Traditional APIs:** Use AniList or Jikan for user watchlists, airing schedules, and high-res media banners — and pair with **AAR** for deep semantic discovery, complex plot retrieval, and AI chatbot grounding.
+
+---
+
+## 🚀 Quick Links
+
+| Resource | URL |
+|---|---|
+| 🌐 **Interactive Web Demo** | [https://meaha2000.github.io/aar-site/](https://meaha2000.github.io/aar-site/) |
+| ⚡ **Production API Gateway** | [https://api.aarecords.tech](https://api.aarecords.tech) |
+| 📖 **Swagger UI (OpenAPI)** | [https://api.aarecords.tech/docs](https://api.aarecords.tech/docs) |
+| 📑 **ReDoc Documentation** | [https://api.aarecords.tech/redoc](https://api.aarecords.tech/redoc) |
+| 🤖 **Telegram Bot** | [@AnimeAkashicRecords_bot](https://t.me/AnimeAkashicRecords_bot) |
+| 🤖 **LLM Context File** | [`llms.txt`](https://meaha2000.github.io/aar-site/llms.txt) |
+
+---
+
+## ⚡ Free Public Community Tier
+
+The complete retrieval engine is open for evaluation, AI agent tool calling, and developer integrations:
+
+- **Base URL:** `https://api.aarecords.tech`
+- **Public API Key:** `aar_free_access` (or `aar_free`)
+- **Authentication:** Supported via header (`x-api-key: aar_free_access`), bearer token, or query parameter (`?api_key=aar_free_access`).
+- **Rate Limits:** 30 requests/minute on `/search` (burst: 3 req/sec), 3 requests/minute on `/ask`.
+- **Health Check:** `GET /health` is quota-free.
+
+---
+
+## 💻 Quickstart (cURL & Code)
+
+### cURL
+
+```bash
+curl -X GET "https://api.aarecords.tech/search?q=Bounty+hunters+in+space+with+jazz&limit=5" \
+  -H "x-api-key: aar_free_access"
+```
+
+### Python (`requests`)
+
+```python
+import requests
+
+url = "https://api.aarecords.tech/search"
+headers = {"x-api-key": "aar_free_access"}
+params = {
+    "q": "Time travel thriller with a microwave and dr pepper",
+    "limit": 5,
+    "mode": "hybrid"
+}
+
+response = requests.get(url, params=params, headers=headers)
+data = response.json()
+
+for item in data.get("results", []):
+    print(f"• {item['title']} ({item['release_year']}) — Score: {item.get('score', 0):.2f}")
+```
+
+### Node.js (Fetch)
+
+```javascript
+const response = await fetch("https://api.aarecords.tech/search?q=Cyberpunk+dystopia+psychological+thriller&limit=5", {
+  headers: { "x-api-key": "aar_free_access" }
+});
+
+const data = await response.json();
+console.log(data.results);
+```
+
+---
+
+## 📡 Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/search` | `GET`, `POST` | Hybrid retrieval blending Qdrant dense vector embeddings, FTS5 BM25, and neural reranking (~500ms). |
+| `/ask` | `GET`, `POST` | Grounded conversational AI question answering deriving answers strictly from canonical catalog data. |
+| `/recommend` | `GET`, `POST` | Work-to-work semantic similarity based on narrative DNA, thematic tone, and aesthetic pacing. |
+| `/suggest` | `POST` | Community contribution endpoint to submit new titles, custom narrative descriptions, and metadata corrections. |
+| `/health` | `GET` | Quota-free liveness probe and corpus statistics. |
+
+---
+
+## 🛠 Local Website Preview
+
+This repository hosts the static frontend published to GitHub Pages. To preview locally:
+
+```bash
+# Serve statically with any HTTP server
+python -m http.server 8000
+```
+
+Open `http://localhost:8000/` in your browser.
+
+---
+
+## 📬 Contact & Support
+
+For enterprise SLAs, custom rate limits, partnership opportunities, or bug reports:
+- **Email:** [AnimeAkashicRecords@hotmail.com](mailto:AnimeAkashicRecords@hotmail.com)
+- **Telegram:** [@AnimeAkashicRecords_bot](https://t.me/AnimeAkashicRecords_bot)
+
+---
+
+<div align="center">
+  <sub>© Anime Akashic Records. Made for fans, developers, and autonomous AI agents.</sub>
+</div>
