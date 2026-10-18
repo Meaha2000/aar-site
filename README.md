@@ -20,7 +20,7 @@
 
 **Anime Akashic Records (AAR)** is a deep semantic search and retrieval engine covering over **144,000+ works** (anime, manga, light novels, visual novels, manhwa, and manhua) and **444,000+ interconnected production entities** (characters, voice actors, directors, authors, composers).
 
-Traditional databases require exact spelling or keyword matches. AAR understands natural language concepts, vague plot memories, thematic vibes, character dynamics, and obscure plot tropes:
+Traditional databases require exact spelling or keyword matches. AAR understands natural language concepts, vague plot memories, detailed narrative scenes, character dynamics, and obscure plot tropes:
 - *"Anime where a high schooler finds a notebook that kills people"*
 - *"Psychological space thriller with bebop jazz soundtrack"*
 - *"Fantasy with an elf mage journeying after defeating the demon king"*

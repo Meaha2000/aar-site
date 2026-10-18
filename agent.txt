@@ -1,6 +1,6 @@
 # Anime Akashic Records (AAR) API — Full Specification & Documentation
 
-> High-precision semantic and hybrid discovery engine over 144,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and aesthetic vibes into ranked canonical works paired with supporting excerpt passages.
+> High-precision semantic and hybrid discovery engine over 144,000+ canonical works spanning Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua. Designed to resolve vague memories, tropes, plot synopses, and detailed narrative descriptions into ranked canonical works paired with supporting excerpt passages.
 
 ---
 
@@ -10,7 +10,7 @@
 > **BEST PAIRED WITH TRADITIONAL ANIME APIS for exact metadata and images:**
 > AAR is engineered to be paired seamlessly with traditional anime APIs (Jikan, AniList, Kitsu).
 > Use traditional APIs for user watchlists, episode airing countdowns, and schedule trackers.
-> Use AAR as the intelligence and semantic discovery layer for natural language trope search, vibe discovery, narrative recommendations, and AI agent integration.
+> Use AAR as the intelligence and semantic discovery layer for natural language trope search, plot description discovery, narrative recommendations, and AI agent integration.
 
 
 > **Find the work you can't remember. Discover the work you didn't know you wanted.**
@@ -25,7 +25,7 @@
 - **High-Velocity Gateway:** Hosted on direct edge infrastructure (api.aarecords.tech) with instant API keys, sub-second responses, managed rate limits, and zero setup hassle.
 
 ### Intended Scope & Best Practices:
-- **Core Purpose:** Semantic retrieval, vibe and trope discovery, natural language query resolution, and grounded AI answer synthesis across 144,000+ East Asian pop culture works.
+- **Core Purpose:** Semantic retrieval, narrative and plot description discovery, natural language query resolution, and grounded AI answer synthesis across 144,000+ East Asian pop culture works.
 - **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
 - **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns and watch-lists, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
 
@@ -39,9 +39,9 @@ Anime Akashic Records (AAR) is designed for more than identifying works by title
 Describe a plot, scene, character, ability, or story detail without knowing the title. AAR searches for relevant works using semantic retrieval, keyword matching, and reranking.
 - **Example:** `"An anime about a student who travels back in time to prevent a classmate's murder."`
 
-### 2.2. Discover Works by Vibe
-Describe the atmosphere, emotional tone, themes, or narrative experience you want to explore. You do not need to have seen the work before or remember a specific title.
-- **Example:** `"Find fantasy stories with a quiet, melancholic atmosphere, slow journeys, and themes of memory and the passage of time."`
+### 2.2. Discover Works by Story Premise & Narrative Elements
+Describe the story premise, scene details, world setting, or narrative progression you want to explore. You do not need to have seen the work before or remember a specific title.
+- **Example:** `"Find fantasy stories about an immortal traveler witnessing generations pass, with slow journeys and themes of memory."`
 
 ### 2.3. Search by Themes and Story Concepts
 Find works involving specific narrative patterns, character dynamics, abilities, conflicts, or combinations of story elements.
@@ -99,13 +99,13 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 
 | Capability | Traditional Anime APIs (MAL / AniList / Kitsu) | Anime Akashic Records (AAR) |
 |---|---|---|
-| **Primary Focus** | User watch-lists, episode broadcast schedules, forum profiles. | Intelligent anime discovery, natural language search, vibe retrieval, and AI assistant grounding. |
-| **Search Input** | Exact or near-exact title keywords only. | Plain natural language descriptions, plot summaries, tropes, vibes, and themes. |
-| **Tip-of-the-Tongue & Vibe Queries** | Limited — requires title keywords to surface results. | Built specifically to resolve descriptive memories and atmospheric requests. |
+| **Primary Focus** | User watch-lists, episode broadcast schedules, forum profiles. | Intelligent anime discovery, natural language search, narrative retrieval, and AI assistant grounding. |
+| **Search Input** | Exact or near-exact title keywords only. | Plain natural language descriptions, plot summaries, tropes, premise details, and themes. |
+| **Tip-of-the-Tongue & Plot Description Queries** | Limited — requires title keywords to surface results. | Built specifically to resolve descriptive memories and nuanced plot requests. |
 | **Why It Matched (Evidence/Grounding)** | Returns titles and metadata IDs only. | Returns supporting synopsis excerpts providing context for why the title matches. |
 | **Direct Q&A (`/ask`)** | Not available — you must build your own retrieval and grounding pipeline. | Built-in endpoint delivering synthesized answers with citations. |
 | **Cross-Media Scope** | Often split into separate databases or IDs. | Unified index: Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, Chinese Manhua. |
-| **Best Used For** | Tracking which episode you watched yesterday. | Finding what to watch next, exploring vibes, answering questions, and powering intelligent apps. |
+| **Best Used For** | Tracking which episode you watched yesterday. | Finding what to watch next, exploring story premises, answering questions, and powering intelligent apps. |
 
 ---
 
@@ -113,14 +113,14 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 
 | Target Audience | Practical Value Proposition | Technical Integration Note |
 |---|---|---|
-| **Streaming Platforms** | Add natural language search and vibe discovery to your existing catalog. Users describe what they want to watch in their own words. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. *(Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service).* |
+| **Streaming Platforms** | Add natural language search and plot description discovery to your existing catalog. Users describe what they want to watch in their own words. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. *(Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service).* |
 | **AI Chatbots & Agents** | Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests. | Synthesizes answers and returns cited excerpts to avoid hallucinations and unsupported claims. |
-| **Anime Discovery Apps** | Enhance your app's search bar so users don't need to remember exact spellings; explore titles matching their mood or aesthetic vibe. | Replaces shallow tag checkboxes with rich conversational and thematic discovery. |
+| **Anime Discovery Apps** | Enhance your app's search bar so users don't need to remember exact spellings; explore titles matching their detailed story descriptions. | Replaces shallow tag checkboxes with rich conversational and thematic discovery. |
 | **Community Bots & Creators** | Build Discord and Telegram bots that answer community questions, or quickly curate themed lists around specific tropes. | Rapidly surfaces thematic titles across 144,000+ indexed works. |
 
 ### 3.5. When to Choose AAR vs. Traditional APIs:
 - **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched), forum profiles, or minute-by-minute episode airing countdowns.
-- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." and vibe-based discovery queries.
+- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." and plot-based discovery queries.
 
 ---
 
