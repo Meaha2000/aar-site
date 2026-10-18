@@ -156,7 +156,7 @@ For evaluation, open-source AI agents, and independent developers, AAR provides 
   - **3 requests per minute** per client IP.
   - **1 request per second** per client IP (burst protection).
 - **Rate Limit Response:** Exceeding these limits triggers an `HTTP 429 Too Many Requests` envelope with a standard `Retry-After` header.
-- **Fair Use Notice:** Hosted on experimental community infrastructure; 100% uptime and latency are not guaranteed under sudden concurrent load surges. For custom quotas, private enterprise keys, SLA support, or bug reports, email `AnimeAkashicRecords@hotmail.com`.
+- **Fair Use Notice:** Hosted on experimental community infrastructure; 100% uptime and latency are not guaranteed under sudden concurrent load surges. For custom quotas, private enterprise keys, SLA support, or bug reports, email `contact@aarecords.tech`.
 
 ### 4.2. Production Gateway Access
 The official API gateway is accessible directly:
@@ -532,6 +532,6 @@ A full-featured live client is available on Telegram for conversational testing 
 ## 9. Developer Support, Collaborations & Feedback
 
 We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
-- **Official Contact Email:** `AnimeAkashicRecords@hotmail.com`
+- **Official Contact Email:** `contact@aarecords.tech`
 - **GitHub Repository:** https://github.com/Meaha2000/aar-site
 - **OpenAPI / Swagger UI:** https://api.aarecords.tech/docs

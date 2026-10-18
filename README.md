@@ -124,7 +124,7 @@ Open `http://localhost:8000/` in your browser.
 ## 📬 Contact & Support
 
 For enterprise SLAs, custom rate limits, partnership opportunities, or bug reports:
-- **Email:** [AnimeAkashicRecords@hotmail.com](mailto:AnimeAkashicRecords@hotmail.com)
+- **Email:** [contact@aarecords.tech](mailto:contact@aarecords.tech)
 - **Telegram:** [@AnimeAkashicRecords_bot](https://t.me/AnimeAkashicRecords_bot)
 
 ---

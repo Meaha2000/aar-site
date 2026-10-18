@@ -497,6 +497,6 @@ A full-featured live client is available on Telegram for conversational testing 
 ## 9. Developer Support, Collaborations & Feedback
 
 We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
-- **Official Contact Email:** `AnimeAkashicRecords@hotmail.com`
+- **Official Contact Email:** `contact@aarecords.tech`
 - **GitHub Repository:** https://github.com/Meaha2000/aar-site
 - **OpenAPI / Swagger UI:** https://api.aarecords.tech/docs
