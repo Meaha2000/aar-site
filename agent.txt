@@ -127,7 +127,7 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 ## 4. Gateway, Authentication & Base URLs
 
 ### Host & Endpoints
-- **Public Free Gateway URL:** `https://download-equality-productions-arab.trycloudflare.com`
+- **Public Free Gateway URL:** `https://api.aarecords.tech`
 - **Public Free Key:** `aar_free_access` (or `aar_free`)
 - **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
 - **Base Request URL:** `https://anime-akashic-records-aar-api.p.rapidapi.com`
@@ -154,7 +154,7 @@ Liveness probe and catalog metrics. Requires standard RapidAPI key headers, but 
 
 #### Request:
 ```bash
-curl -X GET "https://download-equality-productions-arab.trycloudflare.com/health" \
+curl -X GET "https://api.aarecords.tech/health" \
   -H "x-api-key: aar_free_access"
 ```
 
@@ -315,7 +315,7 @@ Work-to-work semantic recommendation based on narrative DNA, thematic essence, c
 
 #### Request Example (GET):
 ```bash
-curl -X GET "https://download-equality-productions-arab.trycloudflare.com/recommend/work:anime:mal_9253_al_9253?limit=5" \
+curl -X GET "https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253?limit=5" \
   -H "x-api-key: aar_free_access"
 ```
 
@@ -374,7 +374,7 @@ Community proposals and catalog contributions endpoint. Allows users and AI agen
 
 #### Request Example (`POST /suggest`):
 ```bash
-curl -X POST "https://download-equality-productions-arab.trycloudflare.com/suggest" \
+curl -X POST "https://api.aarecords.tech/suggest" \
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{
@@ -391,7 +391,7 @@ curl -X POST "https://download-equality-productions-arab.trycloudflare.com/sugge
 
 #### Inspect Clustered Submissions (`GET /contributions/grouped`):
 ```bash
-curl -X GET "https://download-equality-productions-arab.trycloudflare.com/contributions/grouped" \
+curl -X GET "https://api.aarecords.tech/contributions/grouped" \
   -H "x-api-key: aar_free_access"
 ```
 
@@ -460,7 +460,7 @@ async function searchAAR(payload: SearchPayload) {
 
 ### cURL CLI
 ```bash
-curl -X POST "https://download-equality-productions-arab.trycloudflare.com/search" \
+curl -X POST "https://api.aarecords.tech/search" \
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{

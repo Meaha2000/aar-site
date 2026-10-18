@@ -28,7 +28,7 @@ export const RAPIDAPI_HOST = "anime-akashic-records-aar-api.p.rapidapi.com";
 export const API_BASE = "https://orange-cell-9386.meaha2000.workers.dev";
 
 /** Direct Cloudflare tunnel fallback for community ingestion and unproxied routes. */
-export const TUNNEL_BASE = "https://download-equality-productions-arab.trycloudflare.com";
+export const TUNNEL_BASE = "https://api.aarecords.tech";
 
 /** Free public access key for community submissions. */
 export const FREE_PUBLIC_KEY = "aar_free_access";

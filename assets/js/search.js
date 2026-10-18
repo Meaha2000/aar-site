@@ -133,7 +133,7 @@ function renderPreview(question) {
   if (!els.preview) return;
   const q = question || "<your question>";
   const opts = currentOptions(q);
-  const baseUrl = "https://articles-exclusive-hope-yacht.trycloudflare.com";
+  const baseUrl = "https://api.aarecords.tech";
   const path = state.endpointMode === "ask" ? "/ask" : "/search";
   const method = state.httpMethod;
 
