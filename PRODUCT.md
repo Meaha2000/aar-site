@@ -63,5 +63,5 @@ contract in `DESIGN.md` and audited at the finish pass. Vector brand assets are 
   search-demo / security / Worker sections were not received. The palette is therefore completed in
   `DESIGN.md` from the three anchors that *were* given (parchment/cream, deep ink, sakura pink), and
   the page inventory is derived from the six stated user goals. Both are marked as derived, not quoted.
-- RapidAPI listing URL was not supplied; the site references the listing by name and leaves the URL
+- Direct Gateway listing URL was not supplied; the site references the listing by name and leaves the URL
   to a single configurable constant.

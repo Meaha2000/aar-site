@@ -31,7 +31,7 @@ Records (AAR). It does not read from, write to, or depend on any other folder in
   spinner, no placeholder results.
 - **With no backend configured** it says so plainly and links the hosted listing; it never invents
   retrieval output.
-- **On error** it names the problem and the recovery (401 â€” check the RapidAPI key; timeout â€” a Retry
+- **On error** it names the problem and the recovery (401 — check the API key; timeout — a Retry
   that actually retries).
 - **Scope chips** are hard filters over the four media types.
 
@@ -48,11 +48,10 @@ Then open `http://localhost:5173/`.
 
 ## How to point it at a backend
 
-All backend wiring lives in one file, `assets/js/config.js`. The catalogue is served as a hosted
-RapidAPI product, so the demo sends every request through the RapidAPI gateway:
+All backend wiring lives in one file, `assets/js/config.js`. The catalogue is served via the production gateway (`https://api.aarecords.tech`):
 
-- `RAPIDAPI_HOST` â€” the listing host, sent as the `X-RapidAPI-Host` header and used as the request host.
-- `API_KEY` â€” your RapidAPI key, sent as the `X-RapidAPI-Key` header. Leave it empty to keep the demo
+- `API_BASE` — the API gateway base URL.
+- `API_KEY` — optional API key for authenticated requests. Leave it empty to keep the demo
   in its honest unconfigured state.
 
 Changing the key never requires a rebuild, because there is nothing to build.
@@ -65,7 +64,7 @@ component in this repository.
 ## Security boundary
 
 The site is public. Therefore `config.js` ships with an **empty** `API_KEY`; each visitor supplies
-their own RapidAPI key, and the origin server stays private behind the gateway.
+their own API key, and the origin server stays private behind the gateway.
 
 ---
 

@@ -22,7 +22,7 @@
 - **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
 - **Evidence-Grounded Results:** Every retrieved candidate returns supporting text from indexed synopses helping explain why a work matches (evaluated in context).
 - **Question Answering (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
-- **Managed Search Infrastructure:** Hosted on RapidAPI with global availability, instant API keys, managed rate limits, and ready-to-use client libraries.
+- **High-Velocity Gateway:** Hosted on direct edge infrastructure (api.aarecords.tech) with instant API keys, sub-second responses, managed rate limits, and zero setup hassle.
 
 ### Intended Scope & Best Practices:
 - **Core Purpose:** Semantic retrieval, vibe and trope discovery, natural language query resolution, and grounded AI answer synthesis across 144,000+ East Asian pop culture works.
@@ -90,7 +90,7 @@ AAR is fundamentally distinct from conventional anime databases through six core
 5. **Flexible Hard Scope Filters:**
    Combine the freedom of natural language descriptions with strict filters: narrow results by medium (`types`: anime, manga, light_novel, visual_novel, manhwa, manhua), status (Finished, Releasing), release year ranges, genres, or animation studios.
 6. **Managed Search Infrastructure:**
-   Hosted directly on RapidAPI. No need to host or maintain complex vector and retrieval clusters yourself — instant API keys, managed rate limits, and ready-to-run client libraries.
+   Hosted directly on production infrastructure (api.aarecords.tech). No need to host or maintain complex vector and retrieval clusters yourself — instant API access, managed rate limits, and ready-to-run client libraries.
 
 ---
 
@@ -127,30 +127,28 @@ Traditional APIs and Anime Akashic Records serve complementary roles in the anim
 ## 4. Gateway, Authentication & Base URLs
 
 ### Host & Endpoints
-- **Public Free Gateway URL:** `https://api.aarecords.tech`
+- **Production Gateway URL:** `https://api.aarecords.tech`
 - **Public Free Key:** `aar_free_access` (or `aar_free`)
-- **RapidAPI Gateway Host:** `anime-akashic-records-aar-api.p.rapidapi.com`
-- **Base Request URL:** `https://anime-akashic-records-aar-api.p.rapidapi.com`
-- **RapidAPI Listing:** https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api
+- **Interactive OpenAPI / Swagger UI:** `https://api.aarecords.tech/docs`
+- **ReDoc Documentation:** `https://api.aarecords.tech/redoc`
 - **Web Demo Playground:** https://meaha2000.github.io/aar-site/search.html
 - **Official Telegram Bot:** https://t.me/AnimeAkashicRecords_bot (@AnimeAkashicRecords_bot)
 
-### Mandatory HTTP Headers
-Every request routed through the RapidAPI gateway must supply the following headers:
+### HTTP Authentication Headers
+Requests to the production gateway support header, bearer token, or query parameter authentication:
 ```http
-X-RapidAPI-Key: YOUR_RAPIDAPI_KEY
-X-RapidAPI-Host: anime-akashic-records-aar-api.p.rapidapi.com
+x-api-key: aar_free_access
 Content-Type: application/json
 Accept: application/json
 ```
-*(Note: `GET /health` requires the RapidAPI key headers to pass the gateway, but does not consume your plan quota).*
+*(Note: `GET /health` requires an API key, but does not consume your request quota).*
 
 ---
 
 ## 5. Endpoints Reference
 
 ### 5.1. `GET /health`
-Liveness probe and catalog metrics. Requires standard RapidAPI key headers, but **does not consume request quota** (quota-free). Safe for container probes, uptime checkers, and integration smoke tests.
+Liveness probe and catalog metrics. Requires an API key header (`x-api-key: aar_free_access`), but **does not consume request quota** (quota-free). Safe for container probes, uptime checkers, and integration smoke tests.
 
 #### Request:
 ```bash
@@ -402,10 +400,9 @@ curl -X GET "https://api.aarecords.tech/contributions/grouped" \
 import os
 import requests
 
-url = "https://anime-akashic-records-aar-api.p.rapidapi.com/search"
+url = "https://api.aarecords.tech/search"
 headers = {
-    "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY", "YOUR_RAPIDAPI_KEY"),
-    "X-RapidAPI-Host": "anime-akashic-records-aar-api.p.rapidapi.com",
+    "x-api-key": os.getenv("AAR_API_KEY", "aar_free_access"),
     "Content-Type": "application/json"
 }
 payload = {
@@ -440,12 +437,11 @@ interface SearchPayload {
 }
 
 async function searchAAR(payload: SearchPayload) {
-  const response = await fetch("https://anime-akashic-records-aar-api.p.rapidapi.com/search", {
+  const response = await fetch("https://api.aarecords.tech/search", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-RapidAPI-Key": process.env.RAPIDAPI_KEY || "YOUR_RAPIDAPI_KEY",
-      "X-RapidAPI-Host": "anime-akashic-records-aar-api.p.rapidapi.com"
+      "x-api-key": process.env.AAR_API_KEY || "aar_free_access"
     },
     body: JSON.stringify(payload)
   });
@@ -480,7 +476,7 @@ curl -X POST "https://api.aarecords.tech/search" \
   {"detail": "missing or invalid API key"}
   ```
 - **`422 Unprocessable Entity`**: Payload validation failed (e.g., unknown scope filter, empty question string).
-- **`429 Too Many Requests`**: Rate limit exceeded for your RapidAPI tier. Reset occurs per plan quota window.
+- **`429 Too Many Requests`**: Rate limit exceeded for your tier (30 req/min for `/search`, 3 req/min for `/ask`). Reset occurs per rolling window.
 
 ---
 
@@ -503,4 +499,4 @@ A full-featured live client is available on Telegram for conversational testing 
 We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
 - **Official Contact Email:** `AnimeAkashicRecords@hotmail.com`
 - **GitHub Repository:** https://github.com/Meaha2000/aar-site
-- **RapidAPI Provider Portal:** https://rapidapi.com/meaha2000/api/anime-akashic-records-aar-api
+- **OpenAPI / Swagger UI:** https://api.aarecords.tech/docs

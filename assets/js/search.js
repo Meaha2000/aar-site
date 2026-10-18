@@ -4,7 +4,7 @@
    ========================================================================= */
 
 import { search, ask, buildSearchParams, buildSearchPayload, ApiError } from "./api.js?v=2";
-import { API_BASE, API_KEY, DEFAULT_LIMIT, RAPIDAPI_HOST, RAPIDAPI_URL, isConfigured, endpoint }
+import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
   from "./config.js?v=2";
 
 /* ---- DOM ------------------------------------------------------------------ */
@@ -392,11 +392,8 @@ function renderResults(data) {
 /* ---- Unconfigured state --------------------------------------------------- */
 
 function renderUnconfigured() {
-  const live = RAPIDAPI_URL
-    ? ` or visit the official listing on <a href="${escapeHtml(RAPIDAPI_URL)}" rel="noopener" target="_blank">RapidAPI</a>`
-    : "";
   statusNote("warn",
-    `<strong>Service is currently unavailable.</strong> The search gateway is not configured for this demo${live}. `+
+    `<strong>Service is currently unavailable.</strong> The search gateway is not reachable. `+
     `Please try again later.`);
   renderPreview(state.lastQuery || "");
   renderEmpty();
@@ -728,7 +725,7 @@ function init() {
       runQuery(fromUrl);
     } else {
       statusNote("warn",
-        `<strong>Service unavailable.</strong> Please try again later or access the API via RapidAPI.`);
+        `<strong>Service unavailable.</strong> Please try again later or explore the <a href="api.html">API Reference</a>.`);
     }
   }
 

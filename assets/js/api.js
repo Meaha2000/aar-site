@@ -6,7 +6,6 @@
 
 import {
   API_KEY,
-  RAPIDAPI_HOST,
   API_BASE,
   TUNNEL_BASE,
   FREE_PUBLIC_KEY,
@@ -28,8 +27,7 @@ function headers(json) {
   const h = { Accept: "application/json" };
   if (json) h["Content-Type"] = "application/json";
   if (API_KEY) {
-    h["X-RapidAPI-Host"] = RAPIDAPI_HOST;
-    h["X-RapidAPI-Key"] = API_KEY;
+    h["x-api-key"] = API_KEY;
   }
   return h;
 }
