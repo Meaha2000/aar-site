@@ -118,31 +118,54 @@ function initCopy() {
 
 /* ---- Live health chip ----------------------------------------------------- */
 
-async function initHealth() {
-  const chip = document.querySelector("[data-health]");
+const HEALTH_CHECK_INTERVAL_MS = 5 * 60 * 1000; // Poll every 5 minutes
+
+async function checkHealth(chip) {
   if (!chip) return;
   const setText = (t, state) => {
     chip.textContent = t;
     chip.setAttribute("data-state", state);
-    chip.setAttribute("title", t);
+    chip.setAttribute("title", `${t} (checked: ${new Date().toLocaleTimeString()})`);
   };
-
-  if (!isConfigured()) { setText("No backend configured", "idle"); return; }
-  setText("Checking endpoint…", "idle");
 
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), 8000);
   try {
     const h = await health(ctrl.signal);
-    const status = typeof h?.status === "string" ? h.status : "live";
-    setText(`Endpoint ${status}`, "ok");
+    const status = typeof h?.status === "string" ? h.status.toLowerCase() : "";
+    const isOk = status === "ok" || status === "healthy" || status === "live";
+    if (isOk) {
+      setText("Endpoint Healthy", "ok");
+    } else {
+      setText("Endpoint Error", "error");
+    }
   } catch (err) {
-    const e = err instanceof ApiError ? err : null;
-    setText(e && e.status === 401 ? "Endpoint reachable · key rejected" : "Endpoint unreachable",
-            e && e.status === 401 ? "warn" : "error");
+    setText("Endpoint Offline", "error");
   } finally {
     clearTimeout(t);
   }
+}
+
+async function initHealth() {
+  const chip = document.querySelector("[data-health]");
+  if (!chip) return;
+
+  // Immediate check on initial page load
+  await checkHealth(chip);
+
+  // Periodic recurring check every 5 minutes
+  setInterval(() => {
+    checkHealth(chip);
+  }, HEALTH_CHECK_INTERVAL_MS);
+
+  // Re-check when window/tab regains focus if more than 60s elapsed
+  let lastChecked = Date.now();
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && (Date.now() - lastChecked > 60000)) {
+      lastChecked = Date.now();
+      checkHealth(chip);
+    }
+  });
 }
 
 /* ---- Boot ----------------------------------------------------------------- */

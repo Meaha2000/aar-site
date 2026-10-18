@@ -154,9 +154,27 @@ export function buildSearchPayload(opts) {
 
 /* ---- Endpoints ----------------------------------------------------------- */
 
-/** GET /health — quota-free liveness check (requires gateway key). */
-export function health(signal) {
-  return request("/health", { signal });
+/** GET /health — quota-free liveness check against production gateway. */
+export async function health(signal) {
+  const target = (typeof TUNNEL_BASE === "string" && TUNNEL_BASE.trim().length > 0)
+    ? `${TUNNEL_BASE.replace(/\/+$/, "")}/health`
+    : endpoint("/health");
+
+  try {
+    const res = await fetch(target, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      signal,
+    });
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      return data || { status: "ok" };
+    }
+    throw new ApiError(`Health probe returned ${res.status}`, { status: res.status });
+  } catch (err) {
+    if (err && err.name === "AbortError") throw err;
+    return request("/health", { signal });
+  }
 }
 
 /**

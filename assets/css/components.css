@@ -620,6 +620,7 @@
   border-radius: 4px;
   background: var(--paper-deep);
   border: 1px solid var(--rule);
+  transition: all var(--dur-quiet) ease;
 }
 [data-health]::before {
   content: "";
@@ -627,11 +628,31 @@
   width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--ink-faint);
-  transition: background var(--dur-quiet) ease;
+  transition: background var(--dur-quiet) ease, box-shadow var(--dur-quiet) ease;
 }
-[data-health][data-state="ok"]::before    { background: var(--moss); box-shadow: 0 0 8px var(--moss); }
-[data-health][data-state="warn"]::before  { background: var(--amber); }
-[data-health][data-state="error"]::before { background: var(--rust); }
+[data-health][data-state="ok"] {
+  border-color: rgba(61, 107, 72, 0.4);
+  color: var(--ink);
+}
+[data-health][data-state="ok"]::before {
+  background: var(--moss);
+  box-shadow: 0 0 8px var(--moss);
+}
+[data-health][data-state="warn"] {
+  border-color: rgba(148, 104, 30, 0.4);
+}
+[data-health][data-state="warn"]::before {
+  background: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
+}
+[data-health][data-state="error"] {
+  border-color: rgba(168, 50, 54, 0.45);
+  color: var(--rust);
+}
+[data-health][data-state="error"]::before {
+  background: var(--rust);
+  box-shadow: 0 0 8px var(--rust);
+}
 
 /* ---- Shelf: example prompts list ---------------------------------------- */
 
