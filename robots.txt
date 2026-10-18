@@ -4,7 +4,7 @@ Allow: /
 # Anime Akashic Records (AAR) — Bot & Content Usage Policies
 # Official Contact: contact@aarecords.tech
 # Content Signals declaration per https://contentsignals.org/
-Content-Signal: ai-train=no, search=yes, ai-input=no
+Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 # Machine-Readable Agent Discovery Resources
 # RFC 9727 API Catalog: https://aarecords.tech/.well-known/api-catalog
