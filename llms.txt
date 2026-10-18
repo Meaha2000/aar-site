@@ -254,16 +254,37 @@ Advanced hybrid retrieval across the 6 supported mediums.
 #### Response Envelope (`200 OK`):
 ```json
 {
+  "total": 1,
   "total_documents": 1,
   "results": [
     {
       "work_id": "manhwa:solo_leveling",
       "title": "Solo Leveling",
+      "title_english": "Solo Leveling",
+      "title_romaji": "Na Honjaman Rebeleop",
       "type": "manhwa",
-      "score": 0.942,
+      "bucket": "manhwa",
       "status": "finished",
+      "score": 0.942,
+      "community_score": 87.5,
+      "release_year": 2018,
+      "genres": ["Action", "Adventure", "Fantasy"],
+      "image_url": "https://cdn.myanimelist.net/images/manga/3/222295.jpg",
+      "mal_id": 121496,
+      "anilist_id": 105398,
+      "kitsu_id": 41838,
+      "anidb_id": null,
+      "anisearch_id": 23439,
+      "anime_planet_slug": "solo-leveling",
+      "sources": [
+        "https://myanimelist.net/manga/121496",
+        "https://anilist.co/manga/105398",
+        "https://kitsu.app/manga/41838",
+        "https://anime-planet.com/manga/solo-leveling"
+      ],
       "chunks": [
         {
+          "chunk_id": "chunk:manhwa:solo_leveling:synopsis:0",
           "section": "Synopsis",
           "text": "In a world where hunters must battle deadly monsters, Sung Jin-woo, notoriously known as the weakest hunter of all mankind, is fatally injured in a high-rank double dungeon..."
         }
@@ -428,7 +449,41 @@ curl -X GET "https://api.aarecords.tech/contributions/grouped" \
   -H "x-api-key: aar_free_access"
 ```
 
-## 6. Client Code Snippets
+## 6. Native Model Context Protocol (MCP) Server
+
+Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Antigravity, Cline, Windsurf) directly to the Anime Akashic Records index.
+
+- **MCP Endpoint (SSE):** `https://mcp.aarecords.tech/sse`
+- **Protocol Spec:** 2025-11-25
+- **Authentication:** 100% shared API keys via `X-API-Key` HTTP header. Default free tier key `aar_free_access` is accepted out-of-the-box.
+
+### AI Client Configuration:
+```json
+{
+  "mcpServers": {
+    "aar": {
+      "url": "https://mcp.aarecords.tech/sse"
+    }
+  }
+}
+```
+
+### Exposed MCP Tools:
+- **`aar_search`**: High-precision discovery across 144,000+ works by natural language plot memories, tropes, and premise descriptions.
+  - `query` (`string`, required): Description or forgotten scene memory.
+  - `limit` (`integer`, optional, default: 10): Maximum results to return (1-50).
+  - `media_types` (`array[string]`, optional): Filter media types (e.g. `["anime"]`).
+  - `genres` (`array[string]`, optional): Filter genres (e.g. `["Action"]`).
+  - `mode` (`string`, optional, default: `"hybrid"`): `"hybrid"` or `"semantic"`.
+  - `include_sources` (`boolean`, optional, default: `false`): When `true`, includes external platform links (MAL, AniList, Kitsu, AniDB, etc.) in markdown output.
+  - `return_data` (`boolean`, optional, default: `false`): When `true`, returns the complete raw structured JSON array with all metadata, IDs, poster images, and source links.
+- **`aar_ask`**: Grounded conversational Q&A synthesizing factual answers with cited catalog evidence.
+- **`aar_lookup_work`**: Detailed canonical metadata, relations, and excerpts for a specific work ID.
+- **`aar_health`**: Operational health and connectivity check.
+
+---
+
+## 7. Client Code Snippets
 
 ### Python (`requests`)
 ```python
@@ -503,7 +558,7 @@ curl -X POST "https://api.aarecords.tech/search" \
 
 ---
 
-## 7. Status Codes & Error Envelopes
+## 8. Status Codes & Error Envelopes
 
 - **`200 OK`**: Request succeeded. Returns the JSON envelope.
 - **`401 Unauthorized`**: Key rejected or missing header:
@@ -515,7 +570,7 @@ curl -X POST "https://api.aarecords.tech/search" \
 
 ---
 
-## 8. Official Telegram Bot
+## 9. Official Telegram Bot
 
 A full-featured live client is available on Telegram for conversational testing and interactive lookups:
 - **Bot Username:** `@AnimeAkashicRecords_bot`
@@ -529,7 +584,7 @@ A full-featured live client is available on Telegram for conversational testing 
 
 ---
 
-## 9. Developer Support, Collaborations & Feedback
+## 10. Developer Support, Collaborations & Feedback
 
 We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
 - **Official Contact Email:** `contact@aarecords.tech`
