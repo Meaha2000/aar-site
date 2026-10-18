@@ -30,11 +30,11 @@
   "tools": [
     {
       "name": "aar_search",
-      "description": "Search 144,000+ canonical anime, manga, novels, and visual novel works by natural language description, plot synopsis, trope, or theme."
+      "description": "Search 144,000+ canonical works by plot memories, premises, or scenes. Supports include_sources and return_data options."
     },
     {
       "name": "aar_ask",
-      "description": "Ask questions about anime, manga, light novels, and visual novels to receive grounded factual prose answers with citations."
+      "description": "Ask narrative and plot questions with grounded AI citations. Supports include_sources and return_data options."
     },
     {
       "name": "aar_health",

@@ -478,6 +478,11 @@ Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Anti
   - `include_sources` (`boolean`, optional, default: `false`): When `true`, includes external platform links (MAL, AniList, Kitsu, AniDB, etc.) in markdown output.
   - `return_data` (`boolean`, optional, default: `false`): When `true`, returns the complete raw structured JSON array with all metadata, IDs, poster images, and source links.
 - **`aar_ask`**: Grounded conversational Q&A synthesizing factual answers with cited catalog evidence.
+  - `question` (`string`, required): Narrative or character query.
+  - `limit` (`integer`, optional, default: 5): Maximum supporting works to retrieve.
+  - `media_types` (`array[string]`, optional): Filter media types.
+  - `include_sources` (`boolean`, optional, default: `false`): Include external source links for cited works in markdown.
+  - `return_data` (`boolean`, optional, default: `false`): Return raw structured JSON data of the answer and cited results.
 - **`aar_lookup_work`**: Detailed canonical metadata, relations, and excerpts for a specific work ID.
 - **`aar_health`**: Operational health and connectivity check.
 
