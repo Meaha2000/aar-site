@@ -61,16 +61,16 @@
 
 <header class="masthead">
   <div class="shell masthead__inner">
-    <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
+    <a class="masthead__brand" href="/" aria-label="Anime Akashic Records — home">
       <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
       <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
     </a>
     <nav class="masthead__nav" aria-label="Primary">
-      <a href="index.html" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Overview</a>
-      <a href="about.html">About</a>
-      <a href="search.html">Search Demo</a>
-      <a href="api.html">API Reference</a>
-      <a href="contact.html">Telegram &amp; Contact</a>
+      <a href="/" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Overview</a>
+      <a href="/about">About</a>
+      <a href="/search">Search Demo</a>
+      <a href="/api">API Reference</a>
+      <a href="/contact">Telegram &amp; Contact</a>
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
@@ -102,7 +102,7 @@
             It surfaces relevant works paired with supporting synopsis excerpts confirming why the title fits.
           </p>
           <div class="controls" style="display:flex;gap:var(--space-3);flex-wrap:wrap">
-            <a class="btn btn--primary" href="search.html" style="font-size:.875rem;padding:.75rem 1.6rem">
+            <a class="btn btn--primary" href="/search" style="font-size:.875rem;padding:.75rem 1.6rem">
               <span>Try the Search Demo</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </a>
@@ -110,19 +110,19 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
               <span>Telegram Bot</span>
             </a>
-            <a class="btn btn--quiet" href="api.html" style="font-size:.875rem;padding:.75rem 1.6rem">API Reference</a>
+            <a class="btn btn--quiet" href="/api" style="font-size:.875rem;padding:.75rem 1.6rem">API Reference</a>
           </div>
 
           <!-- Community Free Access Callout Banner -->
           <div style="margin-top:var(--space-6);padding:var(--space-4);background:var(--paper-raised);border:1px solid var(--rule);border-left:4px solid var(--moss);border-radius:6px;box-shadow:var(--card-shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)">
             <div style="font-size:.9375rem;line-height:1.6;color:var(--ink)">
               <span class="badge" style="background:rgba(126,175,133,0.18);color:var(--moss);border:1px solid var(--moss);font-size:.6875rem;margin-right:.5rem;vertical-align:middle">FREE PUBLIC ACCESS</span>
-              <mark style="background:rgba(230,190,138,0.35);color:var(--ink);padding:.15rem .45rem;border-radius:3px;font-weight:600">The API service is currently free to use with rate limits</mark> &mdash; for public keys, endpoints, and integration guides, visit the <a href="api.html" style="color:var(--sakura-deep);font-weight:600;text-decoration:underline">API Documentation</a>.
+              <mark style="background:rgba(230,190,138,0.35);color:var(--ink);padding:.15rem .45rem;border-radius:3px;font-weight:600">The API service is currently free to use with rate limits</mark> &mdash; for public keys, endpoints, and integration guides, visit the <a href="/api" style="color:var(--sakura-deep);font-weight:600;text-decoration:underline">API Documentation</a>.
               <span class="faint" style="display:block;font-size:.8125rem;margin-top:.25rem">
                 Direct community gateway access with per-IP rate limits (30 req/min for Search, 3 req/min for Ask). No registration or credit card required.
               </span>
             </div>
-            <a href="api.html" class="btn btn--quiet" style="font-size:.8125rem;padding:.45rem .9rem;white-space:nowrap">
+            <a href="/api" class="btn btn--quiet" style="font-size:.8125rem;padding:.45rem .9rem;white-space:nowrap">
               <span>API Docs &amp; Keys</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </a>
@@ -183,49 +183,49 @@
           <p class="measure muted">Hand-picked prompts demonstrating memories, plot descriptions, and tropes &mdash; click any query to run it live in the demo.</p>
         </div>
         <ul class="shelf">
-          <li><a class="shelf__item" href="search.html?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
+          <li><a class="shelf__item" href="/search?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
             <span class="shelf__pos">01</span>
             <span class="shelf__q">A swordsman who cannot die, and the woman who follows him</span>
             <span class="shelf__tag">Anime &middot; Memory</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Find%20fantasy%20stories%20with%20a%20quiet%2C%20melancholic%20atmosphere%20and%20slow%20journeys">
+          <li><a class="shelf__item" href="/search?q=Find%20fantasy%20stories%20with%20a%20quiet%2C%20melancholic%20atmosphere%20and%20slow%20journeys">
             <span class="shelf__pos">02</span>
             <span class="shelf__q">Find fantasy stories with a quiet, melancholic atmosphere and slow journeys</span>
             <span class="shelf__tag">Plot &middot; Setting</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Time-travel%20visual%20novel%20with%20branching%20timelines">
+          <li><a class="shelf__item" href="/search?q=Time-travel%20visual%20novel%20with%20branching%20timelines">
             <span class="shelf__pos">03</span>
             <span class="shelf__q">Time-travel visual novel with branching timelines</span>
             <span class="shelf__tag">VN &middot; Mechanic</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Weakest%20hunter%20reawakens%20in%20a%20double%20dungeon%20with%20a%20solo%20leveling%20system">
+          <li><a class="shelf__item" href="/search?q=Weakest%20hunter%20reawakens%20in%20a%20double%20dungeon%20with%20a%20solo%20leveling%20system">
             <span class="shelf__pos">04</span>
             <span class="shelf__q">Weakest hunter reawakens in a double dungeon with a solo leveling system</span>
             <span class="shelf__tag">Korean Manhwa</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Stories%20about%20characters%20who%20gradually%20realize%20that%20the%20world%20around%20them%20is%20not%20what%20it%20seems">
+          <li><a class="shelf__item" href="/search?q=Stories%20about%20characters%20who%20gradually%20realize%20that%20the%20world%20around%20them%20is%20not%20what%20it%20seems">
             <span class="shelf__pos">05</span>
             <span class="shelf__q">Stories about characters who gradually realize that the world around them is not what it seems</span>
             <span class="shelf__tag">Theme &middot; Mystery</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Studio%20that%20animated%20a%20demon-slaying%20brother%20and%20sister">
+          <li><a class="shelf__item" href="/search?q=Studio%20that%20animated%20a%20demon-slaying%20brother%20and%20sister">
             <span class="shelf__pos">06</span>
             <span class="shelf__q">Studio that animated a demon-slaying brother and sister</span>
             <span class="shelf__tag">Anime &middot; Studio</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Banished%20immortal%20cultivator%20returns%2010%2C000%20years%20later%20to%20rebuild%20his%20sect">
+          <li><a class="shelf__item" href="/search?q=Banished%20immortal%20cultivator%20returns%2010%2C000%20years%20later%20to%20rebuild%20his%20sect">
             <span class="shelf__pos">07</span>
             <span class="shelf__q">Banished immortal cultivator returns 10,000 years later to rebuild his sect</span>
             <span class="shelf__tag">Chinese Manhua</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="search.html?q=Something%20cozy%20but%20a%20little%20lonely%2C%20for%20a%20rainy%20evening">
+          <li><a class="shelf__item" href="/search?q=Something%20cozy%20but%20a%20little%20lonely%2C%20for%20a%20rainy%20evening">
             <span class="shelf__pos">08</span>
             <span class="shelf__q">Something cozy but a little lonely, for a rainy evening</span>
             <span class="shelf__tag">Atmosphere</span>
@@ -298,7 +298,7 @@
           <p class="measure muted">Production REST API with instant free community tier and interactive documentation.</p>
         </div>
 
-        <a class="listing" href="api.html">
+        <a class="listing" href="/api">
           <div class="listing__body">
             <div class="listing__eyebrow">
               <span class="badge badge--sakura">Direct API Gateway</span>
@@ -317,9 +317,9 @@
         </a>
 
         <div style="margin-top:var(--space-6);display:flex;gap:var(--space-3);flex-wrap:wrap">
-          <a class="btn btn--quiet" href="about.html">About &amp; Core Selling Points &rarr;</a>
-          <a class="btn btn--quiet" href="api.html">View Full API Reference &rarr;</a>
-          <a class="btn btn--quiet" href="contact.html">Contact &amp; Telegram &rarr;</a>
+          <a class="btn btn--quiet" href="/about">About &amp; Core Selling Points &rarr;</a>
+          <a class="btn btn--quiet" href="/api">View Full API Reference &rarr;</a>
+          <a class="btn btn--quiet" href="/contact">Contact &amp; Telegram &rarr;</a>
         </div>
       </section>
 
@@ -345,11 +345,11 @@
     <div>
       <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>
       <div class="stack-2">
-        <a href="index.html">Overview</a>
-        <a href="about.html">About AAR</a>
-        <a href="search.html">Interactive Demo</a>
-        <a href="api.html">API Reference</a>
-        <a href="contact.html">Telegram &amp; Contact</a>
+        <a href="/">Overview</a>
+        <a href="/about">About AAR</a>
+        <a href="/search">Interactive Demo</a>
+        <a href="/api">API Reference</a>
+        <a href="/contact">Telegram &amp; Contact</a>
       </div>
     </div>
     <div>

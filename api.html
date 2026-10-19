@@ -42,7 +42,7 @@
   "@type": "WebAPI",
   "name": "Anime Akashic Records API",
   "description": "Complete HTTP specification for Anime Akashic Records. POST /search, POST /ask, and GET /health schemas.",
-  "documentation": "https://aarecords.tech/api.html",
+  "documentation": "https://aarecords.tech/api",
   "provider": {
     "@type": "Organization",
     "name": "Anime Akashic Records",
@@ -54,16 +54,16 @@
 <body>
 <header class="masthead">
   <div class="shell masthead__inner">
-    <a class="masthead__brand" href="index.html" aria-label="Anime Akashic Records — home">
+    <a class="masthead__brand" href="/" aria-label="Anime Akashic Records — home">
       <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
       <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
     </a>
     <nav class="masthead__nav" aria-label="Primary">
-      <a href="index.html">Overview</a>
-      <a href="about.html">About</a>
-      <a href="search.html">Search Demo</a>
-      <a href="api.html" aria-current="page" style="color:var(--sakura-deep);font-weight:600">API Reference</a>
-      <a href="contact.html">Telegram &amp; Contact</a>
+      <a href="/">Overview</a>
+      <a href="/about">About</a>
+      <a href="/search">Search Demo</a>
+      <a href="/api" aria-current="page" style="color:var(--sakura-deep);font-weight:600">API Reference</a>
+      <a href="/contact">Telegram &amp; Contact</a>
     </nav>
     <div class="masthead__tools">
       <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
@@ -525,6 +525,7 @@
   "total_documents": 1,
   "results": [
     {
+      "aar_id": "aar_1",
       "work_id": "work:anime:mal_1_al_1",
       "title": "Cowboy Bebop",
       "title_english": "Cowboy Bebop",
@@ -771,14 +772,14 @@
               </div>
               <div class="code__body"><pre data-res-stats>{
   "status": "healthy",
-  "total_works": 150707,
+  "total_works": 144698,
   "by_type": {
     "anime": 38434,
     "light_novel": 11724,
     "manga": 67003,
     "manhua": 464,
     "manhwa": 7071,
-    "visual_novel": 26011
+    "visual_novel": 20002
   },
   "total_chunks": 266610,
   "total_relations": 60811,
@@ -818,8 +819,8 @@
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 canonical work identifiers (e.g. <code>["work:anime:mal_9253_al_9253"]</code>).</span></div>
-            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Canonical work ID (e.g. <code>https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253</code>).</span></div>
+            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Work identifier. Supports native unified AAR IDs (<code>aar_1</code>, <code>aar_9253</code>), external partner IDs (<code>mal:9253</code>, <code>anilist:9253</code>, <code>vndb:v17</code>), or full canonical URIs. The engine automatically resolves any supported ID format.</span></div>
+            <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 seed work identifiers. Accepts native AAR IDs (e.g. <code>["aar_1", "aar_9253"]</code>), external database IDs (e.g. <code>["mal:5114", "vndb:v17"]</code>), or canonical IDs.</span></div>
             <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, etc.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>50</code>) &mdash; Number of recommended titles to return.</span></div>
 
@@ -827,9 +828,9 @@
             <div class="code">
               <div class="code__bar">
                 <span class="micro">cURL (GET)</span>
-                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253?limit=5"   -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
+                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://api.aarecords.tech/recommend/aar_1?limit=5"   -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253?limit=5"   -H "x-api-key: aar_free_access"</code></pre></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/recommend/aar_1?limit=5"   -H "x-api-key: aar_free_access"</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Request (POST &mdash; JSON Payload)</h4>
@@ -842,7 +843,7 @@
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{
-    "seed_work_ids": ["work:anime:mal_9253_al_9253"],
+    "seed_work_ids": ["aar_1"],
     "limit": 5
   }'</code></pre></div>
             </div>
@@ -853,23 +854,30 @@
                 <span class="micro">Response Envelope</span>
               </div>
               <div class="code__body"><pre><code class="language-json">{
-  "work_id": "work:anime:mal_9253_al_9253",
-  "title": "Steins;Gate",
-  "total_recommendations": 5,
+  "seed_work_ids": ["work:anime:mal_1_al_1"],
+  "target_scope": null,
+  "total": 2,
+  "latency_ms": 11.2,
   "recommendations": [
     {
-      "position": 1,
-      "work_id": "work:anime:mal_30484_al_21127",
-      "title": "Steins;Gate 0",
+      "aar_id": "aar_803",
+      "work_id": "work:anime:mal_889_al_889",
+      "title": "Black Lagoon",
+      "title_english": "Black Lagoon",
       "type": "anime",
-      "similarity_score": 0.9412
-    },
-    {
-      "position": 2,
-      "work_id": "work:anime:mal_22535_al_20665",
-      "title": "Kiseijuu: Sei no Kakuritsu",
-      "type": "anime",
-      "similarity_score": 0.8125
+      "release_year": 2006,
+      "score": 78.0,
+      "popularity": 253282,
+      "final_score": 0.6973,
+      "vector_similarity": 0.7795,
+      "tag_overlap_score": 0.3137,
+      "shared_tags": ["Action", "Adult Cast", "Adventure", "Crime"],
+      "genres": ["Action", "Adventure", "Drama", "Thriller"],
+      "mal_id": 889,
+      "anilist_id": 889,
+      "vndb_id": null,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1906/121592.jpg",
+      "url": "https://myanimelist.net/anime/889/Black_Lagoon"
     }
   ]
 }</code></pre></div>
@@ -1034,11 +1042,11 @@
     <div>
       <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>
       <div class="stack-2">
-        <a href="index.html">Overview</a>
-        <a href="about.html">About AAR</a>
-        <a href="search.html">Interactive Demo</a>
-        <a href="api.html">API Reference</a>
-        <a href="contact.html">Telegram &amp; Contact</a>
+        <a href="/">Overview</a>
+        <a href="/about">About AAR</a>
+        <a href="/search">Interactive Demo</a>
+        <a href="/api">API Reference</a>
+        <a href="/contact">Telegram &amp; Contact</a>
       </div>
     </div>
     <div>
