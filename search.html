@@ -33,7 +33,7 @@
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/components.css">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v=5">
 
 <!-- Structured Data (JSON-LD) -->
 <script type="application/ld+json">
@@ -95,14 +95,23 @@
               <button class="chip" type="button" data-mode="ask" aria-pressed="false" style="font-size:.75rem;padding:.45rem .85rem">
                 Ask AI Mode (GET /ask)
               </button>
+              <button class="chip" type="button" data-mode="recommend" aria-pressed="false" style="font-size:.75rem;padding:.45rem .85rem">
+                Recommend Me (GET /recommend)
+              </button>
             </div>
 
-            <form class="query-bar" data-search-form role="search" style="border-radius:6px;box-shadow:var(--card-shadow)">
+            <form class="query-bar" data-search-form data-active-mode="search" role="search" style="border-radius:6px;box-shadow:var(--card-shadow)">
               <div class="query-bar__row">
                 <label class="sr-only" for="q">Your question</label>
-                <input id="q" type="search" name="q" data-search-input
-                       placeholder="e.g. hunter who levels up alone in dungeons" autocomplete="off" spellcheck="false"
-                       style="border-radius:4px">
+                <div class="query-bar__field">
+                  <span class="query-bar__mode-pill" data-mode-pill hidden>SEED WORK</span>
+                  <input id="q" type="search" name="q" data-search-input
+                         placeholder="e.g. hunter who levels up alone in dungeons" autocomplete="off" spellcheck="false"
+                         aria-autocomplete="list" aria-expanded="false" aria-controls="recommend-autocomplete"
+                         style="border-radius:4px">
+                  <span class="query-bar__resolved-badge" data-resolved-badge hidden></span>
+                  <div id="recommend-autocomplete" class="ac-dropdown" data-autocomplete-menu role="listbox" aria-label="Matching works from catalogue" hidden></div>
+                </div>
                 <button class="btn btn--primary" type="submit" data-search-submit style="border-radius:4px">
                   Search the catalogue
                 </button>
@@ -321,7 +330,7 @@
   </div>
 </footer>
 
-<script type="module" src="assets/js/site.js?v=4"></script>
-<script type="module" src="assets/js/search.js?v=4"></script>
+<script type="module" src="assets/js/site.js?v=5"></script>
+<script type="module" src="assets/js/search.js?v=5"></script>
 </body>
 </html>

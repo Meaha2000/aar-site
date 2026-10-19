@@ -11,7 +11,7 @@ import {
   FREE_PUBLIC_KEY,
   endpoint,
   isConfigured,
-} from "./config.js?v=4";
+} from "./config.js?v=5";
 
 /** Error carrying an HTTP status so callers can name the recovery. */
 export class ApiError extends Error {
@@ -239,4 +239,87 @@ export function previewSearchBody(opts) {
 
 export function previewAskBody(opts) {
   return buildSearchPayload(opts);
+}
+
+/**
+ * Parses raw user input in "Recommend Me" mode and classifies it into:
+ *  - { kind: 'url', workId: 'mal:5114', label: 'MAL → mal:5114' }
+ *  - { kind: 'id',  workId: 'aar_30914', label: 'ID: aar_30914' }
+ *  - { kind: 'query', query: 'frieren', workId: null, label: '' }
+ */
+export function parseRecommendInput(raw) {
+  const input = String(raw || '').trim();
+  if (!input) return { kind: 'empty', workId: null, label: '' };
+
+  // 1. Source URL Extraction (MyAnimeList, AniList, VNDB)
+  const malMatch = input.match(/(?:https?:\/\/)?(?:www\.)?myanimelist\.net\/(?:anime|manga)\/(\d+)/i);
+  if (malMatch) {
+    return { kind: 'url', workId: `mal:${malMatch[1]}`, label: `MAL → mal:${malMatch[1]}` };
+  }
+
+  const alMatch = input.match(/(?:https?:\/\/)?(?:www\.)?anilist\.co\/(?:anime|manga)\/(\d+)/i);
+  if (alMatch) {
+    return { kind: 'url', workId: `anilist:${alMatch[1]}`, label: `AniList → anilist:${alMatch[1]}` };
+  }
+
+  const vndbUrlMatch = input.match(/(?:https?:\/\/)?(?:www\.)?vndb\.org\/(v\d+)/i);
+  if (vndbUrlMatch) {
+    const vid = vndbUrlMatch[1].toLowerCase();
+    return { kind: 'url', workId: `vndb:${vid}`, label: `VNDB → vndb:${vid}` };
+  }
+
+  // 2. Direct ID Formats:
+  //    - aar_30914 or pure numeric 30914
+  //    - work:anime:mal_1_al_1
+  //    - mal:5114 | anilist:16498 | vndb:v17 | v17
+  if (/^aar_\d+$/i.test(input)) {
+    const id = input.toLowerCase();
+    return { kind: 'id', workId: id, label: `ID: ${id}` };
+  }
+  if (/^\d+$/.test(input)) {
+    const id = `aar_${input}`;
+    return { kind: 'id', workId: id, label: `ID: ${id}` };
+  }
+  if (/^work:[a-z0-9_:.-]+$/i.test(input)) {
+    const id = input.toLowerCase();
+    return { kind: 'id', workId: id, label: `URI: ${id}` };
+  }
+  if (/^(mal|anilist|vndb):[a-z0-9_]+$/i.test(input)) {
+    const id = input.toLowerCase();
+    return { kind: 'id', workId: id, label: `ID: ${id}` };
+  }
+  if (/^v\d+$/i.test(input)) {
+    const id = `vndb:${input.toLowerCase()}`;
+    return { kind: 'id', workId: id, label: `ID: ${id}` };
+  }
+
+  // 3. Generic Title Search (Requires Lexical Autocomplete)
+  return { kind: 'query', workId: null, query: input, label: '' };
+}
+
+/**
+ * Local DB Autocomplete via Fast Lexical Search
+ * GET /search?q={query}&mode=lexical&limit=6
+ */
+export function searchAutocomplete(query, { limit = 6, signal = null } = {}) {
+  const enc = encodeURIComponent(String(query || '').trim());
+  return request(`/search?q=${enc}&mode=lexical&limit=${limit}`, { method: "GET", signal });
+}
+
+/**
+ * Recommendations Endpoint
+ * GET /recommend/{work_id}?limit={limit}
+ * or POST /recommend with JSON body
+ */
+export function recommend(workId, { limit = 8, signal = null, method = "GET" } = {}) {
+  const m = (method || "GET").toUpperCase();
+  if (m === "POST") {
+    return request("/recommend", {
+      method: "POST",
+      body: { seed_work_ids: [workId], limit },
+      signal,
+    });
+  }
+  const enc = encodeURIComponent(String(workId || '').trim());
+  return request(`/recommend/${enc}?limit=${limit}`, { method: "GET", signal });
 }
