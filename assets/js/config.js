@@ -6,7 +6,7 @@
    The catalogue is served via our direct production gateway at https://api.aarecords.tech.
    Requests authenticate using standard x-api-key headers (or bearer tokens / query parameters).
 
-        export const API_KEY = "";
+        export const API_KEY = "aar_free_access";
 
    Leave API_KEY empty to keep the demo in its honest unconfigured state: it
    will show the request it *would* send and never invent results.
@@ -19,7 +19,7 @@
 
 
 /** API origin — the Cloudflare Worker proxy that enforces 10 req/day per IP. */
-export const API_BASE = "https://orange-cell-9386.meaha2000.workers.dev";
+export const API_BASE = "https://api.aarecords.tech";
 
 /** Direct Cloudflare tunnel fallback for community ingestion and unproxied routes. */
 export const TUNNEL_BASE = "https://api.aarecords.tech";
@@ -28,7 +28,7 @@ export const TUNNEL_BASE = "https://api.aarecords.tech";
 export const FREE_PUBLIC_KEY = "aar_free_access";
 
 /** Optional API key for authenticated requests (`x-api-key`). */
-export const API_KEY = "";
+export const API_KEY = "aar_free_access";
 
 /** Default result count for the demo request. Server clamps to its own maximum. */
 export const DEFAULT_LIMIT = 8;

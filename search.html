@@ -111,7 +111,7 @@
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
                 <span>Advanced Options</span>
-                <span class="advanced-toggle__summary" data-advanced-summary>GET &middot; Breakdown On &middot; Hybrid &middot; Limit 8 &middot; Safe</span>
+                <span class="advanced-toggle__summary" data-advanced-summary>GET &middot; Breakdown Off &middot; Hybrid &middot; Limit 8 &middot; Safe</span>
               </button>
               <button type="button" class="btn btn--quiet btn--reset-mini" data-reset-advanced title="Reset options to defaults">
                 Reset
@@ -138,11 +138,11 @@
                 <div class="advanced-group">
                   <label class="advanced-label">
                     <span>Query Breakdown</span>
-                    <span class="badge badge--sakura" data-badge-breakdown>LLM On</span>
+                    <span class="badge" data-badge-breakdown>Bypassed (Fast)</span>
                   </label>
                   <div class="advanced-chips" role="group" aria-label="Query Breakdown">
-                    <button class="chip is-active" type="button" data-opt-breakdown="true" aria-pressed="true">Enabled (true)</button>
-                    <button class="chip" type="button" data-opt-breakdown="false" aria-pressed="false">Bypassed (false)</button>
+                    <button class="chip" type="button" data-opt-breakdown="true" aria-pressed="false">Enabled (true)</button>
+                    <button class="chip is-active" type="button" data-opt-breakdown="false" aria-pressed="true">Bypassed (false)</button>
                   </div>
                   <p class="advanced-desc">When disabled, skips LLM query decomposition and embeds prompt directly as-is (essential for exact queries like &ldquo;samurais and aliens&rdquo; to rank Gintama #1).</p>
                 </div>
@@ -315,7 +315,7 @@
   </div>
 </footer>
 
-<script type="module" src="assets/js/site.js?v=2"></script>
-<script type="module" src="assets/js/search.js?v=2"></script>
+<script type="module" src="assets/js/site.js?v=3"></script>
+<script type="module" src="assets/js/search.js?v=3"></script>
 </body>
 </html>

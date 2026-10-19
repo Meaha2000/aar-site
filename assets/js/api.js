@@ -11,7 +11,7 @@ import {
   FREE_PUBLIC_KEY,
   endpoint,
   isConfigured,
-} from "./config.js?v=2";
+} from "./config.js?v=3";
 
 /** Error carrying an HTTP status so callers can name the recovery. */
 export class ApiError extends Error {

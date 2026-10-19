@@ -3,9 +3,9 @@
    Interactive playground for /search and /ask endpoints supporting GET and POST.
    ========================================================================= */
 
-import { search, ask, buildSearchParams, buildSearchPayload, ApiError } from "./api.js?v=2";
+import { search, ask, buildSearchParams, buildSearchPayload, ApiError } from "./api.js?v=3";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
-  from "./config.js?v=2";
+  from "./config.js?v=3";
 
 /* ---- DOM ------------------------------------------------------------------ */
 
@@ -59,7 +59,7 @@ const state = {
   types: new Set(),             // active hard-filter scope types (ANIME, MANGA, etc.)
   endpointMode: "search",       // "search" or "ask"
   httpMethod: "GET",            // "GET" (default) or "POST"
-  queryBreakdown: true,         // true or false
+  queryBreakdown: false,        // false by default for instant ~500ms hybrid search
   retrievalMode: "hybrid",      // "hybrid" or "semantic"
   limit: DEFAULT_LIMIT,         // 8
   nsfw: false,                  // false or true
@@ -432,8 +432,9 @@ async function runQuery(question) {
       : await search(opts, ctrl.signal);
     renderResults(data);
   } catch (err) {
-    if (err && err.name === "AbortError" && !ctrl.signal.aborted) {
-      // aborted by a newer request; stay quiet
+    if ((err && err.name === "AbortError") || ctrl.signal.aborted) {
+      // aborted by a newer request or user action; stay quiet
+      return;
     } else if (err instanceof ApiError) {
       renderError(err, q);
     } else {
@@ -641,7 +642,7 @@ function initAdvanced() {
   for (const btn of els.resetBtns) {
     btn.addEventListener("click", () => {
       state.httpMethod = "GET";
-      state.queryBreakdown = true;
+      state.queryBreakdown = false;
       state.retrievalMode = "hybrid";
       state.limit = DEFAULT_LIMIT;
       state.nsfw = false;
