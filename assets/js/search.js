@@ -28,6 +28,7 @@ const els = {
   modePill:       $("[data-mode-pill]"),
   resolvedBadge:  $("[data-resolved-badge]"),
   acMenu:         $("[data-autocomplete-menu]"),
+  seedChips:      $("[data-seed-chips]"),
   chips:          Array.from(document.querySelectorAll("[data-scope-type]")),
   modes:          Array.from(document.querySelectorAll("[data-mode]")),
   preview:        $("[data-request-preview]"),
@@ -115,7 +116,8 @@ const state = {
   inflight: null,               // AbortController
   lastQuery: "",
   // Recommend & Autocomplete state
-  selectedSeedWork: null,       // { workId, title, type, release_year }
+  selectedSeedWork: null,       // legacy single seed fallback
+  selectedSeeds: [],            // [{ workId, title, type, release_year }]
   acItems: [],
   acHighlightIndex: -1,
   acDebounceTimer: null,
@@ -191,8 +193,10 @@ function updateModeButtons() {
     closeAutocomplete();
     if (els.resolvedBadge) els.resolvedBadge.hidden = true;
     if (els.form) els.form.classList.remove("has-resolved-badge");
+    if (els.seedChips) els.seedChips.hidden = true;
   } else {
     updateResolvedBadge();
+    renderSeedChips();
   }
 
   renderExamples();
@@ -205,22 +209,35 @@ function renderPreview(question) {
   const method = state.httpMethod;
 
   if (state.endpointMode === "recommend") {
-    const parsed = parseRecommendInput(question);
-    const workId = parsed.workId || state.selectedSeedWork?.workId || (question ? question.trim() : "<work_id>");
-    const displayUrl = `${baseUrl}/recommend/${encodeURIComponent(workId)}?limit=${state.limit}`;
-    const curlCmd = method === "GET"
-      ? `curl -X GET "${displayUrl}" \
-  -H "x-api-key: aar_free_access"`
-      : `curl -X POST "${baseUrl}/recommend" \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: aar_free_access" \
-  -d '{"seed_work_ids": ["${escapeHtml(workId)}"], "limit": ${state.limit}}'`;
+    let seeds = state.selectedSeeds.map(s => s.workId);
+    if (!seeds.length) {
+      const parsed = parseRecommendInput(question);
+      seeds = [parsed.workId || state.selectedSeedWork?.workId || (question ? question.trim() : "<work_id>")];
+    }
+    const isMulti = seeds.length > 1;
+    const effectiveMethod = isMulti ? "POST" : method;
+
+    let displayUrl = "";
+    let curlCmd = "";
+
+    if (effectiveMethod === "POST") {
+      displayUrl = `${baseUrl}/recommend`;
+      const bodyJson = JSON.stringify({ seed_work_ids: seeds, limit: state.limit });
+      curlCmd = `curl -X POST "${displayUrl}" \\
+  -H "Content-Type: application/json" \\
+  -H "x-api-key: aar_free_access" \\
+  -d '${bodyJson}'`;
+    } else {
+      displayUrl = `${baseUrl}/recommend/${encodeURIComponent(seeds[0])}?limit=${state.limit}`;
+      curlCmd = `curl -X GET "${displayUrl}" \\
+  -H "x-api-key: aar_free_access"`;
+    }
 
     els.preview.innerHTML = `
       <div class="code">
         <div class="code__bar">
           <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-            <span class="badge badge--method ${method === "GET" ? "badge--get" : "badge--post"}">${method}</span>
+            <span class="badge badge--method ${effectiveMethod === "GET" ? "badge--get" : "badge--post"}">${effectiveMethod}</span>
             <span class="micro" style="word-break:break-all">${escapeHtml(displayUrl)}</span>
           </div>
           <div style="display:flex;align-items:center;gap:.4rem">
@@ -500,9 +517,14 @@ function renderRecommendationResults(data, requestedId, seedMeta) {
     ? data.seed_work_ids.join(", ")
     : requestedId;
 
-  const seedTitleHtml = seedMeta && seedMeta.title
-    ? `<strong>${escapeHtml(seedMeta.title)}</strong> <span class="rec-seed-banner__id">${escapeHtml(seedIds)}</span>`
-    : `<span class="rec-seed-banner__id">${escapeHtml(seedIds)}</span>`;
+  let seedTitleHtml = "";
+  if (Array.isArray(seedMeta) && seedMeta.length > 0) {
+    seedTitleHtml = seedMeta.map(s => `<strong>${escapeHtml(s.title || s.workId)}</strong> <span class="rec-seed-banner__id">${escapeHtml(s.workId)}</span>`).join(" + ");
+  } else if (seedMeta && seedMeta.title) {
+    seedTitleHtml = `<strong>${escapeHtml(seedMeta.title)}</strong> <span class="rec-seed-banner__id">${escapeHtml(seedIds)}</span>`;
+  } else {
+    seedTitleHtml = `<span class="rec-seed-banner__id">${escapeHtml(seedIds)}</span>`;
+  }
 
   const bannerHtml = `
     <div class="rec-seed-banner">
@@ -528,12 +550,14 @@ function renderRecommendationResults(data, requestedId, seedMeta) {
     const matchPct = typeof rec.final_score === "number"
       ? `${Math.round(rec.final_score * 100)}% Match`
       : "";
-    const sharedTags = Array.isArray(rec.shared_tags) ? rec.shared_tags.slice(0, 5) : [];
-    const genres = Array.isArray(rec.genres) ? rec.genres.slice(0, 4) : [];
+    const cleanShared = Array.from(new Set((rec.shared_tags || []).map(cleanTagValue).filter(Boolean)));
+    const cleanGenres = Array.from(new Set((rec.genres || []).map(cleanTagValue).filter(Boolean)));
+    const seenLower = new Set(cleanShared.map(t => t.toLowerCase()));
+    const remainingGenres = cleanGenres.filter(g => !seenLower.has(g.toLowerCase()));
 
     const pillsHtml = [
-      ...sharedTags.map((t) => `<span class="rec-tag rec-tag--shared" title="Shared Narrative Tag">✦ ${escapeHtml(t)}</span>`),
-      ...genres.filter((g) => !sharedTags.includes(g)).map((g) => `<span class="rec-tag">${escapeHtml(g)}</span>`)
+      ...cleanShared.slice(0, 5).map((t) => `<span class="rec-tag rec-tag--shared" title="Shared Narrative Tag">✦ ${escapeHtml(t)}</span>`),
+      ...remainingGenres.slice(0, 4).map((g) => `<span class="rec-tag">${escapeHtml(g)}</span>`)
     ].join("");
 
     const imgTag = rec.image_url
@@ -555,9 +579,12 @@ function renderRecommendationResults(data, requestedId, seedMeta) {
             <code class="mono faint">${escapeHtml(rec.aar_id)}</code>
           </div>
           ${pillsHtml ? `<div class="rec-tags-row">${pillsHtml}</div>` : ""}
-          <div style="margin-top:.45rem">
+          <div style="display:flex;gap:.4rem;align-items:center;margin-top:.45rem;flex-wrap:wrap">
+            <button class="btn btn--quiet" type="button" data-add-seed="${escapeHtml(rec.aar_id)}" data-seed-title="${escapeHtml(rec.title)}" style="font-size:.75rem;padding:.2rem .55rem">
+              + Add as seed
+            </button>
             <button class="btn btn--quiet" type="button" data-seed-work="${escapeHtml(rec.aar_id)}" data-seed-title="${escapeHtml(rec.title)}" style="font-size:.75rem;padding:.2rem .55rem">
-              Find similar to this &rarr;
+              Find similar &rarr;
             </button>
           </div>
         </div>
@@ -570,11 +597,69 @@ function renderRecommendationResults(data, requestedId, seedMeta) {
 
 /* ---- Autocomplete & Input Resolvers --------------------------------------- */
 
+function renderSeedChips() {
+  if (!els.seedChips) return;
+  if (state.endpointMode !== "recommend" || !state.selectedSeeds.length) {
+    els.seedChips.hidden = true;
+    els.seedChips.innerHTML = "";
+    return;
+  }
+  els.seedChips.innerHTML = state.selectedSeeds.map((seed, idx) => `
+    <span class="seed-chip" style="display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .55rem;background:var(--paper-raised);border:1px solid var(--sakura-line);border-radius:4px;font-size:.8125rem;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,0.04)">
+      <span class="seed-chip__title" style="font-weight:500;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escapeHtml(seed.title)}">${escapeHtml(seed.title)}</span>
+      <span class="seed-chip__badge mono" style="font-size:.7rem;color:var(--sakura-deep);background:var(--sakura-soft);padding:.1rem .3rem;border-radius:3px">${escapeHtml(seed.workId)}</span>
+      <button type="button" class="seed-chip__remove" data-remove-seed="${idx}" aria-label="Remove ${escapeHtml(seed.title)}" style="background:transparent;border:none;color:var(--faint);cursor:pointer;padding:0 .15rem;font-size:1.05rem;line-height:1;display:flex;align-items:center">&times;</button>
+    </span>
+  `).join("");
+  els.seedChips.hidden = false;
+}
+
+function addSeedWork(item) {
+  if (!item || !item.workId) return;
+  if (state.selectedSeeds.some(s => s.workId === item.workId)) return;
+  if (state.selectedSeeds.length >= 10) {
+    statusNote("warn", "Maximum of 10 seed works supported by API.");
+    return;
+  }
+  state.selectedSeeds.push({
+    workId: item.workId,
+    title: item.title || item.workId,
+    type: item.type || null,
+    release_year: item.release_year || null,
+  });
+  renderSeedChips();
+  if (els.input) {
+    els.input.value = "";
+    els.input.placeholder = "Add another seed work (or search title/paste ID)…";
+    els.input.focus();
+  }
+  updateResolvedBadge();
+  renderPreview();
+}
+
+function removeSeedWork(index) {
+  state.selectedSeeds.splice(index, 1);
+  renderSeedChips();
+  if (!state.selectedSeeds.length && els.input) {
+    els.input.placeholder = MODE_CONFIG.recommend.placeholder;
+  }
+  updateResolvedBadge();
+  renderPreview();
+}
+
 function updateResolvedBadge() {
   if (!els.resolvedBadge) return;
   if (state.endpointMode !== "recommend") {
     els.resolvedBadge.hidden = true;
     if (els.form) els.form.classList.remove("has-resolved-badge");
+    return;
+  }
+
+  if (state.selectedSeeds.length > 0) {
+    els.resolvedBadge.textContent = `✓ ${state.selectedSeeds.length} Seed(s)`;
+    els.resolvedBadge.setAttribute("data-badge-kind", "id");
+    els.resolvedBadge.hidden = false;
+    if (els.form) els.form.classList.add("has-resolved-badge");
     return;
   }
 
@@ -674,7 +759,7 @@ function selectAutocompleteItem(index) {
   const item = state.acItems[index];
   if (!item) return;
 
-  state.selectedSeedWork = {
+  const seedObj = {
     workId: item.aar_id,
     title: item.title,
     title_english: item.title_english,
@@ -682,14 +767,9 @@ function selectAutocompleteItem(index) {
     release_year: item.release_year
   };
 
-  if (els.input) {
-    els.input.value = item.title;
-    els.input.focus();
-  }
+  addSeedWork(seedObj);
   closeAutocomplete();
-  updateResolvedBadge();
-  renderPreview(item.title);
-  runQuery(item.title);
+  runQuery();
 }
 
 function syncAutocompleteHighlight() {
@@ -724,7 +804,14 @@ function setBusy(busy) {
 
 async function runQuery(question) {
   const q = (question || "").trim();
-  if (!q) { els.input && els.input.focus(); return; }
+  if (state.endpointMode !== "recommend" && !q) {
+    els.input && els.input.focus();
+    return;
+  }
+  if (state.endpointMode === "recommend" && !q && !state.selectedSeeds.length) {
+    els.input && els.input.focus();
+    return;
+  }
 
   state.lastQuery = q;
   closeAutocomplete();
@@ -742,18 +829,15 @@ async function runQuery(question) {
     statusNote("info", `<span class="spinner" aria-hidden="true"></span> Processing request…`);
 
     if (state.endpointMode === "recommend") {
-      let seedId = null;
-      let seedMeta = state.selectedSeedWork;
+      let seedIds = state.selectedSeeds.map(s => s.workId);
 
-      if (seedMeta && seedMeta.workId && seedMeta.title === q) {
-        seedId = seedMeta.workId;
-      } else {
+      // If user typed something in input and hit submit without picking from dropdown:
+      if (q && (!state.selectedSeeds.length || !state.selectedSeeds.some(s => s.title === q))) {
         const parsed = parseRecommendInput(q);
         if (parsed.kind === "url" || parsed.kind === "id") {
-          seedId = parsed.workId;
-          seedMeta = { workId: parsed.workId, title: null };
+          addSeedWork({ workId: parsed.workId, title: parsed.label });
+          seedIds = state.selectedSeeds.map(s => s.workId);
         } else if (parsed.kind === "query") {
-          // Fallback: user typed title and pressed submit directly without picking from dropdown
           statusNote("info", `<span class="spinner" aria-hidden="true"></span> Resolving work in catalogue…`);
           const lookup = await searchAutocomplete(parsed.query, { limit: 1, signal: ctrl.signal });
           const topHit = Array.isArray(lookup?.results) && lookup.results[0];
@@ -762,22 +846,27 @@ async function runQuery(question) {
             statusNote("warn", `<strong>No matching work found.</strong> Could not find an anime or manga in the catalogue matching "${escapeHtml(parsed.query)}". Try an exact title or ID.`);
             return;
           }
-          seedId = topHit.aar_id;
-          seedMeta = { workId: topHit.aar_id, title: topHit.title, type: topHit.type, release_year: topHit.release_year };
-          state.selectedSeedWork = seedMeta;
-          updateResolvedBadge();
+          addSeedWork({
+            workId: topHit.aar_id,
+            title: topHit.title,
+            type: topHit.type,
+            release_year: topHit.release_year,
+          });
+          seedIds = state.selectedSeeds.map(s => s.workId);
         }
       }
 
-      if (!seedId) {
+      if (!seedIds.length) {
         renderEmpty();
-        statusNote("warn", "Please enter a valid work ID, source link, or search title.");
+        statusNote("warn", "Please enter a valid work ID, source link, or select a work from the catalogue.");
         return;
       }
 
-      statusNote("info", `<span class="spinner" aria-hidden="true"></span> Finding resonant works for <code>${escapeHtml(seedId)}</code>…`);
-      const data = await recommend(seedId, { limit: state.limit, signal: ctrl.signal, method: state.httpMethod });
-      renderRecommendationResults(data, seedId, seedMeta);
+      seedIds = Array.from(new Set(seedIds));
+
+      statusNote("info", `<span class="spinner" aria-hidden="true"></span> Finding resonant works for ${seedIds.length} seed work(s)…`);
+      const data = await recommend(seedIds, { limit: state.limit, signal: ctrl.signal, method: state.httpMethod });
+      renderRecommendationResults(data, seedIds.join(", "), state.selectedSeeds);
       return;
     }
 
@@ -1172,19 +1261,37 @@ function init() {
       return;
     }
 
+    // Seed Chip Remove click
+    const rmSeed = e.target.closest("[data-remove-seed]");
+    if (rmSeed) {
+      const idx = Number(rmSeed.getAttribute("data-remove-seed"));
+      removeSeedWork(idx);
+      return;
+    }
+
+    // Recommendation card "+ Add as seed" click
+    const addSeedBtn = e.target.closest("[data-add-seed]");
+    if (addSeedBtn) {
+      const id = addSeedBtn.getAttribute("data-add-seed");
+      const title = addSeedBtn.getAttribute("data-seed-title") || id;
+      addSeedWork({ workId: id, title });
+      runQuery();
+      return;
+    }
+
     // Recommendation card seed click ("Find similar to this")
     const seedBtn = e.target.closest("[data-seed-work]");
     if (seedBtn) {
       const id = seedBtn.getAttribute("data-seed-work");
       const title = seedBtn.getAttribute("data-seed-title") || id;
-      state.selectedSeedWork = { workId: id, title };
+      state.selectedSeeds = [{ workId: id, title }];
+      renderSeedChips();
       if (els.input) {
-        els.input.value = title;
-        els.input.focus();
+        els.input.value = "";
       }
       updateResolvedBadge();
       renderPreview(title);
-      runQuery(id);
+      runQuery();
       return;
     }
 

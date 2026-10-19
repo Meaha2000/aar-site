@@ -311,15 +311,22 @@ export function searchAutocomplete(query, { limit = 6, signal = null } = {}) {
  * GET /recommend/{work_id}?limit={limit}
  * or POST /recommend with JSON body
  */
-export function recommend(workId, { limit = 8, signal = null, method = "GET" } = {}) {
-  const m = (method || "GET").toUpperCase();
+export function recommend(workIds, { limit = 8, signal = null, method = "GET", targetScope = null } = {}) {
+  const isMulti = Array.isArray(workIds) && workIds.length > 1;
+  const m = isMulti ? "POST" : (method || "GET").toUpperCase();
   if (m === "POST") {
+    const seeds = Array.isArray(workIds) ? workIds : [workIds];
+    const body = { seed_work_ids: seeds, limit };
+    if (targetScope) body.target_scope = targetScope;
     return request("/recommend", {
       method: "POST",
-      body: { seed_work_ids: [workId], limit },
+      body,
       signal,
     });
   }
-  const enc = encodeURIComponent(String(workId || '').trim());
-  return request(`/recommend/${enc}?limit=${limit}`, { method: "GET", signal });
+  const singleId = Array.isArray(workIds) ? workIds[0] : workIds;
+  const enc = encodeURIComponent(String(singleId || '').trim());
+  let url = `/recommend/${enc}?limit=${limit}`;
+  if (targetScope) url += `&target_scope=${encodeURIComponent(targetScope)}`;
+  return request(url, { method: "GET", signal });
 }
