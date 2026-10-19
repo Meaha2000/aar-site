@@ -3,9 +3,9 @@
    Interactive playground for /search and /ask endpoints supporting GET and POST.
    ========================================================================= */
 
-import { search, ask, buildSearchParams, buildSearchPayload, ApiError } from "./api.js?v=3";
+import { search, ask, buildSearchParams, buildSearchPayload, ApiError } from "./api.js?v=4";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
-  from "./config.js?v=3";
+  from "./config.js?v=4";
 
 /* ---- DOM ------------------------------------------------------------------ */
 
@@ -452,7 +452,7 @@ function renderError(err, q) {
   const detail = (err?.body && (err.body.message || err.body.error || err.body.detail)) || "";
   if (err.status === 401 || err.status === 403) {
     statusNote("error",
-      `<strong>Authentication error (${err.status}).</strong> Access to the API service was denied. Please verify your credentials or subscription. ${retry}`);
+      `<strong>Authentication error (${err.status}).</strong> Access to the API service was denied. Please verify your API key or contact contact@aarecords.tech. ${retry}`);
   } else if (err.status === 429) {
     const msg = detail || "You have reached your rate limit for this demo. Please wait a moment before trying again.";
     statusNote("warn",
@@ -498,10 +498,13 @@ function initModes() {
       const mode = btn.getAttribute("data-mode");
       if (!mode) return;
       state.endpointMode = mode;
-      els.modes.forEach((b) => b.classList.toggle("is-active", b === btn));
+      for (const b of els.modes) {
+        const active = b === btn;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", String(active));
+      }
       updateModeButtons();
       renderPreview(state.lastQuery);
-      if (state.lastQuery) runQuery(state.lastQuery);
     });
   }
 }
