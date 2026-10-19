@@ -235,6 +235,9 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | `max_year` | `integer` | Maximum release year bound (e.g. `2024`). |
 | `min_score` | `number` | Minimum review score threshold (float between 0.0 and 10.0). |
 | `adult` | `boolean` | Explicit 18+ content flag (default `false` excludes adult titles). |
+| `min_episodes` | `integer` | Minimum episode count bound (e.g. `12`, `24`). |
+| `max_episodes` | `integer` | Maximum episode count bound (e.g. `26`, `50`). |
+| `episodes` | `integer` | Exact episode count filter (e.g. `12`). |
 
 #### Request Example:
 ```json
@@ -268,6 +271,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
       "score": 0.942,
       "community_score": 87.5,
       "release_year": 2018,
+      "episodes": null,
       "genres": ["Action", "Adventure", "Fantasy"],
       "image_url": "https://cdn.myanimelist.net/images/manga/3/222295.jpg",
       "mal_id": 121496,
@@ -449,6 +453,42 @@ curl -X GET "https://api.aarecords.tech/contributions/grouped" \
   -H "x-api-key: aar_free_access"
 ```
 
+---
+
+### 5.6. `GET /stats`
+Catalog statistics, live work counts across all 6 media formats (150,707+ works), total indexed chunks, and relationship graph edges. Safe and accessible using public API keys (`aar_free_access`).
+
+#### Request:
+```bash
+curl -X GET "https://api.aarecords.tech/stats" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "status": "healthy",
+  "total_works": 150707,
+  "by_type": {
+    "anime": 38434,
+    "light_novel": 11724,
+    "manga": 67003,
+    "manhua": 464,
+    "manhwa": 7071,
+    "visual_novel": 26011
+  },
+  "total_chunks": 266610,
+  "total_character_profiles": 0,
+  "total_people": 155391,
+  "total_staff": 0,
+  "total_characters": 0,
+  "total_relations": 60811,
+  "max_limit": 300,
+  "max_results": 300,
+  "default_language": "en"
+}
+```
+
 ## 6. Native Model Context Protocol (MCP) Server
 
 Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Antigravity, Cline, Windsurf) directly to the Anime Akashic Records index.
@@ -474,6 +514,8 @@ Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Anti
   - `limit` (`integer`, optional, default: 10): Maximum results to return (1-50).
   - `media_types` (`array[string]`, optional): Filter media types (e.g. `["anime"]`).
   - `genres` (`array[string]`, optional): Filter genres (e.g. `["Action"]`).
+  - `min_episodes` (`integer`, optional): Minimum episode count filter (e.g. `12`, `24`).
+  - `max_episodes` (`integer`, optional): Maximum episode count filter (e.g. `26`, `50`).
   - `mode` (`string`, optional, default: `"hybrid"`): `"hybrid"` or `"semantic"`.
   - `include_sources` (`boolean`, optional, default: `false`): When `true`, includes external platform links (MAL, AniList, Kitsu, AniDB, etc.) in markdown output.
   - `return_data` (`boolean`, optional, default: `false`): When `true`, returns the complete raw structured JSON array with all metadata, IDs, poster images, and source links.
@@ -483,6 +525,14 @@ Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Anti
   - `media_types` (`array[string]`, optional): Filter media types.
   - `include_sources` (`boolean`, optional, default: `false`): Include external source links for cited works in markdown.
   - `return_data` (`boolean`, optional, default: `false`): Return raw structured JSON data of the answer and cited results.
+- **`aar_find_similar`**: Find thematically and semantically similar works to a seed work using vector centroid similarity and shared narrative tropes.
+  - `work_id` (`string`, required): Canonical work ID (e.g. `work:anime:mal_1_al_1`).
+  - `limit` (`integer`, optional, default: 5): Maximum recommendations to return (1-50).
+  - `target_scope` (`string`, optional): Target media type filter (`"anime"`, `"manga"`, etc.).
+  - `exclude_franchise` (`boolean`, optional, default: `true`): Exclude direct sequels/prequels to surface fresh works.
+  - `include_sources` (`boolean`, optional, default: `false`): Include external database links (MAL, AniList, etc.).
+  - `return_data` (`boolean`, optional, default: `false`): Return complete raw structured JSON array.
+- **`aar_stats`**: Retrieve live catalog statistics and breakdown across all 6 formats (anime, manga, light novels, visual novels, manhwa, manhua).
 - **`aar_lookup_work`**: Detailed canonical metadata, relations, and excerpts for a specific work ID.
 - **`aar_health`**: Operational health and connectivity check.
 

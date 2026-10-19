@@ -27,6 +27,8 @@ const ALLOWED = new Set([
   "/search",
   "/ask",
   "/health",
+  "/stats",
+  "/recommend",
   "/contributions",
   "/suggest",
   "/contributions/queue",
@@ -38,6 +40,7 @@ const ALLOWED = new Set([
 const POST_ROUTES = new Set([
   "/search",
   "/ask",
+  "/recommend",
   "/contributions",
   "/suggest",
 ]);
@@ -111,8 +114,9 @@ export default {
       return json({ service: "aar-proxy", routes: [...ALLOWED] }, 200, cors);
     }
 
-    if (!ALLOWED.has(url.pathname)) {
-      return json({ detail: "Not found. This proxy forwards only search, ask, contributions, and health." }, 404, cors);
+    const isRecommendDetail = url.pathname.startsWith("/recommend/");
+    if (!ALLOWED.has(url.pathname) && !isRecommendDetail) {
+      return json({ detail: "Not found. This proxy forwards only search, ask, recommend, stats, contributions, and health." }, 404, cors);
     }
 
     if (POST_ROUTES.has(url.pathname)) {

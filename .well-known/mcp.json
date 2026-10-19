@@ -30,11 +30,23 @@
   "tools": [
     {
       "name": "aar_search",
-      "description": "Search 144,000+ canonical works by plot memories, premises, or scenes. Supports include_sources and return_data options."
+      "description": "Search 144,000+ canonical works by plot memories, premises, or scenes. Supports episode range filters (min_episodes, max_episodes), include_sources, and return_data options."
     },
     {
       "name": "aar_ask",
       "description": "Ask narrative and plot questions with grounded AI citations. Supports include_sources and return_data options."
+    },
+    {
+      "name": "aar_find_similar",
+      "description": "Find semantically and thematically similar works using centroid vector similarity and shared narrative tropes. Supports include_sources and return_data options."
+    },
+    {
+      "name": "aar_stats",
+      "description": "Retrieve real-time catalog metrics and distribution across all 6 media formats, total chunks, and relation edges."
+    },
+    {
+      "name": "aar_lookup_work",
+      "description": "Retrieve canonical metadata, relations, and excerpts for a specific work ID."
     },
     {
       "name": "aar_health",
