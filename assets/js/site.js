@@ -40,6 +40,53 @@ function initTheme() {
   });
 }
 
+/* ---- Nerd mode ------------------------------------------------------------ */
+/* Off by default: technical surfaces stay in the DOM but hidden via CSS.
+   On: endpoints, schemas, request previews and API links come back.        */
+
+const NERD_KEY = "aar.nerd";
+let healthInitialized = false;
+
+function applyNerd(mode) {
+  const on = mode === "on";
+  document.documentElement.setAttribute("data-nerd", on ? "on" : "off");
+  for (const btn of document.querySelectorAll("[data-nerd-toggle]")) {
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.setAttribute("title", on
+      ? "Nerd mode is on: endpoints, schemas and request details are visible"
+      : "Nerd mode is off: technical details are hidden");
+    const label = btn.querySelector("[data-nerd-label]");
+    if (label && btn.classList.contains("nerd-toggle")) {
+      label.textContent = on ? "Nerd: on" : "Nerd: off";
+    }
+  }
+  if (on && !healthInitialized) {
+    healthInitialized = true;
+    initHealth();
+  }
+}
+
+function initNerd() {
+  let saved = null;
+  try {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("nerd") === "1" || p.get("nerd") === "on" || p.get("nerd") === "true") {
+      localStorage.setItem(NERD_KEY, "on");
+    }
+    saved = localStorage.getItem(NERD_KEY);
+  } catch { /* ignore */ }
+  const isApi = window.location.pathname.includes("/api");
+  applyNerd(saved === "on" || (saved !== "off" && isApi) ? "on" : "off");
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-nerd-toggle]");
+    if (!btn) return;
+    const next = document.documentElement.getAttribute("data-nerd") === "on" ? "off" : "on";
+    try { localStorage.setItem(NERD_KEY, next); } catch { /* ignore */ }
+    applyNerd(next);
+  });
+}
+
 /* ---- Rail scroll-spy ------------------------------------------------------ */
 
 function initRail() {
@@ -135,12 +182,12 @@ async function checkHealth(chip) {
     const status = typeof h?.status === "string" ? h.status.toLowerCase() : "";
     const isOk = status === "ok" || status === "healthy" || status === "live";
     if (isOk) {
-      setText("Endpoint Healthy", "ok");
+      setText("Online", "ok");
     } else {
-      setText("Endpoint Error", "error");
+      setText("Error", "error");
     }
   } catch (err) {
-    setText("Endpoint Offline", "error");
+    setText("Offline", "error");
   } finally {
     clearTimeout(t);
   }
@@ -170,11 +217,76 @@ async function initHealth() {
 
 /* ---- Boot ----------------------------------------------------------------- */
 
+
+/* ---- Sidebar Drawer & Theme Switcher ------------------------------------- */
+
+function initDrawer() {
+  const drawer = document.querySelector("[data-drawer]");
+  const backdrop = document.querySelector("[data-drawer-backdrop]");
+  const openBtns = document.querySelectorAll("[data-drawer-open]");
+  const closeBtns = document.querySelectorAll("[data-drawer-close]");
+
+  function openMenu() {
+    if (!drawer || !backdrop) return;
+    drawer.hidden = false;
+    backdrop.hidden = false;
+    requestAnimationFrame(() => {
+      drawer.classList.add("is-open");
+      backdrop.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+      openBtns.forEach(b => b.setAttribute("aria-expanded", "true"));
+    });
+  }
+
+  function closeMenu() {
+    if (!drawer || !backdrop) return;
+    drawer.classList.remove("is-open");
+    backdrop.classList.remove("is-open");
+    document.body.style.overflow = "";
+    openBtns.forEach(b => b.setAttribute("aria-expanded", "false"));
+    setTimeout(() => {
+      if (!drawer.classList.contains("is-open")) {
+        drawer.hidden = true;
+        backdrop.hidden = true;
+      }
+    }, 280);
+  }
+
+  openBtns.forEach(b => b.addEventListener("click", openMenu));
+  closeBtns.forEach(b => b.addEventListener("click", closeMenu));
+  if (backdrop) backdrop.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer && drawer.classList.contains("is-open")) {
+      closeMenu();
+    }
+  });
+
+  // Clicking a drawer nav link closes the drawer
+  if (drawer) {
+    drawer.querySelectorAll(".drawer-link").forEach(link => {
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
+    });
+  }
+
+  // Click listener for Sun / Moon theme icon buttons
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-set-theme]");
+    if (!btn) return;
+    const target = btn.getAttribute("data-set-theme");
+    try { localStorage.setItem(THEME_KEY, target); } catch { /* ignore */ }
+    applyTheme(target);
+  });
+}
+
 function boot() {
   initTheme();
+  initNerd();
   initRail();
   initCopy();
-  initHealth();
+  initDrawer();
 }
 
 if (document.readyState === "loading") {

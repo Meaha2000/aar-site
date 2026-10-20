@@ -59,43 +59,50 @@ const els = {
 
 const MODE_CONFIG = {
   search: {
-    placeholder: "e.g. hunter who levels up alone in dungeons",
-    buttonText: (m) => `Search the catalogue (${m} /search)`,
-    modeText: (m) => `Search Mode (${m} /search)`,
-    examples: [
-      "Time-travel visual novel with branching timelines",
-      "A swordsman who cannot die and the woman who follows him",
-      "Weakest hunter reawakens in a dungeon with a solo leveling system",
-      "Studio that animated a demon-slaying brother and sister",
-      "Banished immortal cultivator returns 10,000 years later to rebuild his sect",
-      "Cyberpunk dystopia where memory can be bought",
-      "Something cozy but a little lonely, for a rainy evening",
-    ],
+    placeholder: "Describe a plot, trope, premise, or character…",
+    buttonText: () => "Search the catalogue",
+    modeText: () => "Search Mode",
   },
   ask: {
-    placeholder: "Ask anything about anime, manga, or visual novels…",
-    buttonText: (m) => `Ask the AI (${m} /ask)`,
-    modeText: (m) => `Ask AI Mode (${m} /ask)`,
-    examples: [
-      "Compare the themes of mortality in Frieren vs Kino's Journey",
-      "Why is Steins;Gate's narrative considered a gold standard in time travel?",
-      "Explain the power system of Hunter x Hunter Nen vs Jujutsu Kaisen Cursed Energy",
-      "Recommend 5 obscure atmospheric seinen manga with psychological depth",
-    ],
+    placeholder: "Ask a question about any anime, story, or lore…",
+    buttonText: () => "Ask the AI",
+    modeText: () => "Ask AI Mode",
   },
   recommend: {
-    placeholder: "Paste MAL/AniList/VNDB link, enter ID (mal:5114, aar_30914), or search title…",
-    buttonText: (m) => `Find Similar Works (${m} /recommend)`,
-    modeText: (m) => `Recommend Me (${m} /recommend)`,
-    examples: [
-      "Sousou no Frieren (aar_30914)",
-      "Fullmetal Alchemist: Brotherhood (mal:5114)",
-      "Attack on Titan (anilist:16498)",
-      "Steins;Gate (vndb:v2002)",
-      "Solo Leveling (aar_9253)",
-      "https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood",
-    ],
+    placeholder: "Search title, enter ID (e.g. mal:5114), or paste URL…",
+    buttonText: () => "Find Similar Works",
+    modeText: () => "Recommend Me",
   },
+};
+
+const MODE_GUIDANCE = {
+  search: {
+    title: "How Natural Language Search Works",
+    summary: "Describe stories you half-remember, themes, character dynamics, or plot premises in plain language. AAR matches across 144,000+ works using neural semantic vectors and returns supporting synopsis excerpts.",
+    tips: [
+      "Describe narrative memory: <em>\"A swordsman who cannot die and the woman who follows him\"</em>",
+      "Describe tone or setting: <em>\"Quiet, melancholic fantasy with slow journeys\"</em>",
+      "Unified index across Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua"
+    ]
+  },
+  ask: {
+    title: "How Grounded AI Q&A Works",
+    summary: "Ask natural language questions about story lore, character dynamics, thematic comparisons, or requests for tailored recommendations. The AI synthesizes answers grounded directly in verified catalogue passages with citations.",
+    tips: [
+      "Ask for comparisons: <em>\"Compare themes of mortality in Frieren vs Kino's Journey\"</em>",
+      "Ask about story lore: <em>\"Why is Steins;Gate's narrative considered a gold standard in time travel?\"</em>",
+      "Answers include verified source citations from the 144k corpus"
+    ]
+  },
+  recommend: {
+    title: "How to Find Similar Recommendations",
+    summary: "Type any title to see instant suggestions from the catalogue, or enter a canonical ID (e.g. <code>aar_30914</code>, <code>mal:5114</code>, <code>anilist:16498</code>) or a direct MyAnimeList link. You can add multiple seed works to blend recommendations.",
+    tips: [
+      "Start typing any title (e.g. <em>\"Frieren\"</em>, <em>\"Attack on Titan\"</em>, <em>\"Solo Leveling\"</em>) and select it",
+      "Add up to 10 seed works to blend distinct tropes and genres",
+      "Results are ranked by shared narrative tags and semantic similarity"
+    ]
+  }
 };
 
 /* ---- State ---------------------------------------------------------------- */
@@ -171,13 +178,13 @@ function updateModeButtons() {
     btn.classList.toggle("is-active", active);
     btn.setAttribute("aria-pressed", String(active));
     if (MODE_CONFIG[m]) {
-      btn.textContent = MODE_CONFIG[m].modeText(state.httpMethod);
+      btn.textContent = MODE_CONFIG[m].modeText();
     }
   }
 
   const cfg = MODE_CONFIG[state.endpointMode] || MODE_CONFIG.search;
   if (els.submit) {
-    els.submit.textContent = cfg.buttonText(state.httpMethod);
+    els.submit.textContent = cfg.buttonText();
   }
   if (els.input) {
     els.input.placeholder = cfg.placeholder;
@@ -185,9 +192,7 @@ function updateModeButtons() {
   if (els.form) {
     els.form.setAttribute("data-active-mode", state.endpointMode);
   }
-  if (els.modePill) {
-    els.modePill.hidden = state.endpointMode !== "recommend";
-  }
+  
 
   if (state.endpointMode !== "recommend") {
     closeAutocomplete();
@@ -199,7 +204,7 @@ function updateModeButtons() {
     renderSeedChips();
   }
 
-  renderExamples();
+  renderGuidance();
 }
 
 /** Render the request the demo would send — pre-flight preview. */
@@ -630,7 +635,7 @@ function addSeedWork(item) {
   renderSeedChips();
   if (els.input) {
     els.input.value = "";
-    els.input.placeholder = "Add another seed work (or search title/paste ID)…";
+    els.input.placeholder = "Add another work to blend recommendations…";
     els.input.focus();
   }
   updateResolvedBadge();
@@ -914,13 +919,20 @@ function renderError(err, q) {
 
 /* ---- Controls wiring ----------------------------------------------------- */
 
-function renderExamples() {
-  const host = document.querySelector("[data-examples]");
+function renderGuidance() {
+  const host = document.querySelector("[data-query-guidance]");
   if (!host) return;
-  const cfg = MODE_CONFIG[state.endpointMode] || MODE_CONFIG.search;
-  host.innerHTML = cfg.examples.map(
-    (ex) => `<button class="example" type="button" data-example>${escapeHtml(ex)}</button>`
-  ).join("");
+  const g = MODE_GUIDANCE[state.endpointMode] || MODE_GUIDANCE.search;
+  host.innerHTML = `
+    <div class="guidance-head">
+      <svg class="guidance-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <span class="guidance-title">${escapeHtml(g.title)}</span>
+    </div>
+    <p class="guidance-text">${g.summary}</p>
+    <ul class="guidance-tips">
+      ${g.tips.map(t => `<li>${t}</li>`).join("")}
+    </ul>
+  `;
 }
 
 function initChips() {

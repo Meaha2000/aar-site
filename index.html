@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-nerd="off">
 <head>
+<script>
+(function(){try{var p=new URLSearchParams(window.location.search);if(p.get("nerd")==="1"||p.get("nerd")==="on"||p.get("nerd")==="true"){localStorage.setItem("aar.nerd","on");}var s=localStorage.getItem("aar.nerd");var isApi=window.location.pathname.indexOf("/api")!==-1;if(s==="on"||(s!=="off"&&isApi)){document.documentElement.setAttribute("data-nerd","on");}else{document.documentElement.setAttribute("data-nerd","off");}}catch(e){}})();
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anime Akashic Records — Find the Work You Remember. Discover the Work You Want.</title>
@@ -36,7 +39,7 @@
 <link rel="alternate" type="text/markdown" href="/index.md" title="Markdown Version">
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/base.css?v=5">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
 
@@ -59,81 +62,149 @@
 </head>
 <body>
 
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" data-drawer-backdrop hidden aria-hidden="true"></div>
+
+<!-- Mobile Sidebar Drawer -->
+<aside class="sidebar-drawer" id="mobile-menu" data-drawer role="dialog" aria-modal="true" aria-label="Navigation Menu" hidden>
+  <div class="sidebar-drawer__head">
+    <div class="row-tight">
+      <img src="assets/img/logo.png" alt="AAR Logo" width="26" height="26">
+      <span class="wordmark" style="font-size:1.05rem">Menu</span>
+    </div>
+    <button class="drawer-close" type="button" data-drawer-close aria-label="Close navigation menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="sidebar-drawer__nav" aria-label="Mobile Navigation">
+    <a href="/" class="drawer-link" aria-current="page">Overview</a>
+    <a href="/about" class="drawer-link">About AAR</a>
+    <a href="/search" class="drawer-link">Search Demo</a>
+    <a href="/api" class="drawer-link">API Reference</a>
+    <a href="/contact" class="drawer-link">Telegram &amp; Contact</a>
+
+    <div class="drawer-divider nerd-only"></div>
+    <div class="drawer-section-title nerd-only">Agents &amp; CLI</div>
+    <a href="llms.txt" class="drawer-link drawer-link--sub nerd-only">llms.txt (Agent Standard)</a>
+    <a href="index.md" class="drawer-link drawer-link--sub nerd-only">index.md (Markdown)</a>
+  </nav>
+
+  <div class="sidebar-drawer__footer">
+    <!-- Nerd Mode Toggle in Drawer -->
+    <div class="drawer-footer-row">
+      <span class="drawer-footer-label">Nerd Mode</span>
+      <button class="nerd-toggle" type="button" data-nerd-toggle aria-pressed="false" aria-label="Toggle nerd mode">
+        <span class="nerd-toggle__dot" aria-hidden="true"></span>
+        <span data-nerd-label>Nerd Mode</span>
+      </button>
+    </div>
+
+    <!-- Theme Switcher in Drawer (Sun & Moon) -->
+    <div class="drawer-footer-row">
+      <span class="drawer-footer-label">Theme</span>
+      <div class="theme-icon-group" role="group" aria-label="Theme switcher">
+        <button class="theme-icon-btn" type="button" data-set-theme="light" aria-label="Switch to light theme" title="Light theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button class="theme-icon-btn" type="button" data-set-theme="dark" aria-label="Switch to dark theme" title="Dark theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
 <header class="masthead">
   <div class="shell masthead__inner">
-    <a class="masthead__brand" href="/" aria-label="Anime Akashic Records — home">
-      <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="34" height="34">
-      <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
-    </a>
+    <div class="masthead__brand-group">
+      <a class="masthead__brand" href="/" aria-label="Anime Akashic Records — home">
+        <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="30" height="30">
+        <span class="wordmark">Anime Akashic Records <span class="badge-beta">BETA</span></span>
+      </a>
+      <span class="health-badge nerd-only" data-health data-state="ok" role="status" aria-live="polite">Online</span>
+    </div>
+
     <nav class="masthead__nav" aria-label="Primary">
-      <a href="/" aria-current="page" style="color:var(--sakura-deep);font-weight:600">Overview</a>
+      <a href="/" aria-current="page">Overview</a>
       <a href="/about">About</a>
       <a href="/search">Search Demo</a>
       <a href="/api">API Reference</a>
       <a href="/contact">Telegram &amp; Contact</a>
     </nav>
+
     <div class="masthead__tools">
-      <span class="micro" data-health data-state="idle" role="status" aria-live="polite">Checking endpoint…</span>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color theme">Light</button>
+      <!-- Desktop Nerd Mode Toggle -->
+      <button class="nerd-toggle desktop-only" type="button" data-nerd-toggle aria-pressed="false" aria-label="Toggle nerd mode">
+        <span class="nerd-toggle__dot" aria-hidden="true"></span>
+        <span data-nerd-label>Nerd Mode</span>
+      </button>
+
+      <!-- Desktop Theme Switcher (Sun & Moon Icons) -->
+      <div class="theme-icon-group desktop-only" role="group" aria-label="Theme switcher">
+        <button class="theme-icon-btn" type="button" data-set-theme="light" aria-label="Switch to light theme" title="Light theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button class="theme-icon-btn" type="button" data-set-theme="dark" aria-label="Switch to dark theme" title="Dark theme">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+
+      <!-- Mobile Hamburger Trigger -->
+      <button class="drawer-trigger" type="button" data-drawer-open aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
 
 <div class="shell">
-  <div class="leaf" style="grid-template-columns: minmax(0,1fr)">
+  <div class="leaf leaf--single">
     <main class="column" id="main">
 
       <!-- Hero Section -->
-      <section class="section" id="hero" style="padding-top:var(--space-6)">
+      <section class="section section--flush" id="hero">
         <div class="hero">
-          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3);flex-wrap:wrap">
-            <span class="badge badge--sakura">Hybrid Retrieval Engine</span>
-            <span class="badge badge--live">144K+ Indexed Works</span>
-            <span class="badge badge--sakura">Anime &middot; Manga &middot; Light Novels &middot; Visual Novels &middot; Korean Manhwa &middot; Chinese Manhua</span>
-          </div>
+          <span class="badge badge--sakura">144,000+ works &middot; six formats</span>
           <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
-          <div style="font-size:clamp(1.2rem,2.2vw,1.5rem);color:var(--sakura-deep);font-weight:600;margin-bottom:var(--space-3);font-family:var(--serif)">
-            Find the Work You Remember. Discover the Work You Want.
-          </div>
           <p class="lead hero__lede">
-            Anime Akashic Records is a discovery and metadata engine spanning 144,000+ canonical works across anime, manga,
-            light novels, visual novels, Korean manhwa, and Chinese manhua. Describe what you half-remember,
-            or discover something new by describing the story, atmosphere, character dynamics, or themes you&rsquo;re looking for.
-            It surfaces relevant works paired with supporting synopsis excerpts confirming why the title fits.
+            Anime Akashic Records is a discovery engine across anime, manga, light novels, visual novels,
+            Korean manhwa, and Chinese manhua. Describe what you half-remember, or describe the story,
+            atmosphere, or themes you want &mdash; and get back works with synopsis excerpts that show why
+            each one fits.
           </p>
-          <div class="controls" style="display:flex;gap:var(--space-3);flex-wrap:wrap">
-            <a class="btn btn--primary" href="/search" style="font-size:.875rem;padding:.75rem 1.6rem">
+          <div class="stack-actions">
+            <a class="btn btn--primary" href="/search">
               <span>Try the Search Demo</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </a>
-            <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener" style="font-size:.875rem;padding:.75rem 1.6rem">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-              <span>Telegram Bot</span>
+            <a class="btn btn--quiet" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener">
+              <span>Open in Telegram</span>
             </a>
-            <a class="btn btn--quiet" href="/api" style="font-size:.875rem;padding:.75rem 1.6rem">API Reference</a>
           </div>
 
-          <!-- Community Free Access Callout Banner -->
-          <div style="margin-top:var(--space-6);padding:var(--space-4);background:var(--paper-raised);border:1px solid var(--rule);border-left:4px solid var(--moss);border-radius:6px;box-shadow:var(--card-shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)">
-            <div style="font-size:.9375rem;line-height:1.6;color:var(--ink)">
-              <span class="badge" style="background:rgba(126,175,133,0.18);color:var(--moss);border:1px solid var(--moss);font-size:.6875rem;margin-right:.5rem;vertical-align:middle">FREE PUBLIC ACCESS</span>
-              <mark style="background:rgba(230,190,138,0.35);color:var(--ink);padding:.15rem .45rem;border-radius:3px;font-weight:600">The API service is currently free to use with rate limits</mark> &mdash; for public keys, endpoints, and integration guides, visit the <a href="/api" style="color:var(--sakura-deep);font-weight:600;text-decoration:underline">API Documentation</a>.
-              <span class="faint" style="display:block;font-size:.8125rem;margin-top:.25rem">
-                Direct community gateway access with per-IP rate limits (30 req/min for Search, 3 req/min for Ask). No registration or credit card required.
-              </span>
-            </div>
-            <a href="/api" class="btn btn--quiet" style="font-size:.8125rem;padding:.45rem .9rem;white-space:nowrap">
-              <span>API Docs &amp; Keys</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </a>
+          <!-- Technical callout: only in nerd mode -->
+          <div class="nerd-only nerd-callout">
+            <div class="micro">Free public beta &middot; 30 req/min search &middot; 3 req/min ask</div>
+            <p class="faint">
+              Direct gateway at <code>api.aarecords.tech</code>. Public keys, endpoints, and integration
+              guides are in the <a href="/api">API reference</a>.
+            </p>
           </div>
         </div>
       </section>
 
       <!-- Value Props Feature Grid -->
-      <section class="section" id="features" style="padding-top:var(--space-8)">
+      <section class="section section--tight" id="features">
         <div class="section__head">
-          <h2 class="section__title" style="font-size:1.65rem">Engine Capabilities</h2>
+          <h2 class="section__title title--sub">Engine Capabilities</h2>
           <p class="measure muted">Built for dual-path discovery: from half-remembered memories to brand-new favorites.</p>
         </div>
         <div class="feature-grid">
@@ -177,9 +248,9 @@
       </section>
 
       <!-- Example Questions Shelf -->
-      <section class="section" id="examples" style="padding-top:var(--space-8)">
+      <section class="section section--tight" id="examples">
         <div class="section__head">
-          <h2 class="section__title" style="font-size:1.65rem">Example Discovery Queries</h2>
+          <h2 class="section__title title--sub">Example Discovery Queries</h2>
           <p class="measure muted">Hand-picked prompts demonstrating memories, plot descriptions, and tropes &mdash; click any query to run it live in the demo.</p>
         </div>
         <ul class="shelf">
@@ -235,9 +306,9 @@
       </section>
 
       <!-- Discovery Across Personas & Platforms -->
-      <section class="section" id="use-cases" style="padding-top:var(--space-8)">
+      <section class="section section--tight" id="use-cases">
         <div class="section__head">
-          <h2 class="section__title" style="font-size:1.65rem">Built for Discovery Solutions</h2>
+          <h2 class="section__title title--sub">Built for Discovery Solutions</h2>
           <p class="measure muted">Whether powering an AI agent or upgrading a streaming search bar.</p>
         </div>
         <div class="feature-grid">
@@ -263,10 +334,10 @@
       </section>
 
       <!-- Telegram Bot Showcase -->
-      <section class="section" id="telegram" style="padding-top:var(--space-8)">
+      <section class="section section--tight" id="telegram">
         <div class="telegram-card">
           <div class="telegram-card__body">
-            <div style="display:flex;align-items:center;gap:.6rem">
+            <div class="row-badges">
               <span class="badge badge--telegram">Live Telegram Bot</span>
               <span class="badge badge--live">Ready to Chat</span>
             </div>
@@ -275,7 +346,7 @@
               Try the search engine in Telegram. Search plots, test scope filters, or ask questions
               and receive real-time answers with cited excerpts.
             </div>
-            <div class="telegram-card__chips">
+            <div class="telegram-card__chips nerd-only">
               <span class="telegram-chip">/search &lt;query&gt;</span>
               <span class="telegram-chip">/ask &lt;question&gt;</span>
               <span class="telegram-chip">/scope type=manhwa</span>
@@ -283,8 +354,7 @@
             </div>
           </div>
           <div>
-            <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener" style="font-size:.9375rem;padding:.85rem 1.85rem">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+            <a class="btn btn--telegram" href="https://t.me/AnimeAkashicRecords_bot" target="_blank" rel="noopener">
               <span>Launch Telegram Bot</span>
             </a>
           </div>
@@ -292,9 +362,9 @@
       </section>
 
       <!-- Direct API Integration Card -->
-      <section class="section" id="integration" style="padding-top:var(--space-8)">
+      <section class="section section--tight nerd-only" id="integration">
         <div class="section__head">
-          <h2 class="section__title" style="font-size:1.65rem">Start Building</h2>
+          <h2 class="section__title title--sub">Start Building</h2>
           <p class="measure muted">Production REST API with instant free community tier and interactive documentation.</p>
         </div>
 
@@ -302,7 +372,7 @@
           <div class="listing__body">
             <div class="listing__eyebrow">
               <span class="badge badge--sakura">Direct API Gateway</span>
-              <code class="mono" style="font-size:.75rem;color:var(--ink-faint);background:none;border:none">api.aarecords.tech</code>
+              <code class="mono code-inline">api.aarecords.tech</code>
             </div>
             <div class="listing__name">Anime Akashic Records (AAR) API</div>
             <div class="listing__note">
@@ -316,9 +386,9 @@
           </div>
         </a>
 
-        <div style="margin-top:var(--space-6);display:flex;gap:var(--space-3);flex-wrap:wrap">
+        <div class="cta-row">
           <a class="btn btn--quiet" href="/about">About &amp; Core Selling Points &rarr;</a>
-          <a class="btn btn--quiet" href="/api">View Full API Reference &rarr;</a>
+          <a class="btn btn--quiet nerd-only" href="/api">View Full API Reference &rarr;</a>
           <a class="btn btn--quiet" href="/contact">Contact &amp; Telegram &rarr;</a>
         </div>
       </section>
@@ -330,20 +400,20 @@
 <footer class="footer">
   <div class="shell footer__grid">
     <div>
-      <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)">
+      <div class="row-tight micro-label">
         <img src="assets/img/logo.png" alt="AAR Logo" class="brand-logo" width="28" height="28">
         <span class="wordmark">Anime Akashic Records</span>
       </div>
-      <p class="faint" style="font-size:.875rem;max-width:44ch">
+      <p class="faint note-sm">
         Semantic and plot retrieval across stories you half-remember and works you want to explore. Anime, manga, light novels, visual novels, Korean manhwa, and Chinese manhua unified in one canonical index.
       </p>
-      <div style="margin-top:var(--space-3);font-size:.8125rem;color:var(--ink-soft);line-height:1.6">
+      <div class="footer-note">
         Have a question, collaboration idea, bug report, or feature suggestion?<br>
-        Reach out directly at: <a href="mailto:contact@aarecords.tech" style="color:var(--sakura-deep);font-weight:600">contact@aarecords.tech</a>
+        Reach out directly at: <a href="mailto:contact@aarecords.tech">contact@aarecords.tech</a>
       </div>
     </div>
     <div>
-      <div class="micro" style="margin-bottom:var(--space-2)">Documentation</div>
+      <div class="micro micro-label">Documentation</div>
       <div class="stack-2">
         <a href="/">Overview</a>
         <a href="/about">About AAR</a>
@@ -352,8 +422,8 @@
         <a href="/contact">Telegram &amp; Contact</a>
       </div>
     </div>
-    <div>
-      <div class="micro" style="margin-bottom:var(--space-2)">Agents &amp; CLI</div>
+    <div class="nerd-only">
+      <div class="micro micro-label">Agents &amp; CLI</div>
       <div class="stack-2">
         <a href="llms.txt">llms.txt (Agent Standard)</a>
         <a href="index.md">index.md (Markdown)</a>
@@ -361,9 +431,9 @@
       </div>
     </div>
   </div>
-  <div class="shell" style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3)">
-    <span class="faint" style="font-size:.8125rem">&copy; Anime Akashic Records</span>
-    <code class="mono" style="font-size:.8125rem;color:var(--ink-faint);background:none;border:none">$ curl -s https://aarecords.tech/llms.txt</code>
+  <div class="shell footer-base">
+    <span class="faint footer-base__copy">&copy; Anime Akashic Records</span>
+    <code class="mono nerd-only code-plain">$ curl -s https://aarecords.tech/llms.txt</code>
   </div>
 </footer>
 

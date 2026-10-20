@@ -13,6 +13,7 @@
   --ink:        #2D1923; /* rich deep plum ink for headings + primary text */
   --ink-soft:   #5C4450; /* plum-tinted secondary prose */
   --ink-faint:  #634856; /* tertiary labels, meta info (>=4.5:1 WCAG AA compliant) */
+  --ink-mute:   #634856; /* alias of ink-faint: quiet technical labels (>=4.5:1) */
 
   --rule:        #E8DDD7; /* delicate hairlines, table borders, dividers */
   --rule-strong: #D5C2BA; /* structural prominent rules */
@@ -25,7 +26,7 @@
   --sakura-wash: rgba(224, 122, 138, 0.08); /* soft blossom tint */
   --sakura-glow: rgba(45, 25, 35, 0.08); /* soft elevation glow */
 
-  --accent-gradient: linear-gradient(135deg, #B83A50 0%, #E07A8A 100%);
+  --accent-gradient: linear-gradient(135deg, #9E2B3E 0%, #B83A50 100%);
   --btn-shadow: 0 4px 14px rgba(45, 25, 35, 0.12);
   --card-shadow: 0 6px 24px rgba(45, 25, 35, 0.05);
 
@@ -73,6 +74,7 @@
   --ink:        #FDF2F5; /* ivory sakura white headings & text */
   --ink-soft:   #CBB0BE; /* soft rose-plum ash prose */
   --ink-faint:  #A88E9C; /* tertiary labels (>=4.5:1 WCAG AA) */
+  --ink-mute:   #A88E9C; /* alias of ink-faint: quiet technical labels */
 
   --rule:        #3A1F2F; /* dark plum borders */
   --rule-strong: #542B43; /* prominent rules */
@@ -85,7 +87,7 @@
   --sakura-wash: rgba(229, 131, 147, 0.12);
   --sakura-glow: rgba(0, 0, 0, 0.4);
 
-  --accent-gradient: linear-gradient(135deg, #E07A8A 0%, #C44C60 100%);
+  --accent-gradient: linear-gradient(135deg, #B83048 0%, #902034 100%);
   --btn-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   --card-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
 

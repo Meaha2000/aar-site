@@ -10,7 +10,7 @@
   align-items: center;
   gap: .35rem;
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: .75rem;
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -35,7 +35,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--mono);
-  font-size: .625rem;
+  font-size: .6875rem;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -109,13 +109,13 @@
 }
 
 .btn--telegram {
-  background: #2AABEE;
+  background: #0077B5;
   color: #ffffff !important;
   border: 1px solid transparent;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .btn--telegram:hover {
-  background: #229ED9;
+  background: #00669C;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   transform: translateY(-2px);
   color: #ffffff !important;
@@ -514,7 +514,7 @@
 /* ---- Scope chip ---------------------------------------------------------- */
 
 .chip {
-  font-family: var(--mono); font-size: .6875rem; font-weight: 600;
+  font-family: var(--mono); font-size: .75rem; font-weight: 600;
   letter-spacing: .08em; text-transform: uppercase;
   color: var(--ink-soft);
   background: var(--paper-deep);
@@ -621,6 +621,8 @@
   background: var(--paper-deep);
   border: 1px solid var(--rule);
   transition: all var(--dur-quiet) ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 [data-health]::before {
   content: "";
@@ -658,9 +660,12 @@
 
 .shelf {
   list-style: none;
-  margin: 0;
+  margin: var(--space-4) 0 0;
   padding: 0;
-  border-top: 1px solid var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
 }
 .shelf > li {
   list-style: none !important;
@@ -726,6 +731,18 @@
     padding: .9rem .75rem;
   }
   .shelf__go { display: none; }
+}
+@media (max-width: 520px) {
+  .shelf__item {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    grid-template-areas:
+      "pos q"
+      ". tag";
+    row-gap: .35rem;
+  }
+  .shelf__pos { grid-area: pos; }
+  .shelf__q { grid-area: q; }
+  .shelf__tag { grid-area: tag; justify-self: start; }
 }
 
 /* ---- Vertical Stack for Footer Links ------------------------------------- */
@@ -861,7 +878,7 @@
   gap: .35rem;
 }
 .advanced-chips .chip {
-  font-size: .6875rem;
+  font-size: .75rem;
   padding: .35rem .65rem;
 }
 .advanced-chips .chip.is-active,
@@ -950,10 +967,11 @@
   font-family: var(--serif);
   font-size: clamp(1.35rem, 2.5vw, 1.75rem);
   font-weight: 600;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.005em;
+  word-spacing: 0.03em;
   color: var(--ink);
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.28;
 }
 
 .catalog-contribute__badge {
@@ -1199,21 +1217,21 @@
 .submission-card {
   padding: var(--space-4) var(--space-5);
   border: 1px solid var(--rule-strong);
-  border-left: 3px solid var(--sakura-deep);
+  border-top: 2px solid var(--sakura-deep);
   border-radius: 4px;
   background: var(--paper-deep);
 }
 .submission-card--success {
-  border-left-color: var(--moss);
+  border-top-color: var(--moss);
 }
 .submission-card--upvote {
-  border-left-color: var(--sakura-deep);
+  border-top-color: var(--sakura-deep);
 }
 .submission-card--catalog {
-  border-left-color: var(--amber);
+  border-top-color: var(--amber);
 }
 .submission-card--error {
-  border-left-color: var(--rust);
+  border-top-color: var(--rust);
 }
 
 .upvote-badge {
