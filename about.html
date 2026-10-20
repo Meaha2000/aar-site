@@ -300,7 +300,105 @@
           </div>
         </div>
 
-                <!-- Commercial Target Audience (Restructured by Commercial Use Case) -->
+                <!-- Pre-Mapped Partner IDs & Cross-Platform Bridge -->
+        <div style="margin-bottom:var(--space-8);background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-6);box-shadow:var(--card-shadow)">
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-2)">
+            <span class="badge" style="background:var(--sakura);color:#fff;font-weight:700;font-size:.75rem">Universal Interoperability</span>
+            <h2 style="font-size:clamp(1.5rem,2.8vw,2rem);margin:0">Pre-Mapped External Database IDs</h2>
+          </div>
+          <p style="font-size:1rem;line-height:1.7;color:var(--ink);margin-bottom:var(--space-4)">
+            AAR acts as an open, universal entity resolution bridge across the entire East Asian pop culture ecosystem. Every work is pre-mapped in our canonical catalog with its corresponding native identifiers across the <strong>7 major global anime, manga, and visual novel databases</strong>:
+          </p>
+
+          <div style="overflow-x:auto;margin-bottom:var(--space-4)">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:25%">Database / Platform</th>
+                  <th style="width:22%">Target Formats</th>
+                  <th style="width:20%">API Key Field</th>
+                  <th style="width:18%">Mapped Works</th>
+                  <th style="width:15%">Upstream URL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>AAR Native Unified ID</strong></td>
+                  <td>Anime, Manga, LNs, VNs, Manhwa, Manhua</td>
+                  <td><code class="mono">aar_id</code> (e.g. <code>aar_1</code>)</td>
+                  <td><strong>144,698 works (100%)</strong></td>
+                  <td>Native Canonical Entity</td>
+                </tr>
+                <tr>
+                  <td><strong>MyAnimeList (MAL)</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">mal_id</code></td>
+                  <td><strong>114,408 works</strong></td>
+                  <td><code class="mono">myanimelist.net/anime/{id}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>AniList</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anilist_id</code></td>
+                  <td><strong>56,007 works</strong></td>
+                  <td><code class="mono">anilist.co/anime/{id}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Anime-Planet</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anime_planet_slug</code></td>
+                  <td><strong>25,215 works</strong></td>
+                  <td><code class="mono">anime-planet.com/anime/{slug}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Kitsu</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">kitsu_id</code></td>
+                  <td><strong>20,827 works</strong></td>
+                  <td><code class="mono">kitsu.app/anime/{id}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>VNDB (Visual Novel Database)</strong></td>
+                  <td>Visual Novels</td>
+                  <td><code class="mono">vndb_id</code></td>
+                  <td><strong>20,002 works</strong></td>
+                  <td><code class="mono">vndb.org/{id}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>aniSearch</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anisearch_id</code></td>
+                  <td><strong>19,653 works</strong></td>
+                  <td><code class="mono">anisearch.com/anime/{id}</code></td>
+                </tr>
+                <tr>
+                  <td><strong>AniDB</strong></td>
+                  <td>Anime</td>
+                  <td><code class="mono">anidb_id</code></td>
+                  <td><strong>13,383 works</strong></td>
+                  <td><code class="mono">anidb.net/anime/{id}</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="feature-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-4)">
+            <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div style="font-weight:700;margin-bottom:.3rem;color:var(--sakura-deep)">Zero ID Translation Friction</div>
+              <p class="faint" style="font-size:.875rem;margin:0;line-height:1.5">
+                Already using MAL, AniList, or VNDB IDs in your existing application? Pass them directly to AAR (e.g. <code>mal:9253</code>, <code>al:9253</code>, <code>vndb:v17</code>, <code>aar_9253</code>). No title parsing or fuzzy matching required.
+              </p>
+            </div>
+            <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+              <div style="font-weight:700;margin-bottom:.3rem;color:var(--sakura-deep)">Instant Reverse Metadata Pairing</div>
+              <p class="faint" style="font-size:.875rem;margin:0;line-height:1.5">
+                Every AAR search and recommendation response returns pre-mapped partner IDs and ready-to-use upstream URLs, allowing you to fetch live episode schedules and user reviews without secondary searches.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commercial Target Audience (Restructured by Commercial Use Case) -->
         <div style="margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">Who Is Anime Akashic Records For?</h2>
           <div class="feature-grid">

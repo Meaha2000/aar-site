@@ -256,6 +256,104 @@
           </p>
         </div>
 
+        <!-- Universal Pre-Mapped External IDs & Cross-Platform Bridge -->
+        <div style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-5);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:.5rem">
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+              <span class="badge" style="background:var(--sakura);color:#fff;font-weight:700">Pre-Mapped Database IDs</span>
+              <span class="badge" style="background:rgba(212,122,138,0.08);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.6875rem">7 Industry Databases</span>
+            </div>
+            <span class="faint" style="font-size:.75rem">Zero Fuzzy-Matching Overhead</span>
+          </div>
+
+          <h2 style="font-size:1.35rem;font-weight:700;margin:0 0 .35rem 0;color:var(--ink)">
+            Universal Cross-Platform ID Mapping
+          </h2>
+          <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0 0 var(--space-4) 0;max-width:80ch">
+            Every work in AAR is pre-mapped in our canonical SQLite database to its corresponding native IDs across 7 global industry platforms. You can query AAR using your existing platform IDs, and every API response returns pre-resolved partner IDs and direct canonical URLs.
+          </p>
+
+          <div style="overflow-x:auto;margin-bottom:var(--space-4)">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:25%">Database / Platform</th>
+                  <th style="width:20%">Target Media</th>
+                  <th style="width:20%">Response JSON Field</th>
+                  <th style="width:18%">Mapped Works</th>
+                  <th style="width:17%">Example Input URI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>AAR Native Unified ID</strong></td>
+                  <td>All 6 Formats</td>
+                  <td><code class="mono">aar_id</code></td>
+                  <td><strong>144,698 works (100%)</strong></td>
+                  <td><code class="mono">aar_9253</code></td>
+                </tr>
+                <tr>
+                  <td><strong>MyAnimeList (MAL)</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">mal_id</code></td>
+                  <td><strong>114,408 works</strong></td>
+                  <td><code class="mono">mal:9253</code></td>
+                </tr>
+                <tr>
+                  <td><strong>AniList</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anilist_id</code></td>
+                  <td><strong>56,007 works</strong></td>
+                  <td><code class="mono">al:9253</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Anime-Planet</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anime_planet_slug</code></td>
+                  <td><strong>25,215 works</strong></td>
+                  <td><code class="mono">ap:cowboy-bebop</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Kitsu</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">kitsu_id</code></td>
+                  <td><strong>20,827 works</strong></td>
+                  <td><code class="mono">kitsu:1</code></td>
+                </tr>
+                <tr>
+                  <td><strong>VNDB (Visual Novel Database)</strong></td>
+                  <td>Visual Novels</td>
+                  <td><code class="mono">vndb_id</code></td>
+                  <td><strong>20,002 works</strong></td>
+                  <td><code class="mono">vndb:v17</code></td>
+                </tr>
+                <tr>
+                  <td><strong>aniSearch</strong></td>
+                  <td>Anime &amp; Manga</td>
+                  <td><code class="mono">anisearch_id</code></td>
+                  <td><strong>19,653 works</strong></td>
+                  <td><code class="mono">anisearch:1</code></td>
+                </tr>
+                <tr>
+                  <td><strong>AniDB</strong></td>
+                  <td>Anime</td>
+                  <td><code class="mono">anidb_id</code></td>
+                  <td><strong>13,383 works</strong></td>
+                  <td><code class="mono">anidb:23</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);font-size:.85rem;line-height:1.6;color:var(--ink-soft)">
+            <strong>Dual-Direction Interoperability:</strong>
+            <ul style="margin:.3rem 0 0 1.2rem;padding:0">
+              <li><strong>Input Resolution:</strong> Endpoints like <code class="mono">GET /recommend/{id}</code> and <code class="mono">POST /recommend (seed_work_ids)</code> accept native AAR IDs (<code>aar_9253</code>) or prefixed partner IDs (<code>mal:9253</code>, <code>al:9253</code>, <code>vndb:v17</code>) out of the box.</li>
+              <li><strong>Output Enrichment:</strong> Every work object in <code class="mono">/search</code>, <code class="mono">/ask</code>, and <code class="mono">/recommend</code> responses contains all mapped partner IDs plus a ready-to-use <code class="mono">sources</code> array of URLs.</li>
+            </ul>
+          </div>
+        </div>
+
         <!-- Model Context Protocol (MCP) Integration Section -->
         <div style="background:var(--paper-raised);border:1px solid var(--sakura);border-radius:8px;padding:var(--space-5);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:.5rem">

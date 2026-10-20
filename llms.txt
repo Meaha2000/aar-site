@@ -26,6 +26,21 @@
 - `query_breakdown: false` (Default): Native hybrid pipeline fusing ScaNN-cascade dense vectors (Qdrant int8), FTS5 BM25, in-memory character synergy aggregation, and deep Cross-Encoder reranking (~500ms) without LLM delay.
 - `query_breakdown: true` (Opt-in): Decomposes compound, multi-part, or comparative queries via an LLM before vector retrieval (adds ~400-800ms).
 
+### Universal Pre-Mapped External Database IDs & Cross-Platform Bridge:
+AAR functions as a universal cross-platform entity resolution bridge across the 7 major global anime, manga, and visual novel databases. Every work in AAR is pre-mapped and returned with its native platform identifiers:
+- **AAR Native Unified ID (`aar_id`):** 144,698 works (100% full coverage, e.g. `aar_1`, `aar_9253`)
+- **MyAnimeList (`mal_id`):** 114,408 works mapped (Anime & Manga)
+- **AniList (`anilist_id`):** 56,007 works mapped (Anime & Manga)
+- **Anime-Planet (`anime_planet_slug`):** 25,215 works mapped (Anime & Manga)
+- **Kitsu (`kitsu_id`):** 20,827 works mapped (Anime & Manga)
+- **VNDB (`vndb_id`):** 20,002 works mapped (Visual Novel Database)
+- **aniSearch (`anisearch_id`):** 19,653 works mapped (Anime & Manga)
+- **AniDB (`anidb_id`):** 13,383 works mapped (Anime)
+
+**Developer & AI Agent Integration Advantages:**
+1. **Direct Input Queries:** Any recommendation endpoint (`GET /recommend/{id}` or `POST /recommend`) accepts partner ID prefixes out of the box (`mal:9253`, `al:9253`, `vndb:v17`, `aar_9253`) with zero manual ID conversion.
+2. **Instant Reverse Pairing:** All search and recommendation payloads include all mapped partner IDs and pre-built canonical URLs (`sources` array), allowing developers to pair AAR's semantic discovery directly with Jikan, AniList GraphQL, or Kitsu without secondary searches.
+
 ### Core Architecture & Key Strengths:
 - **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
 - **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
