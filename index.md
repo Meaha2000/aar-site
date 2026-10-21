@@ -189,8 +189,9 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `question` | `string` | **Yes** | — | Natural language description, plot summary, character dynamic, or trope. |
-| `limit` | `integer` | No | `8` | Number of ranked works to return (clamped between 1 and 50). |
+| `limit` | `integer` | No | `100` | Number of ranked works to return (clamped between 1 and 100). |
 | `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` (semantic vectors + keyword search + rerank) or `"semantic"` (dense vector search + rerank). |
+| `rerank` | `boolean` | No | `true` | Controls Cross-Encoder reranking. When `true` (default), applies deep relevance scoring. Pass `false` (or `use_rerank: false`) to skip reranking for ultra-low latency (~100–250ms). |
 | `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes and refines the query via LLM. When `false`, embeds directly as-is to minimize latency. |
 | `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement and proceeding directly to vector embedding. |
 | `include` | `array[string]` | No | `[]` | Extra relational fields to include: `["staff", "characters", "relations"]`. |
@@ -267,7 +268,7 @@ Grounded conversational question-answering with citation synthesis for AI agents
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `question` | `string` | **Yes** | — | Question regarding an anime premise, comparison, or plot inquiry. |
-| `limit` | `integer` | No | `8` | Number of ranked works to return (clamped between 1 and 50). |
+| `limit` | `integer` | No | `100` | Number of ranked works to return (clamped between 1 and 100). |
 | `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` or `"semantic"`. |
 | `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes query via LLM. When `false`, embeds query directly as-is to minimize latency. |
 | `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement. |

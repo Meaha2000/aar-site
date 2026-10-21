@@ -1,1 +1,2906 @@
-{"openapi":"3.1.0","info":{"title":"AnimeAkashicRecords (AAR) Search & Retrieval Engine","description":"Industrial-Grade, Ultra-Low-Latency (~500ms) Neural Hybrid Search & Retrieval Engine over Anime, Manga, Light Novels, and Visual Novels.\n\n### Recommended Integration Profiles & Use Cases:\n- **Streaming Services & Media Catalogs:** Powers instant search-as-you-type and discovery across titles, obscure character traits, and vague plot descriptions in ~500ms.\n- **AI Chatbots & Conversational RAG:** Provides high-density context blocks with exact provenance, character synergy, and structured metadata to prevent hallucinations.\n- **Autonomous AI Agents:** Operates as a fast, deterministic tool with strict SQL scope filtering (years, formats, adult tags) and zero conversational bloat.\n\n### Query Breakdown & Performance Modes:\n- **Default Mode (`query_breakdown=false`):** Blazing-fast native hybrid retrieval fusing ScaNN-cascade dense vectors (int8 Qdrant), FTS5 BM25, and deep Cross-Encoder reranking without LLM overhead (~500ms).\n- **Optional LLM Breakdown (`query_breakdown=true`):** Pass `query_breakdown: true` to decompose complex, multi-part, or comparative queries via an LLM prior to vector retrieval.","version":"1.2.0"},"paths":{"/health":{"get":{"summary":"Health","operationId":"health_health_get","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Health Health Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/stats":{"get":{"summary":"Stats","description":"Public catalog statistics, media counts, and index health.\nExtended cluster and model configs are returned for verified admin keys.","operationId":"stats_stats_get","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Stats Stats Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/search":{"post":{"summary":"Search Post","description":"Ranked retrieval endpoint.\nanswer=true is restricted to admin keys only.","operationId":"search_post_search_post","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SearchRequest"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Search Post Search Post"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"get":{"summary":"Search Get","operationId":"search_get_search_get","parameters":[{"name":"q","in":"query","required":true,"schema":{"type":"string","minLength":1,"maxLength":2000,"description":"Search query or question","title":"Q"},"description":"Search query or question"},{"name":"limit","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","maximum":300,"minimum":1},{"type":"null"}],"description":"Max documents to return","title":"Limit"},"description":"Max documents to return"},{"name":"nsfw","in":"query","required":false,"schema":{"type":"boolean","description":"Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.","default":false,"title":"Nsfw"},"description":"Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding."},{"name":"query_breakdown","in":"query","required":false,"schema":{"type":"boolean","description":"Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.","default":false,"title":"Query Breakdown"},"description":"Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false."},{"name":"mode","in":"query","required":false,"schema":{"type":"string","description":"Search mode: 'hybrid' or 'semantic'","default":"hybrid","title":"Mode"},"description":"Search mode: 'hybrid' or 'semantic'"},{"name":"include_text","in":"query","required":false,"schema":{"type":"boolean","description":"Include passage text in chunks","default":true,"title":"Include Text"},"description":"Include passage text in chunks"},{"name":"include","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)","title":"Include"},"description":"Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)"},{"name":"adult","in":"query","required":false,"schema":{"anyOf":[{"type":"boolean"},{"type":"null"}],"description":"Filter adult content (true/false)","title":"Adult"},"description":"Filter adult content (true/false)"},{"name":"type","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)","title":"Type"},"description":"Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)"},{"name":"genre","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by genre (repeatable or comma-separated)","title":"Genre"},"description":"Filter by genre (repeatable or comma-separated)"},{"name":"tag","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by tag (repeatable or comma-separated)","title":"Tag"},"description":"Filter by tag (repeatable or comma-separated)"},{"name":"theme","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by theme (repeatable or comma-separated)","title":"Theme"},"description":"Filter by theme (repeatable or comma-separated)"},{"name":"studio","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by studio (repeatable or comma-separated)","title":"Studio"},"description":"Filter by studio (repeatable or comma-separated)"},{"name":"year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Exact release year","title":"Year"},"description":"Exact release year"},{"name":"min_year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Minimum release year","title":"Min Year"},"description":"Minimum release year"},{"name":"max_year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Maximum release year","title":"Max Year"},"description":"Maximum release year"},{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)","title":"Status"},"description":"Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)"},{"name":"staff","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by staff/person names (repeatable or comma-separated)","title":"Staff"},"description":"Filter by staff/person names (repeatable or comma-separated)"},{"name":"character","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by character names (repeatable or comma-separated)","title":"Character"},"description":"Filter by character names (repeatable or comma-separated)"},{"name":"author","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by author names (repeatable or comma-separated)","title":"Author"},"description":"Filter by author names (repeatable or comma-separated)"},{"name":"director","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by director names (repeatable or comma-separated)","title":"Director"},"description":"Filter by director names (repeatable or comma-separated)"},{"name":"composer","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by composer/music names (repeatable or comma-separated)","title":"Composer"},"description":"Filter by composer/music names (repeatable or comma-separated)"},{"name":"voice_actor","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by voice actor names (repeatable or comma-separated)","title":"Voice Actor"},"description":"Filter by voice actor names (repeatable or comma-separated)"},{"name":"title","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by exact/partial titles (repeatable or comma-separated)","title":"Title"},"description":"Filter by exact/partial titles (repeatable or comma-separated)"},{"name":"min_score","in":"query","required":false,"schema":{"anyOf":[{"type":"number"},{"type":"null"}],"description":"Minimum score (0-10)","title":"Min Score"},"description":"Minimum score (0-10)"},{"name":"answer","in":"query","required":false,"schema":{"type":"boolean","description":"Compose prose answer using LLM (admin only)","default":false,"title":"Answer"},"description":"Compose prose answer using LLM (admin only)"},{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Search Get Search Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/ask":{"post":{"summary":"Ask","description":"Mirror of /search with AI answer composition permanently enabled.\nReturns ranked documents, chunks, relations, and synthesized answer with citations.","operationId":"ask_ask_post","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SearchRequest"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Ask Ask Post"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"get":{"summary":"Ask Get","description":"GET mirror of /search with AI answer composition permanently enabled.","operationId":"ask_get_ask_get","parameters":[{"name":"q","in":"query","required":true,"schema":{"type":"string","minLength":1,"maxLength":2000,"description":"Search query or question","title":"Q"},"description":"Search query or question"},{"name":"limit","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","maximum":300,"minimum":1},{"type":"null"}],"description":"Max documents to return","title":"Limit"},"description":"Max documents to return"},{"name":"nsfw","in":"query","required":false,"schema":{"type":"boolean","description":"Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.","default":false,"title":"Nsfw"},"description":"Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding."},{"name":"query_breakdown","in":"query","required":false,"schema":{"type":"boolean","description":"Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.","default":false,"title":"Query Breakdown"},"description":"Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false."},{"name":"mode","in":"query","required":false,"schema":{"type":"string","description":"Search mode: 'hybrid' or 'semantic'","default":"hybrid","title":"Mode"},"description":"Search mode: 'hybrid' or 'semantic'"},{"name":"include_text","in":"query","required":false,"schema":{"type":"boolean","description":"Include passage text in chunks","default":true,"title":"Include Text"},"description":"Include passage text in chunks"},{"name":"include","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)","title":"Include"},"description":"Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)"},{"name":"adult","in":"query","required":false,"schema":{"anyOf":[{"type":"boolean"},{"type":"null"}],"description":"Filter adult content (true/false)","title":"Adult"},"description":"Filter adult content (true/false)"},{"name":"type","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)","title":"Type"},"description":"Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)"},{"name":"genre","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by genre (repeatable or comma-separated)","title":"Genre"},"description":"Filter by genre (repeatable or comma-separated)"},{"name":"tag","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by tag (repeatable or comma-separated)","title":"Tag"},"description":"Filter by tag (repeatable or comma-separated)"},{"name":"theme","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by theme (repeatable or comma-separated)","title":"Theme"},"description":"Filter by theme (repeatable or comma-separated)"},{"name":"studio","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by studio (repeatable or comma-separated)","title":"Studio"},"description":"Filter by studio (repeatable or comma-separated)"},{"name":"year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Exact release year","title":"Year"},"description":"Exact release year"},{"name":"min_year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Minimum release year","title":"Min Year"},"description":"Minimum release year"},{"name":"max_year","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Maximum release year","title":"Max Year"},"description":"Maximum release year"},{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"array","items":{"type":"string"}},{"type":"null"}],"description":"Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)","title":"Status"},"description":"Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)"},{"name":"min_score","in":"query","required":false,"schema":{"anyOf":[{"type":"number"},{"type":"null"}],"description":"Minimum score (0-10)","title":"Min Score"},"description":"Minimum score (0-10)"},{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"object","additionalProperties":true,"title":"Response Ask Get Ask Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/recommend":{"post":{"summary":"Recommend Post","description":"Content discovery & recommendation endpoint based on vector centroid,\nfranchise/sequel suppression, media type scoping, and tag/genre overlap.","operationId":"recommend_post_recommend_post","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecommendRequest"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecommendResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/recommend/{work_id}":{"get":{"summary":"Recommend Get","description":"Quick recommendation endpoint for a single work ID.","operationId":"recommend_get_recommend__work_id__get","parameters":[{"name":"work_id","in":"path","required":true,"schema":{"type":"string","title":"Work Id"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":50,"minimum":1,"description":"Max recommendations to return","default":10,"title":"Limit"},"description":"Max recommendations to return"},{"name":"target_scope","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Optional target media type (e.g. 'anime')","title":"Target Scope"},"description":"Optional target media type (e.g. 'anime')"},{"name":"exclude_franchise","in":"query","required":false,"schema":{"type":"boolean","description":"Whether to suppress sequels and franchise siblings","default":true,"title":"Exclude Franchise"},"description":"Whether to suppress sequels and franchise siblings"},{"name":"adult","in":"query","required":false,"schema":{"type":"boolean","description":"Include adult content","default":false,"title":"Adult"},"description":"Include adult content"},{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RecommendResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/suggest":{"post":{"summary":"Create Contribution","description":"Submit a new user contribution or suggestion (\"اقتراحات أو إضافات\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.","operationId":"create_contribution_suggest_post","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionCreateRequest"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/contributions":{"post":{"summary":"Create Contribution","description":"Submit a new user contribution or suggestion (\"اقتراحات أو إضافات\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.","operationId":"create_contribution_contributions_post","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionCreateRequest"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/suggest/queue":{"get":{"summary":"Get Contributions Queue","description":"Retrieve submitted user contributions and suggestions ordered by popularity (upvotes).","operationId":"get_contributions_queue_suggest_queue_get","parameters":[{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by status: PENDING, APPROVED, REJECTED, or empty for all","default":"PENDING","title":"Status"},"description":"Filter by status: PENDING, APPROVED, REJECTED, or empty for all"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"description":"Max items to retrieve","default":50,"title":"Limit"},"description":"Max items to retrieve"},{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionQueueResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/contributions/queue":{"get":{"summary":"Get Contributions Queue","description":"Retrieve submitted user contributions and suggestions ordered by popularity (upvotes).","operationId":"get_contributions_queue_contributions_queue_get","parameters":[{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by status: PENDING, APPROVED, REJECTED, or empty for all","default":"PENDING","title":"Status"},"description":"Filter by status: PENDING, APPROVED, REJECTED, or empty for all"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"description":"Max items to retrieve","default":50,"title":"Limit"},"description":"Max items to retrieve"},{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContributionQueueResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/suggest/grouped":{"get":{"summary":"Get Grouped Contributions","description":"Export or retrieve all user submissions clustered into groups (by work/title)\nwith aggregated custom descriptions, alternative titles, and upvotes saved to contributions_grouped.json.","operationId":"get_grouped_contributions_suggest_grouped_get","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GroupedContributionsResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/contributions/grouped":{"get":{"summary":"Get Grouped Contributions","description":"Export or retrieve all user submissions clustered into groups (by work/title)\nwith aggregated custom descriptions, alternative titles, and upvotes saved to contributions_grouped.json.","operationId":"get_grouped_contributions_contributions_grouped_get","parameters":[{"name":"x-api-key","in":"header","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"X-Api-Key"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GroupedContributionsResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"ContributionCreateRequest":{"properties":{"contribution_type":{"$ref":"#/components/schemas/ContributionType","description":"Type: ADD_WORK, ADD_ALIAS, EDIT_METADATA, FEATURE_OR_VIBE"},"media_type":{"$ref":"#/components/schemas/MediaType","description":"Media type: anime, manga, visual_novel, light_novel, manhwa, manhua","default":"anime"},"title":{"type":"string","maxLength":250,"minLength":1,"title":"Title","description":"Title of the work or suggestion summary"},"target_work_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Target Work Id","description":"Target work ID (required for ADD_ALIAS or EDIT_METADATA)"},"alt_titles":{"items":{"type":"string"},"type":"array","maxItems":15,"title":"Alt Titles","description":"Alternative names or aliases"},"synopsis_or_note":{"anyOf":[{"type":"string","maxLength":3000},{"type":"null"}],"title":"Synopsis Or Note","description":"Notes, reason, or curator remarks"},"custom_description":{"anyOf":[{"type":"string","maxLength":10000},{"type":"null"}],"title":"Custom Description","description":"User-provided synopsis, review, or detailed custom description of the work"},"suggested_tags":{"items":{"type":"string"},"type":"array","maxItems":30,"title":"Suggested Tags","description":"Tags, themes, or genres"},"reference_url":{"anyOf":[{"type":"string","maxLength":500},{"type":"null"}],"title":"Reference Url","description":"MAL, AniList, VNDB, or official link"},"submitter_id":{"anyOf":[{"type":"string","maxLength":100},{"type":"null"}],"title":"Submitter Id","default":"anonymous"}},"type":"object","required":["contribution_type","title"],"title":"ContributionCreateRequest"},"ContributionItem":{"properties":{"id":{"type":"integer","title":"Id"},"contribution_type":{"type":"string","title":"Contribution Type"},"media_type":{"type":"string","title":"Media Type"},"title":{"type":"string","title":"Title"},"target_work_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Target Work Id"},"alt_titles":{"items":{"type":"string"},"type":"array","title":"Alt Titles"},"synopsis_or_note":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Synopsis Or Note"},"custom_description":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Custom Description"},"suggested_tags":{"items":{"type":"string"},"type":"array","title":"Suggested Tags"},"reference_url":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Reference Url"},"submitter_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Submitter Id"},"status":{"type":"string","title":"Status"},"upvotes_count":{"type":"integer","title":"Upvotes Count"},"created_at":{"type":"integer","title":"Created At"},"updated_at":{"type":"integer","title":"Updated At"}},"type":"object","required":["id","contribution_type","media_type","title","target_work_id","alt_titles","synopsis_or_note","suggested_tags","reference_url","submitter_id","status","upvotes_count","created_at","updated_at"],"title":"ContributionItem"},"ContributionQueueResponse":{"properties":{"total":{"type":"integer","title":"Total"},"status_filter":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Status Filter"},"submissions":{"items":{"$ref":"#/components/schemas/ContributionItem"},"type":"array","title":"Submissions"}},"type":"object","required":["total","status_filter","submissions"],"title":"ContributionQueueResponse"},"ContributionResponse":{"properties":{"status":{"type":"string","title":"Status"},"submission_id":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Submission Id"},"canonical_work_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Canonical Work Id"},"upvotes_count":{"type":"integer","title":"Upvotes Count","default":1},"message":{"type":"string","title":"Message"}},"type":"object","required":["status","message"],"title":"ContributionResponse"},"ContributionType":{"type":"string","enum":["ADD_WORK","ADD_ALIAS","EDIT_METADATA","FEATURE_OR_VIBE"],"title":"ContributionType"},"GroupedContributionCluster":{"properties":{"cluster_key":{"type":"string","title":"Cluster Key"},"canonical_work_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Canonical Work Id"},"primary_title":{"type":"string","title":"Primary Title"},"media_type":{"type":"string","title":"Media Type"},"total_upvotes":{"type":"integer","title":"Total Upvotes"},"submission_count":{"type":"integer","title":"Submission Count"},"alternative_titles":{"items":{"type":"string"},"type":"array","title":"Alternative Titles"},"custom_descriptions":{"items":{"additionalProperties":true,"type":"object"},"type":"array","title":"Custom Descriptions"},"suggested_tags":{"items":{"type":"string"},"type":"array","title":"Suggested Tags"},"reference_urls":{"items":{"type":"string"},"type":"array","title":"Reference Urls"},"status":{"type":"string","title":"Status"},"first_submitted":{"type":"integer","title":"First Submitted"},"last_updated":{"type":"integer","title":"Last Updated"}},"type":"object","required":["cluster_key","primary_title","media_type","total_upvotes","submission_count","alternative_titles","custom_descriptions","suggested_tags","reference_urls","status","first_submitted","last_updated"],"title":"GroupedContributionCluster"},"GroupedContributionsResponse":{"properties":{"total_clusters":{"type":"integer","title":"Total Clusters"},"total_submissions":{"type":"integer","title":"Total Submissions"},"export_file_path":{"type":"string","title":"Export File Path"},"clusters":{"items":{"$ref":"#/components/schemas/GroupedContributionCluster"},"type":"array","title":"Clusters"}},"type":"object","required":["total_clusters","total_submissions","export_file_path","clusters"],"title":"GroupedContributionsResponse"},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"MediaType":{"type":"string","enum":["anime","manga","visual_novel","light_novel","manhwa","manhua","all"],"title":"MediaType"},"RecommendRequest":{"properties":{"seed_work_ids":{"items":{"type":"string"},"type":"array","maxItems":10,"minItems":1,"title":"Seed Work Ids","description":"1 to 10 canonical work IDs (e.g. ['work:anime:mal_9253_al_9253'])"},"negative_work_ids":{"items":{"type":"string"},"type":"array","maxItems":10,"title":"Negative Work Ids","description":"Optional disliked work IDs to steer away from"},"target_scope":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Target Scope","description":"Optional media type filter: 'anime', 'manga', 'visual_novel', 'light_novel', 'manhwa', 'manhua'"},"exclude_same_franchise":{"type":"boolean","title":"Exclude Same Franchise","description":"Whether to suppress sequels, prequels, movies, and spin-offs of seed works","default":true},"include_adult":{"type":"boolean","title":"Include Adult","description":"Include adult/NSFW content in recommendations","default":false},"limit":{"type":"integer","maximum":50.0,"minimum":1.0,"title":"Limit","default":10}},"type":"object","required":["seed_work_ids"],"title":"RecommendRequest"},"RecommendResponse":{"properties":{"seed_work_ids":{"items":{"type":"string"},"type":"array","title":"Seed Work Ids"},"target_scope":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Target Scope"},"total":{"type":"integer","title":"Total"},"latency_ms":{"type":"number","title":"Latency Ms"},"recommendations":{"items":{"$ref":"#/components/schemas/RecommendedWorkItem"},"type":"array","title":"Recommendations"}},"type":"object","required":["seed_work_ids","target_scope","total","latency_ms","recommendations"],"title":"RecommendResponse"},"RecommendedWorkItem":{"properties":{"aar_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Aar Id"},"work_id":{"type":"string","title":"Work Id"},"title":{"type":"string","title":"Title"},"title_english":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Title English"},"type":{"type":"string","title":"Type"},"release_year":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Release Year"},"score":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Score"},"popularity":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Popularity"},"final_score":{"type":"number","title":"Final Score"},"vector_similarity":{"type":"number","title":"Vector Similarity"},"tag_overlap_score":{"type":"number","title":"Tag Overlap Score"},"shared_tags":{"items":{"type":"string"},"type":"array","title":"Shared Tags"},"genres":{"items":{"type":"string"},"type":"array","title":"Genres"},"image_url":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Image Url"},"url":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Url"},"mal_id":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Mal Id"},"anilist_id":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Anilist Id"},"vndb_id":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Vndb Id"}},"type":"object","required":["work_id","title","type","final_score","vector_similarity","tag_overlap_score","shared_tags","genres"],"title":"RecommendedWorkItem"},"ScopeIn":{"properties":{"types":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Types"},"genres":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Genres"},"tags":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Tags"},"themes":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Themes"},"studios":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Studios"},"years":{"anyOf":[{"items":{"type":"integer"},"type":"array"},{"type":"null"}],"title":"Years"},"min_year":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Min Year"},"max_year":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Max Year"},"min_score":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min Score"},"min_episodes":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Min Episodes"},"max_episodes":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Max Episodes"},"episodes":{"anyOf":[{"items":{"type":"integer"},"type":"array"},{"type":"integer"},{"type":"null"}],"title":"Episodes"},"buckets":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Buckets"},"statuses":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Statuses"},"status":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"string"},{"type":"null"}],"title":"Status"},"adult":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Adult"},"work_ids":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Work Ids"},"titles":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Titles"},"staff_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Staff Names"},"director_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Director Names"},"author_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Author Names"},"composer_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Composer Names"},"voice_actor_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Voice Actor Names"},"character_names":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Character Names"}},"additionalProperties":false,"type":"object","title":"ScopeIn","description":"Hard corpus scope. Unknown fields are rejected rather than ignored."},"SearchRequest":{"properties":{"question":{"type":"string","maxLength":2000,"minLength":1,"title":"Question"},"scope":{"anyOf":[{"$ref":"#/components/schemas/ScopeIn"},{"type":"null"}]},"limit":{"anyOf":[{"type":"integer","maximum":300.0,"minimum":1.0},{"type":"null"}],"title":"Limit"},"include_text":{"type":"boolean","title":"Include Text","default":true},"include":{"anyOf":[{"items":{"type":"string"},"type":"array"},{"type":"null"}],"title":"Include"},"answer":{"type":"boolean","title":"Answer","default":false},"mode":{"type":"string","title":"Mode","description":"Search mode: 'hybrid' (BM25 lexical + vectors) or 'semantic' (pure vectors only)","default":"hybrid"},"nsfw":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Nsfw","description":"Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.","default":false},"query_breakdown":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Query Breakdown","description":"Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.","default":false}},"additionalProperties":false,"type":"object","required":["question"],"title":"SearchRequest"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"},"input":{"title":"Input"},"ctx":{"type":"object","title":"Context"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AnimeAkashicRecords (AAR) Search & Retrieval Engine",
+    "description": "Industrial-Grade, Ultra-Low-Latency (~500ms) Neural Hybrid Search & Retrieval Engine over Anime, Manga, Light Novels, and Visual Novels.\n\n### Recommended Integration Profiles & Use Cases:\n- **Streaming Services & Media Catalogs:** Powers instant search-as-you-type and discovery across titles, obscure character traits, and vague plot descriptions in ~500ms.\n- **AI Chatbots & Conversational RAG:** Provides high-density context blocks with exact provenance, character synergy, and structured metadata to prevent hallucinations.\n- **Autonomous AI Agents:** Operates as a fast, deterministic tool with strict SQL scope filtering (years, formats, adult tags) and zero conversational bloat.\n\n### Query Breakdown & Performance Modes:\n- **Default Mode (`query_breakdown=false`):** Blazing-fast native hybrid retrieval fusing ScaNN-cascade dense vectors (int8 Qdrant), FTS5 BM25, and deep Cross-Encoder reranking without LLM overhead (~500ms).\n- **Optional LLM Breakdown (`query_breakdown=true`):** Pass `query_breakdown: true` to decompose complex, multi-part, or comparative queries via an LLM prior to vector retrieval.",
+    "version": "1.2.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "summary": "Stats",
+        "description": "Public catalog statistics, media counts, and index health.\nExtended cluster and model configs are returned for verified admin keys.",
+        "operationId": "stats_stats_get",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Stats Stats Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "summary": "Search Post",
+        "description": "Ranked retrieval endpoint.\nanswer=true is restricted to admin keys only.",
+        "operationId": "search_post_search_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Search Post Search Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Search Get",
+        "operationId": "search_get_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "Search query or question",
+              "title": "Q"
+            },
+            "description": "Search query or question"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Max documents to return",
+              "title": "Limit"
+            },
+            "description": "Max documents to return"
+          },
+          {
+            "name": "nsfw",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.",
+              "default": false,
+              "title": "Nsfw"
+            },
+            "description": "Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding."
+          },
+          {
+            "name": "query_breakdown",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.",
+              "default": false,
+              "title": "Query Breakdown"
+            },
+            "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false."
+          },
+          {
+            "name": "rerank",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Whether to apply cross-encoder reranking. Set to false for ultra-low latency (~250ms). Default: null (follows server config).",
+              "title": "Rerank"
+            },
+            "description": "Whether to apply cross-encoder reranking. Set to false for ultra-low latency (~250ms). Default: null (follows server config)."
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search mode: 'hybrid' or 'semantic'",
+              "default": "hybrid",
+              "title": "Mode"
+            },
+            "description": "Search mode: 'hybrid' or 'semantic'"
+          },
+          {
+            "name": "include_text",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include passage text in chunks",
+              "default": true,
+              "title": "Include Text"
+            },
+            "description": "Include passage text in chunks"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)",
+              "title": "Include"
+            },
+            "description": "Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)"
+          },
+          {
+            "name": "adult",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter adult content (true/false)",
+              "title": "Adult"
+            },
+            "description": "Filter adult content (true/false)"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)",
+              "title": "Type"
+            },
+            "description": "Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)"
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by genre (repeatable or comma-separated)",
+              "title": "Genre"
+            },
+            "description": "Filter by genre (repeatable or comma-separated)"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by tag (repeatable or comma-separated)",
+              "title": "Tag"
+            },
+            "description": "Filter by tag (repeatable or comma-separated)"
+          },
+          {
+            "name": "theme",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by theme (repeatable or comma-separated)",
+              "title": "Theme"
+            },
+            "description": "Filter by theme (repeatable or comma-separated)"
+          },
+          {
+            "name": "studio",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by studio (repeatable or comma-separated)",
+              "title": "Studio"
+            },
+            "description": "Filter by studio (repeatable or comma-separated)"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exact release year",
+              "title": "Year"
+            },
+            "description": "Exact release year"
+          },
+          {
+            "name": "min_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Minimum release year",
+              "title": "Min Year"
+            },
+            "description": "Minimum release year"
+          },
+          {
+            "name": "max_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Maximum release year",
+              "title": "Max Year"
+            },
+            "description": "Maximum release year"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)",
+              "title": "Status"
+            },
+            "description": "Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)"
+          },
+          {
+            "name": "staff",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by staff/person names (repeatable or comma-separated)",
+              "title": "Staff"
+            },
+            "description": "Filter by staff/person names (repeatable or comma-separated)"
+          },
+          {
+            "name": "character",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by character names (repeatable or comma-separated)",
+              "title": "Character"
+            },
+            "description": "Filter by character names (repeatable or comma-separated)"
+          },
+          {
+            "name": "author",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by author names (repeatable or comma-separated)",
+              "title": "Author"
+            },
+            "description": "Filter by author names (repeatable or comma-separated)"
+          },
+          {
+            "name": "director",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by director names (repeatable or comma-separated)",
+              "title": "Director"
+            },
+            "description": "Filter by director names (repeatable or comma-separated)"
+          },
+          {
+            "name": "composer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by composer/music names (repeatable or comma-separated)",
+              "title": "Composer"
+            },
+            "description": "Filter by composer/music names (repeatable or comma-separated)"
+          },
+          {
+            "name": "voice_actor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by voice actor names (repeatable or comma-separated)",
+              "title": "Voice Actor"
+            },
+            "description": "Filter by voice actor names (repeatable or comma-separated)"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by exact/partial titles (repeatable or comma-separated)",
+              "title": "Title"
+            },
+            "description": "Filter by exact/partial titles (repeatable or comma-separated)"
+          },
+          {
+            "name": "min_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Minimum score (0-10)",
+              "title": "Min Score"
+            },
+            "description": "Minimum score (0-10)"
+          },
+          {
+            "name": "answer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Compose prose answer using LLM (admin only)",
+              "default": false,
+              "title": "Answer"
+            },
+            "description": "Compose prose answer using LLM (admin only)"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Search Get Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ask": {
+      "post": {
+        "summary": "Ask",
+        "description": "Mirror of /search with AI answer composition permanently enabled.\nReturns ranked documents, chunks, relations, and synthesized answer with citations.",
+        "operationId": "ask_ask_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Ask Ask Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Ask Get",
+        "description": "GET mirror of /search with AI answer composition permanently enabled.",
+        "operationId": "ask_get_ask_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "Search query or question",
+              "title": "Q"
+            },
+            "description": "Search query or question"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Max documents to return",
+              "title": "Limit"
+            },
+            "description": "Max documents to return"
+          },
+          {
+            "name": "nsfw",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.",
+              "default": false,
+              "title": "Nsfw"
+            },
+            "description": "Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding."
+          },
+          {
+            "name": "query_breakdown",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.",
+              "default": false,
+              "title": "Query Breakdown"
+            },
+            "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false."
+          },
+          {
+            "name": "rerank",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Whether to apply cross-encoder reranking. Set to false for ultra-low latency (~250ms). Default: null.",
+              "title": "Rerank"
+            },
+            "description": "Whether to apply cross-encoder reranking. Set to false for ultra-low latency (~250ms). Default: null."
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search mode: 'hybrid' or 'semantic'",
+              "default": "hybrid",
+              "title": "Mode"
+            },
+            "description": "Search mode: 'hybrid' or 'semantic'"
+          },
+          {
+            "name": "include_text",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include passage text in chunks",
+              "default": true,
+              "title": "Include Text"
+            },
+            "description": "Include passage text in chunks"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)",
+              "title": "Include"
+            },
+            "description": "Relational details to attach per result (repeatable or comma-separated: staff, characters, relations)"
+          },
+          {
+            "name": "adult",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter adult content (true/false)",
+              "title": "Adult"
+            },
+            "description": "Filter adult content (true/false)"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)",
+              "title": "Type"
+            },
+            "description": "Filter by media type (repeatable or comma-separated: anime, manga, visual_novel, light_novel, manhwa, manhua)"
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by genre (repeatable or comma-separated)",
+              "title": "Genre"
+            },
+            "description": "Filter by genre (repeatable or comma-separated)"
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by tag (repeatable or comma-separated)",
+              "title": "Tag"
+            },
+            "description": "Filter by tag (repeatable or comma-separated)"
+          },
+          {
+            "name": "theme",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by theme (repeatable or comma-separated)",
+              "title": "Theme"
+            },
+            "description": "Filter by theme (repeatable or comma-separated)"
+          },
+          {
+            "name": "studio",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by studio (repeatable or comma-separated)",
+              "title": "Studio"
+            },
+            "description": "Filter by studio (repeatable or comma-separated)"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Exact release year",
+              "title": "Year"
+            },
+            "description": "Exact release year"
+          },
+          {
+            "name": "min_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Minimum release year",
+              "title": "Min Year"
+            },
+            "description": "Minimum release year"
+          },
+          {
+            "name": "max_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Maximum release year",
+              "title": "Max Year"
+            },
+            "description": "Maximum release year"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)",
+              "title": "Status"
+            },
+            "description": "Filter by work status (repeatable or comma-separated: finished, releasing, upcoming, cancelled, hiatus)"
+          },
+          {
+            "name": "min_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Minimum score (0-10)",
+              "title": "Min Score"
+            },
+            "description": "Minimum score (0-10)"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Ask Get Ask Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recommend": {
+      "post": {
+        "summary": "Recommend Post",
+        "description": "Content discovery & recommendation endpoint based on vector centroid,\nfranchise/sequel suppression, media type scoping, and tag/genre overlap.",
+        "operationId": "recommend_post_recommend_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecommendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recommend/{work_id}": {
+      "get": {
+        "summary": "Recommend Get",
+        "description": "Quick recommendation endpoint for a single work ID.",
+        "operationId": "recommend_get_recommend__work_id__get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Max recommendations to return",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Max recommendations to return"
+          },
+          {
+            "name": "target_scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional target media type (e.g. 'anime')",
+              "title": "Target Scope"
+            },
+            "description": "Optional target media type (e.g. 'anime')"
+          },
+          {
+            "name": "exclude_franchise",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to suppress sequels and franchise siblings",
+              "default": true,
+              "title": "Exclude Franchise"
+            },
+            "description": "Whether to suppress sequels and franchise siblings"
+          },
+          {
+            "name": "adult",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include adult content",
+              "default": false,
+              "title": "Adult"
+            },
+            "description": "Include adult content"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suggest": {
+      "post": {
+        "summary": "Create Contribution",
+        "description": "Submit a new user contribution or suggestion (\"\u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a \u0623\u0648 \u0625\u0636\u0627\u0641\u0627\u062a\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
+        "operationId": "create_contribution_suggest_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContributionCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contributions": {
+      "post": {
+        "summary": "Create Contribution",
+        "description": "Submit a new user contribution or suggestion (\"\u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a \u0623\u0648 \u0625\u0636\u0627\u0641\u0627\u062a\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
+        "operationId": "create_contribution_contributions_post",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContributionCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suggest/queue": {
+      "get": {
+        "summary": "Get Contributions Queue",
+        "description": "Retrieve submitted user contributions and suggestions ordered by popularity (upvotes).",
+        "operationId": "get_contributions_queue_suggest_queue_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by status: PENDING, APPROVED, REJECTED, or empty for all",
+              "default": "PENDING",
+              "title": "Status"
+            },
+            "description": "Filter by status: PENDING, APPROVED, REJECTED, or empty for all"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max items to retrieve",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Max items to retrieve"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionQueueResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contributions/queue": {
+      "get": {
+        "summary": "Get Contributions Queue",
+        "description": "Retrieve submitted user contributions and suggestions ordered by popularity (upvotes).",
+        "operationId": "get_contributions_queue_contributions_queue_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by status: PENDING, APPROVED, REJECTED, or empty for all",
+              "default": "PENDING",
+              "title": "Status"
+            },
+            "description": "Filter by status: PENDING, APPROVED, REJECTED, or empty for all"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Max items to retrieve",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Max items to retrieve"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContributionQueueResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suggest/grouped": {
+      "get": {
+        "summary": "Get Grouped Contributions",
+        "description": "Export or retrieve all user submissions clustered into groups (by work/title)\nwith aggregated custom descriptions, alternative titles, and upvotes saved to contributions_grouped.json.",
+        "operationId": "get_grouped_contributions_suggest_grouped_get",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupedContributionsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contributions/grouped": {
+      "get": {
+        "summary": "Get Grouped Contributions",
+        "description": "Export or retrieve all user submissions clustered into groups (by work/title)\nwith aggregated custom descriptions, alternative titles, and upvotes saved to contributions_grouped.json.",
+        "operationId": "get_grouped_contributions_contributions_grouped_get",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupedContributionsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContributionCreateRequest": {
+        "properties": {
+          "contribution_type": {
+            "$ref": "#/components/schemas/ContributionType",
+            "description": "Type: ADD_WORK, ADD_ALIAS, EDIT_METADATA, FEATURE_OR_VIBE"
+          },
+          "media_type": {
+            "$ref": "#/components/schemas/MediaType",
+            "description": "Media type: anime, manga, visual_novel, light_novel, manhwa, manhua",
+            "default": "anime"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Title",
+            "description": "Title of the work or suggestion summary"
+          },
+          "target_work_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Work Id",
+            "description": "Target work ID (required for ADD_ALIAS or EDIT_METADATA)"
+          },
+          "alt_titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 15,
+            "title": "Alt Titles",
+            "description": "Alternative names or aliases"
+          },
+          "synopsis_or_note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 3000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Synopsis Or Note",
+            "description": "Notes, reason, or curator remarks"
+          },
+          "custom_description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Description",
+            "description": "User-provided synopsis, review, or detailed custom description of the work"
+          },
+          "suggested_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Suggested Tags",
+            "description": "Tags, themes, or genres"
+          },
+          "reference_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Url",
+            "description": "MAL, AniList, VNDB, or official link"
+          },
+          "submitter_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submitter Id",
+            "default": "anonymous"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contribution_type",
+          "title"
+        ],
+        "title": "ContributionCreateRequest"
+      },
+      "ContributionItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "contribution_type": {
+            "type": "string",
+            "title": "Contribution Type"
+          },
+          "media_type": {
+            "type": "string",
+            "title": "Media Type"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "target_work_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Work Id"
+          },
+          "alt_titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Alt Titles"
+          },
+          "synopsis_or_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Synopsis Or Note"
+          },
+          "custom_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Description"
+          },
+          "suggested_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Suggested Tags"
+          },
+          "reference_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Url"
+          },
+          "submitter_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submitter Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "upvotes_count": {
+            "type": "integer",
+            "title": "Upvotes Count"
+          },
+          "created_at": {
+            "type": "integer",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "integer",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "contribution_type",
+          "media_type",
+          "title",
+          "target_work_id",
+          "alt_titles",
+          "synopsis_or_note",
+          "suggested_tags",
+          "reference_url",
+          "submitter_id",
+          "status",
+          "upvotes_count",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ContributionItem"
+      },
+      "ContributionQueueResponse": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "status_filter": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status Filter"
+          },
+          "submissions": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionItem"
+            },
+            "type": "array",
+            "title": "Submissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "status_filter",
+          "submissions"
+        ],
+        "title": "ContributionQueueResponse"
+      },
+      "ContributionResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "submission_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Id"
+          },
+          "canonical_work_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canonical Work Id"
+          },
+          "upvotes_count": {
+            "type": "integer",
+            "title": "Upvotes Count",
+            "default": 1
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "message"
+        ],
+        "title": "ContributionResponse"
+      },
+      "ContributionType": {
+        "type": "string",
+        "enum": [
+          "ADD_WORK",
+          "ADD_ALIAS",
+          "EDIT_METADATA",
+          "FEATURE_OR_VIBE"
+        ],
+        "title": "ContributionType"
+      },
+      "GroupedContributionCluster": {
+        "properties": {
+          "cluster_key": {
+            "type": "string",
+            "title": "Cluster Key"
+          },
+          "canonical_work_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canonical Work Id"
+          },
+          "primary_title": {
+            "type": "string",
+            "title": "Primary Title"
+          },
+          "media_type": {
+            "type": "string",
+            "title": "Media Type"
+          },
+          "total_upvotes": {
+            "type": "integer",
+            "title": "Total Upvotes"
+          },
+          "submission_count": {
+            "type": "integer",
+            "title": "Submission Count"
+          },
+          "alternative_titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Alternative Titles"
+          },
+          "custom_descriptions": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Custom Descriptions"
+          },
+          "suggested_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Suggested Tags"
+          },
+          "reference_urls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reference Urls"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "first_submitted": {
+            "type": "integer",
+            "title": "First Submitted"
+          },
+          "last_updated": {
+            "type": "integer",
+            "title": "Last Updated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster_key",
+          "primary_title",
+          "media_type",
+          "total_upvotes",
+          "submission_count",
+          "alternative_titles",
+          "custom_descriptions",
+          "suggested_tags",
+          "reference_urls",
+          "status",
+          "first_submitted",
+          "last_updated"
+        ],
+        "title": "GroupedContributionCluster"
+      },
+      "GroupedContributionsResponse": {
+        "properties": {
+          "total_clusters": {
+            "type": "integer",
+            "title": "Total Clusters"
+          },
+          "total_submissions": {
+            "type": "integer",
+            "title": "Total Submissions"
+          },
+          "export_file_path": {
+            "type": "string",
+            "title": "Export File Path"
+          },
+          "clusters": {
+            "items": {
+              "$ref": "#/components/schemas/GroupedContributionCluster"
+            },
+            "type": "array",
+            "title": "Clusters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_clusters",
+          "total_submissions",
+          "export_file_path",
+          "clusters"
+        ],
+        "title": "GroupedContributionsResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "MediaType": {
+        "type": "string",
+        "enum": [
+          "anime",
+          "manga",
+          "visual_novel",
+          "light_novel",
+          "manhwa",
+          "manhua",
+          "all"
+        ],
+        "title": "MediaType"
+      },
+      "RecommendRequest": {
+        "properties": {
+          "seed_work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Seed Work Ids",
+            "description": "1 to 10 canonical work IDs (e.g. ['work:anime:mal_9253_al_9253'])"
+          },
+          "negative_work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "title": "Negative Work Ids",
+            "description": "Optional disliked work IDs to steer away from"
+          },
+          "target_scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Scope",
+            "description": "Optional media type filter: 'anime', 'manga', 'visual_novel', 'light_novel', 'manhwa', 'manhua'"
+          },
+          "exclude_same_franchise": {
+            "type": "boolean",
+            "title": "Exclude Same Franchise",
+            "description": "Whether to suppress sequels, prequels, movies, and spin-offs of seed works via DB relation graph",
+            "default": true
+          },
+          "include_adult": {
+            "type": "boolean",
+            "title": "Include Adult",
+            "description": "Include adult/NSFW content in recommendations",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 10
+          }
+        },
+        "type": "object",
+        "required": [
+          "seed_work_ids"
+        ],
+        "title": "RecommendRequest"
+      },
+      "RecommendResponse": {
+        "properties": {
+          "seed_work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Seed Work Ids"
+          },
+          "target_scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Scope"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "latency_ms": {
+            "type": "number",
+            "title": "Latency Ms"
+          },
+          "recommendations": {
+            "items": {
+              "$ref": "#/components/schemas/RecommendedWorkItem"
+            },
+            "type": "array",
+            "title": "Recommendations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seed_work_ids",
+          "target_scope",
+          "total",
+          "latency_ms",
+          "recommendations"
+        ],
+        "title": "RecommendResponse"
+      },
+      "RecommendedWorkItem": {
+        "properties": {
+          "aar_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aar Id"
+          },
+          "work_id": {
+            "type": "string",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "title_english": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title English"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "release_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Year"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "popularity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Popularity"
+          },
+          "final_score": {
+            "type": "number",
+            "title": "Final Score"
+          },
+          "vector_similarity": {
+            "type": "number",
+            "title": "Vector Similarity"
+          },
+          "tag_overlap_score": {
+            "type": "number",
+            "title": "Tag Overlap Score"
+          },
+          "shared_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Shared Tags"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "mal_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mal Id"
+          },
+          "anilist_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Anilist Id"
+          },
+          "vndb_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vndb Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "type",
+          "final_score",
+          "vector_similarity",
+          "tag_overlap_score",
+          "shared_tags",
+          "genres"
+        ],
+        "title": "RecommendedWorkItem"
+      },
+      "ScopeIn": {
+        "properties": {
+          "types": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Types"
+          },
+          "genres": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Genres"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
+          },
+          "themes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Themes"
+          },
+          "studios": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Studios"
+          },
+          "years": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Years"
+          },
+          "min_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Year"
+          },
+          "max_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Year"
+          },
+          "min_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Score"
+          },
+          "min_episodes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Episodes"
+          },
+          "max_episodes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Episodes"
+          },
+          "episodes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Episodes"
+          },
+          "buckets": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Buckets"
+          },
+          "statuses": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Statuses"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "adult": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adult"
+          },
+          "work_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Ids"
+          },
+          "titles": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Titles"
+          },
+          "staff_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Staff Names"
+          },
+          "director_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Director Names"
+          },
+          "author_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Names"
+          },
+          "composer_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Composer Names"
+          },
+          "voice_actor_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice Actor Names"
+          },
+          "character_names": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Names"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ScopeIn",
+        "description": "Hard corpus scope. Unknown fields are rejected rather than ignored."
+      },
+      "SearchRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScopeIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit"
+          },
+          "include_text": {
+            "type": "boolean",
+            "title": "Include Text",
+            "default": true
+          },
+          "include": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include"
+          },
+          "answer": {
+            "type": "boolean",
+            "title": "Answer",
+            "default": false
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "description": "Search mode: 'hybrid' (BM25 lexical + vectors) or 'semantic' (pure vectors only)",
+            "default": "hybrid"
+          },
+          "nsfw": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nsfw",
+            "description": "Explicitly mark query as NSFW/adult to skip LLM query refinement and proceed directly to vector embedding.",
+            "default": false
+          },
+          "query_breakdown": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query Breakdown",
+            "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.",
+            "default": false
+          },
+          "rerank": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rerank",
+            "description": "Whether to apply cross-encoder reranking. Set to false for ultra-low latency (~250ms). Default: null (follows server config)."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "SearchRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
