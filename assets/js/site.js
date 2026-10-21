@@ -4,8 +4,8 @@
    No framework. Progressive: everything works without JS except the live chip.
    ========================================================================= */
 
-import { health, ApiError } from "./api.js?v=9";
-import { isConfigured } from "./config.js?v=9";
+import { health, ApiError } from "./api.js?v=10";
+import { isConfigured } from "./config.js?v=10";
 
 /* ---- Theme ---------------------------------------------------------------- */
 
@@ -60,9 +60,7 @@ function applyNerd(mode) {
       label.textContent = on ? "Nerd: on" : "Nerd: off";
     }
   }
-  if (on) {
-    checkHealth();
-  }
+
 }
 
 function initNerd() {
@@ -214,8 +212,13 @@ async function initHealth() {
   // 1. Online is strictly default on boot
   setDefaultHealth();
 
-  // 2. Background probe runs silently
-  checkHealth();
+  // 2. Background probe runs silently after full page load to never block critical rendering
+  const runDeferred = () => setTimeout(checkHealth, 2000);
+  if (document.readyState === 'complete') {
+    runDeferred();
+  } else {
+    window.addEventListener('load', runDeferred, { once: true });
+  }
 
   // 3. Periodic recurring check every 5 minutes
   setInterval(() => {

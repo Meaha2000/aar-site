@@ -14,9 +14,9 @@ import {
   buildSearchParams,
   buildSearchPayload,
   ApiError
-} from "./api.js?v=7";
+} from "./api.js?v=10";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
-  from "./config.js?v=5";
+  from "./config.js?v=10";
 
 /* ---- DOM ------------------------------------------------------------------ */
 

@@ -3,7 +3,7 @@
    Handles direct developer feedback and community catalog contributions.
    ========================================================================= */
 
-import { submitContribution, ApiError } from "./api.js?v=4";
+import { submitContribution, ApiError } from "./api.js?v=10";
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
