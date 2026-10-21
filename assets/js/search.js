@@ -1,14 +1,3 @@
-function formatImageUrl(url) {
-  if (!url) return "";
-  let clean = String(url).trim();
-  if (clean.startsWith("https://myanimelist.net/images/")) {
-    clean = clean.replace("https://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
-  } else if (clean.startsWith("http://myanimelist.net/images/")) {
-    clean = clean.replace("http://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
-  }
-  return clean;
-}
-
 /* ============================================================================
    AAR — search, ask & recommend demo
    Interactive playground for /search, /ask, and /recommend endpoints.
@@ -25,13 +14,25 @@ import {
   buildSearchParams,
   buildSearchPayload,
   ApiError
-} from "./api.js?v=6";
+} from "./api.js?v=7";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
   from "./config.js?v=5";
 
 /* ---- DOM ------------------------------------------------------------------ */
 
 const $ = (sel) => document.querySelector(sel);
+
+function formatImageUrl(url) {
+  if (!url) return "";
+  let clean = String(url).trim();
+  if (clean.startsWith("https://myanimelist.net/images/")) {
+    clean = clean.replace("https://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
+  } else if (clean.startsWith("http://myanimelist.net/images/")) {
+    clean = clean.replace("http://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
+  }
+  return clean;
+}
+
 
 const els = {
   form:           $("[data-search-form]"),
@@ -746,7 +747,7 @@ function renderAutocomplete(results, query) {
         data-ac-index="${idx}"
       >
         ${img
-          ? `<img class="ac-item__thumb" src="${img}" alt="" loading="lazy" referrerpolicy="no-referrer">`
+          ? `<img class="ac-item__thumb" src="${img}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none';">`
           : `<div class="ac-item__thumb" aria-hidden="true"></div>`
         }
         <div class="ac-item__body">
