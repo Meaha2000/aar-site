@@ -1,3 +1,14 @@
+function formatImageUrl(url) {
+  if (!url) return "";
+  let clean = String(url).trim();
+  if (clean.startsWith("https://myanimelist.net/images/")) {
+    clean = clean.replace("https://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
+  } else if (clean.startsWith("http://myanimelist.net/images/")) {
+    clean = clean.replace("http://myanimelist.net/images/", "https://cdn.myanimelist.net/images/");
+  }
+  return clean;
+}
+
 /* ============================================================================
    AAR — search, ask & recommend demo
    Interactive playground for /search, /ask, and /recommend endpoints.
@@ -566,8 +577,9 @@ function renderRecommendationResults(data, requestedId, seedMeta) {
       ...remainingGenres.slice(0, 4).map((g) => `<span class="rec-tag">${escapeHtml(g)}</span>`)
     ].join("");
 
-    const imgTag = rec.image_url
-      ? `<img class="rec-card__thumb" src="${escapeHtml(rec.image_url)}" alt="${title}" loading="lazy" referrerpolicy="no-referrer">`
+    const cleanImg = formatImageUrl(rec.image_url);
+    const imgTag = cleanImg
+      ? `<img class="rec-card__thumb" src="${escapeHtml(cleanImg)}" alt="${title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.visibility='hidden';">`
       : `<div class="rec-card__thumb" aria-hidden="true" style="background:var(--paper-deep);border:1px solid var(--rule)"></div>`;
 
     return `
@@ -722,7 +734,8 @@ function renderAutocomplete(results, query) {
     const type = escapeHtml(item.type || "work");
     const year = item.release_year ? `<span>${escapeHtml(String(item.release_year))}</span>` : "";
     const score = item.score ? `<span>★ ${Number(item.score).toFixed(2)}</span>` : "";
-    const img = item.image_url ? escapeHtml(item.image_url) : "";
+    const cleanAcImg = formatImageUrl(item.image_url);
+    const img = cleanAcImg ? escapeHtml(cleanAcImg) : "";
 
     return `
       <button
