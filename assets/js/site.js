@@ -4,8 +4,8 @@
    No framework. Progressive: everything works without JS except the live chip.
    ========================================================================= */
 
-import { health, ApiError } from "./api.js?v=4";
-import { isConfigured } from "./config.js?v=4";
+import { health, ApiError } from "./api.js?v=9";
+import { isConfigured } from "./config.js?v=9";
 
 /* ---- Theme ---------------------------------------------------------------- */
 
@@ -45,7 +45,7 @@ function initTheme() {
    On: endpoints, schemas, request previews and API links come back.        */
 
 const NERD_KEY = "aar.nerd";
-let healthInitialized = false;
+
 
 function applyNerd(mode) {
   const on = mode === "on";
@@ -60,9 +60,8 @@ function applyNerd(mode) {
       label.textContent = on ? "Nerd: on" : "Nerd: off";
     }
   }
-  if (on && !healthInitialized) {
-    healthInitialized = true;
-    initHealth();
+  if (on) {
+    checkHealth();
   }
 }
 
@@ -167,12 +166,16 @@ function initCopy() {
 
 const HEALTH_CHECK_INTERVAL_MS = 5 * 60 * 1000; // Poll every 5 minutes
 
-async function checkHealth(chip) {
-  if (!chip) return;
+async function checkHealth() {
+  const chips = document.querySelectorAll("[data-health]");
+  if (!chips.length) return;
   const setText = (t, state) => {
-    chip.textContent = t;
-    chip.setAttribute("data-state", state);
-    chip.setAttribute("title", `${t} (checked: ${new Date().toLocaleTimeString()})`);
+    const time = new Date().toLocaleTimeString();
+    for (const chip of chips) {
+      chip.textContent = t;
+      chip.setAttribute("data-state", state);
+      chip.setAttribute("title", `${t} (checked: ${time})`);
+    }
   };
 
   const ctrl = new AbortController();
@@ -194,15 +197,12 @@ async function checkHealth(chip) {
 }
 
 async function initHealth() {
-  const chip = document.querySelector("[data-health]");
-  if (!chip) return;
-
-  // Immediate check on initial page load
-  await checkHealth(chip);
+  // Immediate check in background on page load regardless of nerd mode
+  checkHealth();
 
   // Periodic recurring check every 5 minutes
   setInterval(() => {
-    checkHealth(chip);
+    checkHealth();
   }, HEALTH_CHECK_INTERVAL_MS);
 
   // Re-check when window/tab regains focus if more than 60s elapsed
@@ -210,7 +210,7 @@ async function initHealth() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && (Date.now() - lastChecked > 60000)) {
       lastChecked = Date.now();
-      checkHealth(chip);
+      checkHealth();
     }
   });
 }
@@ -283,6 +283,7 @@ function initDrawer() {
 
 function boot() {
   initTheme();
+  initHealth();
   initNerd();
   initRail();
   initCopy();

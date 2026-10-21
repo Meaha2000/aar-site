@@ -11,7 +11,7 @@ import {
   FREE_PUBLIC_KEY,
   endpoint,
   isConfigured,
-} from "./config.js?v=5";
+} from "./config.js?v=9";
 
 /** Error carrying an HTTP status so callers can name the recovery. */
 export class ApiError extends Error {
@@ -163,7 +163,7 @@ export async function health(signal) {
   try {
     const res = await fetch(target, {
       method: "GET",
-      headers: { Accept: "application/json" },
+      headers: headers(false),
       signal,
     });
     if (res.ok) {
