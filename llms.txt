@@ -394,10 +394,11 @@ The recommendation endpoints seamlessly accept any supported work identifier for
 |---|---|---|---|---|
 | `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. Accepts native AAR IDs (`aar_1`), external platform IDs (`mal:9253`, `v17`), or canonical URIs. |
 | `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 seed work IDs. Accepts native AAR IDs (e.g. `["aar_1"]`), external IDs (e.g. `["mal:5114"]`), or canonical URIs. |
-| `target_scope` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`). |
-| `exclude_franchise` | `boolean` | No | `true` | Suppress direct sequels, prequels, and same-universe spin-offs. |
-| `adult` | `boolean` | No | `false` | Include mature / 18+ titles. |
-| `limit` | `integer` | No | `10` | Number of recommendations to return (1–50). |
+| `negative_work_ids` | `array[string]` | No | `[]` | Up to 10 disliked work IDs to steer recommendations away from (negative prompting). |
+| `target_scope` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`, `"manhwa"`, `"manhua"`). |
+| `exclude_same_franchise` | `boolean` | No | `true` | Suppress direct sequels, prequels, and same-universe spin-offs via DB relation graph. |
+| `include_adult` | `boolean` | No | `false` | Include mature / 18+ titles in recommendations. |
+| `limit` | `integer` | No | `10` | Number of recommendations to return (1–100). |
 
 #### Request Example (GET):
 ```bash
@@ -445,6 +446,50 @@ curl -X GET "https://api.aarecords.tech/recommend/mal:5114?limit=5" \
       "vndb_id": null,
       "image_url": "https://cdn.myanimelist.net/images/anime/1906/121592.jpg",
       "url": "https://myanimelist.net/anime/889/Black_Lagoon"
+    }
+  ]
+}
+```
+
+---
+
+### 5.5. `GET /autocomplete` & `GET /autocomplete.json`
+Sub-millisecond live autocomplete for works, alternative titles, and synonyms.
+Optimized for real-time keystroke suggestions, search dropdowns, and recommendation seed pickers.
+Edge-cached by Cloudflare for instant sub-20ms global delivery.
+
+#### Request Parameters:
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `q` | `string` | **Yes** | — | Search prefix or title fragment (e.g. `"steins"`, `"frieren"`). |
+| `limit` | `integer` | No | `10` | Maximum candidate titles to return (1–1000). |
+| `type` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"novel"`, `"visual_novel"`). |
+
+#### Request Example:
+```bash
+curl -X GET "https://api.aarecords.tech/autocomplete?q=steins&limit=5" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "total": 2,
+  "query": "steins",
+  "results": [
+    {
+      "work_id": "work:anime:mal_9253_al_9253",
+      "aar_id": "aar_5578",
+      "title": "Steins;Gate",
+      "title_canonical": "Steins;Gate",
+      "title_english": "Steins;Gate",
+      "title_romaji": "Steins;Gate",
+      "type": "anime",
+      "format": "TV",
+      "release_year": 2011,
+      "score": 89.0,
+      "popularity": 597661,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1935/127974.jpg"
     }
   ]
 }
@@ -567,7 +612,7 @@ Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Anti
   - `return_data` (`boolean`, optional, default: `false`): Return raw structured JSON data of the answer and cited results.
 - **`aar_find_similar`**: Find thematically and semantically similar works to a seed work using vector centroid similarity and shared narrative tropes.
   - `work_id` (`string`, required): Canonical work ID (e.g. `work:anime:mal_1_al_1`).
-  - `limit` (`integer`, optional, default: 5): Maximum recommendations to return (1-50).
+  - `limit` (`integer`, optional, default: 5): Maximum recommendations to return (1-100).
   - `target_scope` (`string`, optional): Target media type filter (`"anime"`, `"manga"`, etc.).
   - `exclude_franchise` (`boolean`, optional, default: `true`): Exclude direct sequels/prequels to surface fresh works.
   - `include_sources` (`boolean`, optional, default: `false`): Include external database links (MAL, AniList, etc.).

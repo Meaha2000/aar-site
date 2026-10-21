@@ -586,6 +586,9 @@
             <button class="tab-btn is-active" type="button" role="tab" id="btn-tab-search" aria-selected="true" aria-controls="tab-search" data-tab-target="tab-search">
               <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /search
             </button>
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-autocomplete" aria-selected="false" aria-controls="tab-autocomplete" data-tab-target="tab-autocomplete">
+              <span class="badge badge--method badge--get">GET</span> /autocomplete
+            </button>
             <button class="tab-btn" type="button" role="tab" id="btn-tab-ask" aria-selected="false" aria-controls="tab-ask" data-tab-target="tab-ask">
               <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /ask
             </button>
@@ -664,6 +667,7 @@
             <div class="field"><span class="field__name">rerank</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) — Controls Cross-Encoder reranking. When <code>true</code> (default), ranks candidates with deep relevance scoring. Pass <code>false</code> (or <code>use_rerank: false</code>) for ultra-low-latency real-time search (~100&ndash;250ms), ideal for instant autocomplete or high-throughput bots.</span></div>
             <div class="field"><span class="field__name">query_breakdown</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) — Default is <code>false</code> for ultra-low-latency native hybrid retrieval (~500ms) without LLM query rewriting delay. Pass <code>true</code> only when you want an LLM to decompose complex multi-part or comparative queries (e.g. <em>"anime like X but with themes like Y"</em>) into targeted sub-probes before retrieval (adds ~400&ndash;800ms).</span></div>
             <div class="field"><span class="field__name">nsfw</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) — Explicitly marks query as adult/NSFW, skipping LLM query refinement and proceeding directly to vector embedding.</span></div>
+            <div class="field"><span class="field__name">include_text</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) — Whether to attach confirming synopsis text snippets and chunk references to each returned work. Pass <code>false</code> to minimize bandwidth when only IDs, titles, and metadata are needed.</span></div>
             <div class="field"><span class="field__name">include</span><span class="field__value"><strong>array of strings</strong> (optional) — Expanded relational payloads to attach to each result: <code>["staff", "characters", "relations"]</code>.</span></div>
             <div class="field"><span class="field__name">scope</span><span class="field__value"><strong>object</strong> (optional) — Hard membership and relational filters (see Scope Filter Fields below).</span></div>
 
@@ -760,7 +764,91 @@
             </div>
           </div>
 
-          <!-- TAB 2: /ask -->
+          <!-- TAB 2: /autocomplete -->
+          <div class="tab-pane" id="tab-autocomplete" role="tabpanel" aria-labelledby="btn-tab-autocomplete" hidden>
+            <!-- Endpoint Header Banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/autocomplete</code>
+              </div>
+              <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/autocomplete" style="padding:.25rem .6rem;font-size:.75rem">
+                <span data-copy-label>Copy Endpoint</span>
+              </button>
+            </div>
+
+            <div style="margin-bottom:var(--space-4)">
+              <h3 style="font-size:1.25rem;margin-bottom:.4rem">Sub-Millisecond Live Autocomplete</h3>
+              <p class="faint" style="font-size:.9375rem;line-height:1.6">
+                High-frequency, ultra-fast prefix matching over titles, aliases, English translations, and romaji. Powered by an in-memory SQLite FTS5 index and edge-cached globally via Cloudflare for instant sub-20ms keystroke suggestions, search dropdowns, and recommendation seed pickers.
+              </p>
+            </div>
+
+            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+              <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Instant Search-As-You-Type Integration</div>
+              <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
+                Designed for real-time frontend inputs, CLI tools, and chat bots. Returns canonical IDs, release years, review scores, popularity counts, formats (TV, Movie, Manga, VN), and poster thumbnails. Supports both <code class="mono">/autocomplete</code> and <code class="mono">/autocomplete.json</code>.
+              </div>
+            </div>
+
+            <h4 class="subhead" style="margin-top:var(--space-4)">Query Parameters</h4>
+            <div class="field"><span class="field__name">q</span><span class="field__value"><strong>string</strong> (required) &mdash; Search prefix or title fragment (e.g. <code>"steins"</code>, <code>"frieren"</code>, <code>"solo leveling"</code>).</span></div>
+            <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, min: <code>1</code>, max: <code>1000</code>) &mdash; Maximum number of candidate titles to return.</span></div>
+            <div class="field"><span class="field__name">type</span><span class="field__value"><strong>string</strong> (optional) &mdash; Optional media category filter (<code>"anime"</code>, <code>"manga"</code>, <code>"novel"</code>, <code>"visual_novel"</code>).</span></div>
+
+            <h4 class="subhead">Example Request (GET)</h4>
+            <div class="code">
+              <div class="code__bar">
+                <span class="micro">cURL (GET)</span>
+                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://api.aarecords.tech/autocomplete?q=steins&limit=5" -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
+              </div>
+              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/autocomplete?q=steins&amp;limit=5" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
+            </div>
+
+            <h4 class="subhead">Example Response (200 OK)</h4>
+            <div class="code">
+              <div class="code__bar">
+                <span class="micro">Response Envelope</span>
+              </div>
+              <div class="code__body"><pre><code class="language-json">{
+  "total": 2,
+  "query": "steins",
+  "results": [
+    {
+      "work_id": "work:anime:mal_9253_al_9253",
+      "aar_id": "aar_5578",
+      "title": "Steins;Gate",
+      "title_canonical": "Steins;Gate",
+      "title_english": "Steins;Gate",
+      "title_romaji": "Steins;Gate",
+      "type": "anime",
+      "format": "TV",
+      "release_year": 2011,
+      "score": 89.0,
+      "popularity": 597661,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1935/127974.jpg"
+    },
+    {
+      "work_id": "work:anime:mal_30484_al_21127",
+      "aar_id": "aar_8693",
+      "title": "Steins;Gate 0",
+      "title_canonical": "Steins;Gate 0",
+      "title_english": "Steins;Gate 0",
+      "title_romaji": "Steins;Gate 0",
+      "type": "anime",
+      "format": "TV",
+      "release_year": 2018,
+      "score": 84.0,
+      "popularity": 223601,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1375/93521.jpg"
+    }
+  ]
+}</code></pre></div>
+            </div>
+          </div>
+
+          <!-- TAB 3: /ask -->
           <div class="tab-pane" id="tab-ask" role="tabpanel" aria-labelledby="btn-tab-ask" hidden>
             <!-- Endpoint Header Banner -->
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
@@ -1008,8 +1096,11 @@
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
             <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Work identifier. Supports native unified AAR IDs (<code>aar_1</code>, <code>aar_9253</code>), external partner IDs (<code>mal:9253</code>, <code>anilist:9253</code>, <code>vndb:v17</code>), or full canonical URIs. The engine automatically resolves any supported ID format.</span></div>
             <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 seed work identifiers. Accepts native AAR IDs (e.g. <code>["aar_1", "aar_9253"]</code>), external database IDs (e.g. <code>["mal:5114", "vndb:v17"]</code>), or canonical IDs.</span></div>
-            <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, etc.</span></div>
-            <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>50</code>) &mdash; Number of recommended titles to return.</span></div>
+            <div class="field"><span class="field__name">negative_work_ids</span><span class="field__value"><strong>array of strings</strong> (optional, max: <code>10</code>) &mdash; Disliked or unwanted work identifiers to steer recommendations away from (negative prompt guidance).</span></div>
+            <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, <code>"visual_novel"</code>, <code>"light_novel"</code>, <code>"manhwa"</code>, <code>"manhua"</code>.</span></div>
+            <div class="field"><span class="field__name">exclude_same_franchise</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) &mdash; Whether to suppress sequels, prequels, movies, and spin-offs of seed works via DB relation graph to prioritize fresh discoveries.</span></div>
+            <div class="field"><span class="field__name">include_adult</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) &mdash; Include adult/NSFW content in recommendations.</span></div>
+            <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>100</code>) &mdash; Number of recommended titles to return (1&ndash;100).</span></div>
 
             <h4 class="subhead">Example Request (GET)</h4>
             <div class="code">
@@ -1052,6 +1143,7 @@
       "title": "Black Lagoon",
       "title_english": "Black Lagoon",
       "type": "anime",
+      "format": "TV",
       "release_year": 2006,
       "score": 78.0,
       "popularity": 253282,
