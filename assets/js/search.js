@@ -1181,7 +1181,7 @@ function initAutocompleteListeners() {
       try {
         const data = await searchAutocomplete(parsed.query, {
           signal: state.acAbortController.signal,
-          limit: 6
+          limit: 8
         });
         renderAutocomplete(data.results || [], parsed.query);
       } catch (err) {
@@ -1189,7 +1189,7 @@ function initAutocompleteListeners() {
           closeAutocomplete();
         }
       }
-    }, 220);
+    }, 150);
   });
 
   els.input.addEventListener("keydown", (e) => {
@@ -1240,7 +1240,12 @@ function init() {
   renderPreview(state.lastQuery);
   if (!isConfigured()) renderUnconfigured();
 
-  const fromUrl = new URLSearchParams(location.search).get("q");
+  const urlParams = new URLSearchParams(location.search);
+  const modeFromUrl = urlParams.get("mode");
+  if (modeFromUrl && MODE_CONFIG[modeFromUrl]) {
+    setEndpointMode(modeFromUrl);
+  }
+  const fromUrl = urlParams.get("q");
   if (fromUrl && els.input) {
     els.input.value = fromUrl;
     renderPreview(fromUrl);

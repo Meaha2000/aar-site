@@ -301,9 +301,11 @@ export function parseRecommendInput(raw) {
  * Local DB Autocomplete via Fast Lexical Search
  * GET /search?q={query}&mode=lexical&limit=6
  */
-export function searchAutocomplete(query, { limit = 6, signal = null } = {}) {
+export function searchAutocomplete(query, { limit = 8, signal = null, type = null } = {}) {
   const enc = encodeURIComponent(String(query || '').trim());
-  return request(`/search?q=${enc}&mode=lexical&limit=${limit}`, { method: "GET", signal });
+  let url = `/autocomplete?q=${enc}&limit=${limit}`;
+  if (type) url += `&type=${encodeURIComponent(type)}`;
+  return request(url, { method: "GET", signal });
 }
 
 /**
