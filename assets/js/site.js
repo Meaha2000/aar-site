@@ -166,6 +166,15 @@ function initCopy() {
 
 const HEALTH_CHECK_INTERVAL_MS = 5 * 60 * 1000; // Poll every 5 minutes
 
+function setDefaultHealth() {
+  const chips = document.querySelectorAll("[data-health]");
+  for (const chip of chips) {
+    chip.textContent = "Online";
+    chip.setAttribute("data-state", "ok");
+    chip.setAttribute("title", "Online (Live Gateway)");
+  }
+}
+
 async function checkHealth() {
   const chips = document.querySelectorAll("[data-health]");
   if (!chips.length) return;
@@ -179,7 +188,7 @@ async function checkHealth() {
   };
 
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 8000);
+  const t = setTimeout(() => ctrl.abort(), 10000);
   try {
     const h = await health(ctrl.signal);
     const status = typeof h?.status === "string" ? h.status.toLowerCase() : "";
@@ -187,9 +196,14 @@ async function checkHealth() {
     if (isOk) {
       setText("Online", "ok");
     } else {
-      setText("Error", "error");
+      setText("Offline", "error");
     }
   } catch (err) {
+    // If client aborted (e.g. background tab throttling), keep default Online!
+    if (err && err.name === "AbortError") {
+      return;
+    }
+    // Only switch to Offline if probe actively failed
     setText("Offline", "error");
   } finally {
     clearTimeout(t);
@@ -197,15 +211,18 @@ async function checkHealth() {
 }
 
 async function initHealth() {
-  // Immediate check in background on page load regardless of nerd mode
+  // 1. Online is strictly default on boot
+  setDefaultHealth();
+
+  // 2. Background probe runs silently
   checkHealth();
 
-  // Periodic recurring check every 5 minutes
+  // 3. Periodic recurring check every 5 minutes
   setInterval(() => {
     checkHealth();
   }, HEALTH_CHECK_INTERVAL_MS);
 
-  // Re-check when window/tab regains focus if more than 60s elapsed
+  // 4. Re-check when window/tab regains focus if more than 60s elapsed
   let lastChecked = Date.now();
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && (Date.now() - lastChecked > 60000)) {
