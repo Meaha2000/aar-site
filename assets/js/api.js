@@ -301,13 +301,6 @@ export function parseRecommendInput(raw) {
  * Local DB Autocomplete via Fast Lexical Search
  * GET /search?q={query}&mode=lexical&limit=6
  */
-<<<<<<< Updated upstream
-export function searchAutocomplete(query, { limit = 8, signal = null, type = null } = {}) {
-  const enc = encodeURIComponent(String(query || '').trim());
-  let url = `/autocomplete?q=${enc}&limit=${limit}`;
-  if (type) url += `&type=${encodeURIComponent(type)}`;
-  return request(url, { method: "GET", signal });
-=======
 const _autocompleteCache = new Map();
 
 /**
@@ -341,7 +334,6 @@ export async function searchAutocomplete(query, { limit = 8, signal = null, type
   }
   _autocompleteCache.set(cacheKey, res);
   return res;
->>>>>>> Stashed changes
 }
 
 /**

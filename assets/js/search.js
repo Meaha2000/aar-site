@@ -1196,11 +1196,7 @@ function initAutocompleteListeners() {
           // Keep existing menu if valid
         }
       }
-<<<<<<< Updated upstream
-    }, 150);
-=======
     }, 120);
->>>>>>> Stashed changes
   });
 
   els.input.addEventListener("keydown", (e) => {
