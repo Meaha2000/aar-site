@@ -301,11 +301,47 @@ export function parseRecommendInput(raw) {
  * Local DB Autocomplete via Fast Lexical Search
  * GET /search?q={query}&mode=lexical&limit=6
  */
+<<<<<<< Updated upstream
 export function searchAutocomplete(query, { limit = 8, signal = null, type = null } = {}) {
   const enc = encodeURIComponent(String(query || '').trim());
   let url = `/autocomplete?q=${enc}&limit=${limit}`;
   if (type) url += `&type=${encodeURIComponent(type)}`;
   return request(url, { method: "GET", signal });
+=======
+const _autocompleteCache = new Map();
+
+/**
+ * Fast In-Memory Cache Lookup for Autocomplete
+ */
+export function getCachedAutocomplete(query, { limit = 8, type = null } = {}) {
+  const cleanQ = String(query || '').trim().toLowerCase();
+  const cacheKey = `${cleanQ}__${limit}__${type || ''}`;
+  return _autocompleteCache.get(cacheKey) || null;
+}
+
+/**
+ * Local DB Autocomplete via Fast Lexical Search with In-Memory LRU & Edge Caching
+ * GET /autocomplete?q={query}&limit=8
+ */
+export async function searchAutocomplete(query, { limit = 8, signal = null, type = null } = {}) {
+  const cleanQ = String(query || '').trim().toLowerCase();
+  const cacheKey = `${cleanQ}__${limit}__${type || ''}`;
+  if (_autocompleteCache.has(cacheKey)) {
+    return _autocompleteCache.get(cacheKey);
+  }
+
+  const enc = encodeURIComponent(cleanQ);
+  let url = `/autocomplete?q=${enc}&limit=${limit}`;
+  if (type) url += `&type=${encodeURIComponent(type)}`;
+
+  const res = await request(url, { method: "GET", signal });
+  if (_autocompleteCache.size > 300) {
+    const firstKey = _autocompleteCache.keys().next().value;
+    _autocompleteCache.delete(firstKey);
+  }
+  _autocompleteCache.set(cacheKey, res);
+  return res;
+>>>>>>> Stashed changes
 }
 
 /**

@@ -9,11 +9,12 @@ import {
   ask,
   recommend,
   searchAutocomplete,
+  getCachedAutocomplete,
   parseRecommendInput,
   buildSearchParams,
   buildSearchPayload,
   ApiError
-} from "./api.js?v=5";
+} from "./api.js?v=6";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
   from "./config.js?v=5";
 
@@ -1176,6 +1177,12 @@ function initAutocompleteListeners() {
       return;
     }
 
+    // 0ms Instant Local Cache: if already typed before, render immediately without waiting
+    const cached = getCachedAutocomplete(parsed.query, { limit: 8 });
+    if (cached && cached.results) {
+      renderAutocomplete(cached.results, parsed.query);
+    }
+
     state.acDebounceTimer = setTimeout(async () => {
       state.acAbortController = new AbortController();
       try {
@@ -1186,10 +1193,14 @@ function initAutocompleteListeners() {
         renderAutocomplete(data.results || [], parsed.query);
       } catch (err) {
         if (err.name !== "AbortError") {
-          closeAutocomplete();
+          // Keep existing menu if valid
         }
       }
+<<<<<<< Updated upstream
     }, 150);
+=======
+    }, 120);
+>>>>>>> Stashed changes
   });
 
   els.input.addEventListener("keydown", (e) => {
