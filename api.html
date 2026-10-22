@@ -358,11 +358,12 @@
             Universal Cross-Platform ID Mapping
           </h2>
           <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0 0 var(--space-4) 0;max-width:80ch">
-            Every work in AAR is pre-mapped in our canonical SQLite database to its corresponding native IDs across 7 global industry platforms. You can query AAR using your existing platform IDs, and every API response returns pre-resolved partner IDs and direct canonical URLs.
+            Every work in AAR is pre-mapped in our canonical SQLite database to its corresponding native IDs across 10 global industry and streaming platforms. You can query AAR using your existing platform IDs, and every API response returns pre-resolved partner IDs and direct canonical URLs.
           </p>
 
-          <div style="overflow-x:auto;margin-bottom:var(--space-4)">
-            <table>
+          <div class="table-wrap platform-table-wrap">
+            <div class="table-scroll-hint" aria-hidden="true">&larr; Swipe to view all columns &rarr;</div>
+            <table class="platform-interop-table">
               <thead>
                 <tr>
                   <th style="width:25%">Database / Platform</th>
@@ -429,6 +430,27 @@
                   <td><strong>13,383 works</strong></td>
                   <td><code class="mono">anidb:23</code></td>
                 </tr>
+                <tr>
+                  <td><strong>TheTVDB (TVDb)</strong></td>
+                  <td>Anime &amp; TV Series</td>
+                  <td><code class="mono">tvdb_id</code></td>
+                  <td><strong>10,106 works</strong></td>
+                  <td><code class="mono">tvdb:72025</code></td>
+                </tr>
+                <tr>
+                  <td><strong>TMDB (The Movie Database)</strong></td>
+                  <td>Anime &amp; Movies</td>
+                  <td><code class="mono">tmdb_id</code></td>
+                  <td><strong>10,000 works</strong></td>
+                  <td><code class="mono">tmdb:26209</code></td>
+                </tr>
+                <tr>
+                  <td><strong>IMDb (Internet Movie Database)</strong></td>
+                  <td>Anime &amp; Movies</td>
+                  <td><code class="mono">imdb_id</code></td>
+                  <td><strong>8,837 works</strong></td>
+                  <td><code class="mono">imdb:tt0286390</code></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -436,8 +458,8 @@
           <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);font-size:.85rem;line-height:1.6;color:var(--ink-soft)">
             <strong>Dual-Direction Interoperability:</strong>
             <ul style="margin:.3rem 0 0 1.2rem;padding:0">
-              <li><strong>Input Resolution:</strong> Endpoints like <code class="mono">GET /recommend/{id}</code> and <code class="mono">POST /recommend (seed_work_ids)</code> accept native AAR IDs (<code>aar_9253</code>) or prefixed partner IDs (<code>mal:9253</code>, <code>al:9253</code>, <code>vndb:v17</code>) out of the box.</li>
-              <li><strong>Output Enrichment:</strong> Every work object in <code class="mono">/search</code>, <code class="mono">/ask</code>, and <code class="mono">/recommend</code> responses contains all mapped partner IDs plus a ready-to-use <code class="mono">sources</code> array of URLs.</li>
+              <li><strong>Input Resolution:</strong> Endpoints like <code class="mono">GET /recommend/{id}</code> and <code class="mono">POST /recommend (seed_work_ids)</code> accept native AAR IDs (<code>aar_9253</code>), catalog IDs (<code>mal:9253</code>, <code>al:9253</code>, <code>vndb:v17</code>), or streaming IDs (<code>tmdb:26209</code>, <code>tvdb:72025</code>, <code>imdb:tt0286390</code>) out of the box.</li>
+              <li><strong>Output Enrichment:</strong> Every work object in <code class="mono">/search</code>, <code class="mono">/ask</code>, and <code class="mono">/recommend</code> responses contains all mapped partner IDs (including <code>tmdb_id</code>, <code>tmdb_type</code>, <code>tmdb_season</code>, <code>imdb_id</code>, <code>tvdb_id</code>) plus a ready-to-use <code class="mono">sources</code> array of URLs.</li>
             </ul>
           </div>
         </div>
@@ -1278,7 +1300,7 @@
           <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content boolean (default <code>false</code> excludes 18+ content; <code>true</code> returns only adult works)</span></div>
           <div class="field"><span class="field__name">min_episodes / max_episodes</span><span class="field__value">Integer episode count boundaries (e.g. <code>min_episodes: 24</code>, <code>max_episodes: 26</code>)</span></div>
                     <div class="field"><span class="field__name">episodes</span><span class="field__value">Exact episode count filter (e.g. <code>12</code>)</span></div>
-          <div class="field"><span class="field__name">required_ids</span><span class="field__value">Filter by works possessing specific external IDs (e.g. <code>["tmdb", "imdb"]</code> or comma/plus separated string <code>"tmdb,tvdb"</code>). Supported IDs: <code>"tmdb"</code>, <code>"imdb"</code>, <code>"tvdb"</code>, <code>"mal"</code>, <code>"anilist"</code>, <code>"anidb"</code>, <code>"kitsu"</code>, <code>"vndb"</code>. Empty returns all.</span></div>
+          <div class="field"><span class="field__name">required_ids</span><span class="field__value">Filter by works possessing specific external IDs (e.g. <code>["tmdb", "imdb"]</code> or comma/plus separated string <code>"tmdb,tvdb"</code>). Supported IDs: <code>"tmdb"</code>, <code>"imdb"</code>, <code>"tvdb"</code>, <code>"mal"</code>, <code>"anilist"</code>, <code>"anidb"</code>, <code>"kitsu"</code>, <code>"vndb"</code>, <code>"anisearch"</code>, <code>"anime_planet"</code>. Empty returns all.</span></div>
 
           <h3 style="font-size:1.15rem;margin:var(--space-6) 0 var(--space-3);color:var(--sakura-deep)">The <code>include</code> Relational Parameter</h3>
           <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-3)">

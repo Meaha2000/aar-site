@@ -1240,3 +1240,171 @@
   color: var(--sakura-deep);
   border: 1px solid var(--rule);
 }
+
+/* ---- Platform Interoperability Table Responsive Styling ---- */
+.platform-table-wrap {
+  margin: var(--space-4) 0 var(--space-6);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper-raised);
+  box-shadow: var(--card-shadow);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.platform-interop-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.platform-interop-table th {
+  background: var(--paper-deep);
+  font-family: var(--mono);
+  font-size: .6875rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--rule-strong);
+  text-align: left;
+}
+
+.platform-interop-table td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: .875rem;
+  vertical-align: middle;
+}
+
+.platform-interop-table tr:last-child td {
+  border-bottom: none;
+}
+
+.platform-interop-table code {
+  white-space: nowrap;
+  font-size: .8125rem;
+  background: var(--paper-deep);
+  padding: .15rem .4rem;
+  border-radius: 4px;
+}
+
+/* Mobile: transform rows into beautifully formatted platform cards */
+@media (max-width: 768px) {
+  .platform-table-wrap {
+    overflow: visible;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .platform-interop-table {
+    display: block;
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  .platform-interop-table thead {
+    display: none;
+  }
+
+  .platform-interop-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .platform-interop-table tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2) var(--space-3);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: 10px;
+    padding: var(--space-4);
+    box-shadow: var(--card-shadow);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .platform-interop-table td {
+    display: block;
+    padding: 0;
+    border: none;
+    font-size: .875rem;
+    line-height: 1.45;
+  }
+
+  /* 1. Platform Name Header */
+  .platform-interop-table td:first-child {
+    grid-column: 1 / -1;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* 2. Target Media */
+  .platform-interop-table td:nth-child(2)::before {
+    content: "Target Media";
+    display: block;
+    font-family: var(--mono);
+    font-size: .65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-faint);
+    margin-bottom: .2rem;
+  }
+
+  /* 3. Response JSON Field */
+  .platform-interop-table td:nth-child(3)::before {
+    content: "Response Field";
+    display: block;
+    font-family: var(--mono);
+    font-size: .65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-faint);
+    margin-bottom: .2rem;
+  }
+
+  /* 4. Mapped Works */
+  .platform-interop-table td:nth-child(4)::before {
+    content: "Mapped Works";
+    display: block;
+    font-family: var(--mono);
+    font-size: .65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-faint);
+    margin-bottom: .2rem;
+  }
+
+  /* 5. Example Input URI */
+  .platform-interop-table td:nth-child(5)::before {
+    content: "Example Input URI";
+    display: block;
+    font-family: var(--mono);
+    font-size: .65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-faint);
+    margin-bottom: .2rem;
+  }
+}
+
+@media (max-width: 440px) {
+  .platform-interop-table tr {
+    grid-template-columns: 1fr;
+  }
+}

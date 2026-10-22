@@ -35,7 +35,10 @@ AAR functions as a universal cross-platform entity resolution bridge across the 
 - **Kitsu (`kitsu_id`):** 20,827 works mapped (Anime & Manga)
 - **VNDB (`vndb_id`):** 20,002 works mapped (Visual Novel Database)
 - **aniSearch (`anisearch_id`):** 19,653 works mapped (Anime & Manga)
-- **AniDB (`anidb_id`):** 13,383 works mapped (Anime)
+- **AniDB (`anidb_id`):** 13,383 works
+- **TheTVDB (`tvdb_id`):** 10,106 works
+- **TMDB (`tmdb_id`):** 10,000 works (includes `tmdb_type`, `tmdb_season`)
+- **IMDb (`imdb_id`):** 8,837 works mapped (Anime)
 
 **Developer & AI Agent Integration Advantages:**
 1. **Direct Input Queries:** Any recommendation endpoint (`GET /recommend/{id}` or `POST /recommend`) accepts partner ID prefixes out of the box (`mal:9253`, `al:9253`, `vndb:v17`, `aar_9253`) with zero manual ID conversion.
@@ -251,7 +254,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | `max_year` | `integer` | Maximum release year bound (e.g. `2024`). |
 | `min_score` | `number` | Minimum review score threshold (float between 0.0 and 10.0). |
 | `adult` | `boolean` | Explicit 18+ content flag (default `false` excludes adult titles). |
-| `required_ids` | `array[string]` or `string` | Filter by works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`). |
+| `required_ids` | `array[string]` or `string` | Filter by works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
 | `min_episodes` | `integer` | Minimum episode count bound (e.g. `12`, `24`). |
 | `max_episodes` | `integer` | Maximum episode count bound (e.g. `26`, `50`). |
 | `episodes` | `integer` | Exact episode count filter (e.g. `12`). |
