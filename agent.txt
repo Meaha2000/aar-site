@@ -20,13 +20,13 @@
 ### Universal Pre-Mapped External Database IDs & Cross-Platform Bridge:
 AAR functions as a universal cross-platform entity resolution bridge across the 7 major global anime, manga, and visual novel databases. Every work in AAR is pre-mapped and returned with its native platform identifiers:
 - **AAR Native Unified ID (`aar_id`):** 144,698 works (100% full coverage, e.g. `aar_1`, `aar_9253`)
-- **MyAnimeList (`mal_id`):** 114,408 works mapped (Anime & Manga)
-- **AniList (`anilist_id`):** 56,007 works mapped (Anime & Manga)
-- **Anime-Planet (`anime_planet_slug`):** 25,215 works mapped (Anime & Manga)
-- **Kitsu (`kitsu_id`):** 20,827 works mapped (Anime & Manga)
+- **MyAnimeList (`mal_id`):** 114,462 works mapped (Anime & Manga)
+- **AniList (`anilist_id`):** 56,148 works mapped (Anime & Manga)
+- **Anime-Planet (`anime_planet_slug`):** 26,820 works mapped (Anime & Manga)
+- **Kitsu (`kitsu_id`):** 22,227 works mapped (Anime & Manga)
 - **VNDB (`vndb_id`):** 20,002 works mapped (Visual Novel Database)
-- **aniSearch (`anisearch_id`):** 19,653 works mapped (Anime & Manga)
-- **AniDB (`anidb_id`):** 13,383 works
+- **aniSearch (`anisearch_id`):** 21,166 works mapped (Anime & Manga)
+- **AniDB (`anidb_id`):** 16,824 works
 - **TheTVDB (`tvdb_id`):** 10,106 works
 - **TMDB (`tmdb_id`):** 10,000 works (includes `tmdb_type`, `tmdb_season`)
 - **IMDb (`imdb_id`):** 8,837 works mapped (Anime)
