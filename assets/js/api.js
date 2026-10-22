@@ -112,6 +112,9 @@ export function buildSearchParams(opts) {
   if (include && include.length) {
     p.set("include", include.join(","));
   }
+  if (required_ids) {
+    p.set("required_ids", Array.isArray(required_ids) ? required_ids.join(",") : String(required_ids));
+  }
 
   return p;
 }
@@ -146,6 +149,9 @@ export function buildSearchPayload(opts) {
   if (min_year != null && min_year !== "") scope.min_year = Number(min_year);
   if (max_year != null && max_year !== "") scope.max_year = Number(max_year);
   if (min_score != null && min_score !== "") scope.min_score = Number(min_score);
+  if (required_ids) {
+    scope.required_ids = Array.isArray(required_ids) ? required_ids : String(required_ids).split(/[,+\s]+/).filter(Boolean);
+  }
 
   if (Object.keys(scope).length > 0) payload.scope = scope;
 

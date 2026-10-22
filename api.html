@@ -1277,7 +1277,8 @@
           <div class="field"><span class="field__name">min_score</span><span class="field__value">Minimum review score threshold (float: <code>0.0</code> to <code>10.0</code>, e.g. <code>8.5</code>)</span></div>
           <div class="field"><span class="field__name">adult</span><span class="field__value">Explicit-content boolean (default <code>false</code> excludes 18+ content; <code>true</code> returns only adult works)</span></div>
           <div class="field"><span class="field__name">min_episodes / max_episodes</span><span class="field__value">Integer episode count boundaries (e.g. <code>min_episodes: 24</code>, <code>max_episodes: 26</code>)</span></div>
-          <div class="field"><span class="field__name">episodes</span><span class="field__value">Exact episode count filter (e.g. <code>12</code>)</span></div>
+                    <div class="field"><span class="field__name">episodes</span><span class="field__value">Exact episode count filter (e.g. <code>12</code>)</span></div>
+          <div class="field"><span class="field__name">required_ids</span><span class="field__value">Filter by works possessing specific external IDs (e.g. <code>["tmdb", "imdb"]</code> or comma/plus separated string <code>"tmdb,tvdb"</code>). Supported IDs: <code>"tmdb"</code>, <code>"imdb"</code>, <code>"tvdb"</code>, <code>"mal"</code>, <code>"anilist"</code>, <code>"anidb"</code>, <code>"kitsu"</code>, <code>"vndb"</code>. Empty returns all.</span></div>
 
           <h3 style="font-size:1.15rem;margin:var(--space-6) 0 var(--space-3);color:var(--sakura-deep)">The <code>include</code> Relational Parameter</h3>
           <p class="faint" style="font-size:.9375rem;margin-bottom:var(--space-3)">

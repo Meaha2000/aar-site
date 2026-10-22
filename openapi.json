@@ -5,6 +5,12 @@
     "description": "Industrial-Grade, Ultra-Low-Latency (~500ms) Neural Hybrid Search & Retrieval Engine over Anime, Manga, Light Novels, and Visual Novels.\n\n### Recommended Integration Profiles & Use Cases:\n- **Streaming Services & Media Catalogs:** Powers instant search-as-you-type and discovery across titles, obscure character traits, and vague plot descriptions in ~500ms.\n- **AI Chatbots & Conversational RAG:** Provides high-density context blocks with exact provenance, character synergy, and structured metadata to prevent hallucinations.\n- **Autonomous AI Agents:** Operates as a fast, deterministic tool with strict SQL scope filtering (years, formats, adult tags) and zero conversational bloat.\n\n### Query Breakdown & Performance Modes:\n- **Default Mode (`query_breakdown=false`):** Blazing-fast native hybrid retrieval fusing ScaNN-cascade dense vectors (int8 Qdrant), FTS5 BM25, and deep Cross-Encoder reranking without LLM overhead (~500ms).\n- **Optional LLM Breakdown (`query_breakdown=true`):** Pass `query_breakdown: true` to decompose complex, multi-part, or comparative queries via an LLM prior to vector retrieval.",
     "version": "1.2.0"
   },
+  "servers": [
+    {
+      "url": "https://api.aarecords.tech",
+      "description": "Production Edge Gateway (Cloudflare + Anycast)"
+    }
+  ],
   "paths": {
     "/health": {
       "get": {
@@ -545,6 +551,24 @@
               "title": "Author"
             },
             "description": "Filter by author names (repeatable or comma-separated)"
+          },
+          {
+            "name": "required_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by works possessing specific external IDs (e.g. 'tmdb_id', 'tmdb,kitsu', 'mal+imdb'). Empty returns all.",
+              "title": "Required Ids"
+            },
+            "description": "Filter by works possessing specific external IDs (e.g. 'tmdb_id', 'tmdb,kitsu', 'mal+imdb'). Empty returns all."
           },
           {
             "name": "director",
@@ -1103,6 +1127,24 @@
             "description": "Minimum score (0-10)"
           },
           {
+            "name": "required_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma or plus-separated required external IDs (e.g. 'tmdb,imdb', 'tmdb_id+tvdb_id')",
+              "title": "Required Ids"
+            },
+            "description": "Comma or plus-separated required external IDs (e.g. 'tmdb,imdb', 'tmdb_id+tvdb_id')"
+          },
+          {
             "name": "x-api-key",
             "in": "header",
             "required": false,
@@ -1460,6 +1502,24 @@
             "description": "Include adult content"
           },
           {
+            "name": "required_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter recommendations by required external IDs (e.g. 'tmdb', 'tmdb+imdb')",
+              "title": "Required Ids"
+            },
+            "description": "Filter recommendations by required external IDs (e.g. 'tmdb', 'tmdb+imdb')"
+          },
+          {
             "name": "x-api-key",
             "in": "header",
             "required": false,
@@ -1503,7 +1563,7 @@
     "/suggest": {
       "post": {
         "summary": "Create Contribution",
-        "description": "Submit a new user contribution or suggestion (\"اقتراحات أو إضافات\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
+        "description": "Submit a new user contribution or suggestion (\"\u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a \u0623\u0648 \u0625\u0636\u0627\u0641\u0627\u062a\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
         "operationId": "create_contribution_suggest_post",
         "parameters": [
           {
@@ -1560,7 +1620,7 @@
     "/contributions": {
       "post": {
         "summary": "Create Contribution",
-        "description": "Submit a new user contribution or suggestion (\"اقتراحات أو إضافات\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
+        "description": "Submit a new user contribution or suggestion (\"\u0627\u0642\u062a\u0631\u0627\u062d\u0627\u062a \u0623\u0648 \u0625\u0636\u0627\u0641\u0627\u062a\"):\n- ADD_WORK: Report a missing anime, manga, visual novel, or light novel\n- ADD_ALIAS: Suggest a missing alternate title, English name, or Arabic alias\n- EDIT_METADATA: Suggest corrections for tags, year, studios, or synopsis\n- FEATURE_OR_VIBE: Suggest new vibe tags or system features\n\nFeatures automatic deduplication against existing 144k catalog and hash-based upvoting.",
         "operationId": "create_contribution_contributions_post",
         "parameters": [
           {
@@ -2384,6 +2444,24 @@
             "description": "Include adult/NSFW content in recommendations",
             "default": false
           },
+          "required_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Required Ids",
+            "description": "Require external IDs e.g. ['tmdb', 'imdb', 'tvdb'] or 'tmdb,imdb'"
+          },
           "limit": {
             "type": "integer",
             "maximum": 100.0,
@@ -2604,6 +2682,61 @@
               }
             ],
             "title": "Format"
+          },
+          "tmdb_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tmdb Id"
+          },
+          "tmdb_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tmdb Type"
+          },
+          "tmdb_season": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tmdb Season"
+          },
+          "imdb_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Imdb Id"
+          },
+          "tvdb_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tvdb Id"
           },
           "merged_works": {
             "anyOf": [
@@ -2959,6 +3092,23 @@
               }
             ],
             "title": "Character Names"
+          },
+          "required_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Required Ids"
           }
         },
         "additionalProperties": false,
@@ -3053,6 +3203,24 @@
             "description": "Whether to decompose compound queries using an LLM (true, adds ~400-800ms) or use the default high-speed native hybrid engine (~500ms) without LLM decomposition (false). Default: false.",
             "default": false
           },
+          "required_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Required Ids",
+            "description": "Filter results to only works having specific IDs (e.g. 'tmdb_id', 'tmdb_id,kitsu_id', 'mal+imdb'). Empty returns all."
+          },
           "rerank": {
             "anyOf": [
               {
@@ -3114,11 +3282,5 @@
         "title": "ValidationError"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://api.aarecords.tech",
-      "description": "Production Edge Gateway (Cloudflare + Anycast)"
-    }
-  ]
+  }
 }

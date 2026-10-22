@@ -218,6 +218,7 @@ Advanced hybrid retrieval across the 6 supported mediums.
 | `max_year` | `integer` | Maximum release year bound (e.g. `2024`). |
 | `min_score` | `number` | Minimum review score threshold (float between 0.0 and 10.0). |
 | `adult` | `boolean` | Explicit 18+ content flag (default `false` excludes adult titles). |
+| `required_ids` | `array[string]` or `string` | Filter by works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`). |
 
 #### Request Example:
 ```json

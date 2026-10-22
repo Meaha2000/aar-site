@@ -66,6 +66,7 @@ const els = {
   minYearInput:   $("[data-opt-min-year]"),
   maxYearInput:   $("[data-opt-max-year]"),
   minScoreInput:  $("[data-opt-min-score]"),
+  requiredIdsInput: $("[data-opt-required-ids]"),
   includeChips:   Array.from(document.querySelectorAll("[data-opt-include]")),
   resetBtns:      Array.from(document.querySelectorAll("[data-reset-advanced]")),
 };
@@ -131,6 +132,7 @@ const state = {
   minYear: "",                  // "" or number
   maxYear: "",                  // "" or number
   minScore: "",                 // "" or number
+  requiredIds: "",              // "" or string
   include: new Set(),           // "staff", "characters", "relations"
   isAdvancedOpen: false,
   inflight: null,               // AbortController
@@ -158,6 +160,7 @@ function currentOptions(question) {
     min_year: state.minYear,
     max_year: state.maxYear,
     min_score: state.minScore,
+    required_ids: state.requiredIds,
     include: Array.from(state.include),
   };
 }
@@ -175,6 +178,9 @@ function updateSummaryPill() {
   }
   if (state.minScore) {
     parts.push(`Score ≥${state.minScore}`);
+  }
+  if (state.requiredIds) {
+    parts.push(`IDs: ${state.requiredIds}`);
   }
   if (state.include.size > 0) {
     parts.push(`+${Array.from(state.include).join(",")}`);
@@ -1080,6 +1086,12 @@ function initAdvanced() {
       renderPreview(state.lastQuery);
     });
   }
+  if (els.requiredIdsInput) {
+    els.requiredIdsInput.addEventListener("input", () => {
+      state.requiredIds = els.requiredIdsInput.value.trim();
+      updateActiveCount();
+    });
+  }
   if (els.minScoreInput) {
     els.minScoreInput.addEventListener("input", () => {
       state.minScore = els.minScoreInput.value.trim();
@@ -1118,6 +1130,7 @@ function initAdvanced() {
       state.minYear = "";
       state.maxYear = "";
       state.minScore = "";
+      state.requiredIds = "";
       state.include.clear();
 
       for (const b of els.methodBtns) {
@@ -1157,6 +1170,7 @@ function initAdvanced() {
       if (els.minYearInput) els.minYearInput.value = "";
       if (els.maxYearInput) els.maxYearInput.value = "";
       if (els.minScoreInput) els.minScoreInput.value = "";
+      if (els.requiredIdsInput) els.requiredIdsInput.value = "";
 
       for (const c of els.includeChips) {
         c.classList.remove("is-active");
