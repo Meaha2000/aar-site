@@ -1116,21 +1116,22 @@
             </div>
 
             <h4 class="subhead" style="margin-top:var(--space-4)">Request Parameters</h4>
-            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Work identifier. Supports native unified AAR IDs (<code>aar_1</code>, <code>aar_9253</code>), external partner IDs (<code>mal:9253</code>, <code>anilist:9253</code>, <code>vndb:v17</code>), or full canonical URIs. The engine automatically resolves any supported ID format.</span></div>
-            <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 seed work identifiers. Accepts native AAR IDs (e.g. <code>["aar_1", "aar_9253"]</code>), external database IDs (e.g. <code>["mal:5114", "vndb:v17"]</code>), or canonical IDs.</span></div>
+            <div class="field"><span class="field__name">work_id</span><span class="field__value"><strong>string</strong> (path parameter for GET) &mdash; Seed work identifier. Supports native unified AAR IDs (<code>aar_9253</code>), streaming IDs (<code>tmdb:42509</code>, <code>tvdb:72025</code>, <code>imdb:tt0877057</code>), catalog IDs (<code>mal:9253</code>, <code>al:9253</code>, <code>kitsu:1</code>, <code>anidb:23</code>, <code>anisearch:5048</code>, <code>vndb:v17</code>, <code>ap:cowboy-bebop</code>), or full canonical URIs. For TV shows sharing a single TMDB/TVDb ID across seasons, Season 1 is authoritatively prioritized.</span></div>
+            <div class="field"><span class="field__name">seed_work_ids</span><span class="field__value"><strong>array of strings</strong> (required for POST) &mdash; 1 to 10 seed work identifiers. Accepts native AAR IDs (e.g. <code>["aar_9253"]</code>), streaming IDs (e.g. <code>["tmdb:42509", "tvdb:72025"]</code>), external catalog IDs (e.g. <code>["mal:5114", "anisearch:5048", "vndb:v17"]</code>), or canonical IDs.</span></div>
+            <div class="field"><span class="field__name">required_ids</span><span class="field__value"><strong>array of strings or comma-separated string</strong> (optional, query param for GET, body field for POST) &mdash; Filter recommendations to works possessing specific external streaming or catalog IDs (e.g. <code>"tmdb"</code>, <code>"imdb"</code>, <code>"tvdb"</code>, <code>"mal"</code>, <code>"anilist"</code>, <code>"anidb"</code>, <code>"kitsu"</code>, <code>"vndb"</code>, <code>"anisearch"</code>, <code>"anime_planet"</code>). Supports multi-platform combinations like <code>required_ids=tmdb,imdb</code> to guarantee streaming availability on specific services.</span></div>
             <div class="field"><span class="field__name">negative_work_ids</span><span class="field__value"><strong>array of strings</strong> (optional, max: <code>10</code>) &mdash; Disliked or unwanted work identifiers to steer recommendations away from (negative prompt guidance).</span></div>
             <div class="field"><span class="field__name">target_scope</span><span class="field__value"><strong>string</strong> (optional) &mdash; Restrict recommendations to a medium: <code>"anime"</code>, <code>"manga"</code>, <code>"visual_novel"</code>, <code>"light_novel"</code>, <code>"manhwa"</code>, <code>"manhua"</code>.</span></div>
-            <div class="field"><span class="field__name">exclude_same_franchise</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) &mdash; Whether to suppress sequels, prequels, movies, and spin-offs of seed works via DB relation graph to prioritize fresh discoveries.</span></div>
+            <div class="field"><span class="field__name">exclude_same_franchise</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>true</code>) &mdash; Whether to suppress sequels, prequels, movies, and spin-offs of seed works via DB relation graph and title matching to prioritize fresh discoveries.</span></div>
             <div class="field"><span class="field__name">include_adult</span><span class="field__value"><strong>boolean</strong> (optional, default: <code>false</code>) &mdash; Include adult/NSFW content in recommendations.</span></div>
             <div class="field"><span class="field__name">limit</span><span class="field__value"><strong>integer</strong> (optional, default: <code>10</code>, max: <code>100</code>) &mdash; Number of recommended titles to return (1&ndash;100).</span></div>
 
-            <h4 class="subhead">Example Request (GET)</h4>
+            <h4 class="subhead">Example Request (GET &mdash; Streaming Seed with TMDB Filter)</h4>
             <div class="code">
               <div class="code__bar">
                 <span class="micro">cURL (GET)</span>
-                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://api.aarecords.tech/recommend/aar_1?limit=5"   -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
+                <button class="btn btn--quiet" type="button" data-copy-text='curl -X GET "https://api.aarecords.tech/recommend/tmdb:42509?required_ids=tmdb&amp;limit=5"   -H "x-api-key: aar_free_access"'><span data-copy-label>Copy</span></button>
               </div>
-              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/recommend/aar_1?limit=5"   -H "x-api-key: aar_free_access"</code></pre></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/recommend/tmdb:42509?required_ids=tmdb&amp;limit=5"   -H "x-api-key: aar_free_access"</code></pre></div>
             </div>
 
             <h4 class="subhead">Example Request (POST &mdash; JSON Payload)</h4>
@@ -1143,7 +1144,8 @@
   -H "Content-Type: application/json" \
   -H "x-api-key: aar_free_access" \
   -d '{
-    "seed_work_ids": ["aar_1"],
+    "seed_work_ids": ["tmdb:42509"],
+    "required_ids": ["tmdb", "imdb"],
     "limit": 5
   }'</code></pre></div>
             </div>

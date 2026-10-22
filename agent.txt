@@ -327,20 +327,25 @@ Work-to-work semantic recommendation based on narrative DNA, thematic essence, c
 #### Request Parameters
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 canonical work IDs (e.g. `["work:anime:mal_9253_al_9253"]`). |
-| `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. |
-| `limit` | `integer` | No | `10` | Number of recommendations to return (1–50). |
+| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 seed work identifiers. Accepts native AAR IDs (`"aar_9253"`), streaming IDs (`"tmdb:42509"`, `"tvdb:72025"`), or catalog IDs (`"mal:9253"`, `"anisearch:5048"`). |
+| `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. Supports streaming IDs (`tmdb:42509`, `tvdb:72025`, `imdb:tt0877057`), catalog IDs (`mal:9253`, `al:9253`), or native IDs (`aar_9253`). |
+| `required_ids` | `array[string]` or `string` | No | `null` | Filter recommendations to works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
+| `target_scope` | `string` | No | `null` | Restrict recommendations to a medium: `"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`, `"manhwa"`, `"manhua"`. |
+| `exclude_same_franchise` | `boolean` | No | `true` | Suppress sequels, prequels, and spin-offs of seed works. |
+| `include_adult` | `boolean` | No | `false` | Include adult/NSFW content in recommendations. |
+| `limit` | `integer` | No | `10` | Number of recommendations to return (1–100). |
 
 #### Request Example (GET):
 ```bash
-curl -X GET "https://api.aarecords.tech/recommend/work:anime:mal_9253_al_9253?limit=5" \
+curl -X GET "https://api.aarecords.tech/recommend/tmdb:42509?required_ids=tmdb&limit=5" \
   -H "x-api-key: aar_free_access"
 ```
 
 #### Request Example (POST):
 ```json
 {
-  "seed_work_ids": ["work:anime:mal_9253_al_9253"],
+  "seed_work_ids": ["tmdb:42509"],
+  "required_ids": ["tmdb", "imdb"],
   "limit": 5
 }
 ```
