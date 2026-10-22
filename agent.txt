@@ -18,7 +18,7 @@
 > Anime Akashic Records (AAR) is a discovery and metadata API for applications that need to search across works using natural-language descriptions, story concepts, and atmosphere — not only exact titles.
 
 ### Universal Pre-Mapped External Database IDs & Cross-Platform Bridge:
-AAR functions as a universal cross-platform entity resolution bridge across the 7 major global anime, manga, and visual novel databases. Every work in AAR is pre-mapped and returned with its native platform identifiers:
+AAR functions as a universal cross-platform entity resolution bridge across the 10 major global anime, manga, visual novel, and streaming platforms. Every work in AAR is pre-mapped and returned with its native platform identifiers:
 - **AAR Native Unified ID (`aar_id`):** 144,698 works (100% full coverage, e.g. `aar_1`, `aar_9253`)
 - **MyAnimeList (`mal_id`):** 114,462 works mapped (Anime & Manga)
 - **AniList (`anilist_id`):** 56,148 works mapped (Anime & Manga)
