@@ -400,7 +400,7 @@ The recommendation endpoints seamlessly accept any supported work identifier for
 | `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 100 seed work IDs. Accepts native AAR IDs (`["aar_9253"]`), streaming IDs (`["tmdb:42509"]`), or catalog IDs (`["mal:5114"]`). |
 | `required_ids` | `array[string]` or `string` | No | `null` | Filter recommendations to works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
 | `negative_work_ids` | `array[string]` | No | `[]` | Up to 100 disliked work IDs to steer recommendations away from (negative prompting). |
-| `target_scope` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`, `"manhwa"`, `"manhua"`). |
+| `target_scope` | `string` | No | `null` | Optional media type filter, single or comma-separated (e.g. `"anime"`, `"manga,manhwa"`, `"visual_novel"`, `"light_novel"`, `"manhua"`). |
 | `exclude_same_franchise` | `boolean` | No | `true` | Suppress direct sequels, prequels, and same-universe spin-offs via DB relation graph. |
 | `include_adult` | `boolean` | No | `false` | Include mature / 18+ titles in recommendations. |
 | `limit` | `integer` | No | `10` | Number of recommendations to return (1–100). |
@@ -618,7 +618,7 @@ Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Anti
 - **`aar_find_similar`**: Find thematically and semantically similar works to a seed work using vector centroid similarity and shared narrative tropes.
   - `work_id` (`string`, required): Canonical work ID (e.g. `work:anime:mal_1_al_1`).
   - `limit` (`integer`, optional, default: 5): Maximum recommendations to return (1-100).
-  - `target_scope` (`string`, optional): Target media type filter (`"anime"`, `"manga"`, etc.).
+  - `target_scope` (`string`, optional): Target media type filter, single or comma-separated (e.g. `"anime"`, `"manga,manhwa"`).
   - `exclude_franchise` (`boolean`, optional, default: `true`): Exclude direct sequels/prequels to surface fresh works.
   - `include_sources` (`boolean`, optional, default: `false`): Include external database links (MAL, AniList, etc.).
   - `return_data` (`boolean`, optional, default: `false`): Return complete raw structured JSON array.
