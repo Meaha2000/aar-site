@@ -113,7 +113,7 @@ const MODE_GUIDANCE = {
     summary: "Type any title to see instant suggestions from the catalogue, or enter a canonical ID (e.g. <code>aar_30914</code>, <code>mal:5114</code>, <code>anilist:16498</code>) or a direct MyAnimeList link. You can add multiple seed works to blend recommendations.",
     tips: [
       "Start typing any title (e.g. <em>\"Frieren\"</em>, <em>\"Attack on Titan\"</em>, <em>\"Solo Leveling\"</em>) and select it",
-      "Add up to 10 seed works to blend distinct tropes and genres",
+      "Add up to 100 seed works to blend distinct tropes and genres",
       "Results are ranked by shared narrative tags and semantic similarity"
     ]
   }
@@ -244,15 +244,21 @@ function renderPreview(question) {
     let displayUrl = "";
     let curlCmd = "";
 
+    const targetScope = state.types.size ? Array.from(state.types).map(t => t.toLowerCase()).join(",") : null;
     if (effectiveMethod === "POST") {
       displayUrl = `${baseUrl}/recommend`;
-      const bodyJson = JSON.stringify({ seed_work_ids: seeds, limit: state.limit });
+      const bodyObj = { seed_work_ids: seeds, limit: state.limit };
+      if (targetScope) bodyObj.target_scope = targetScope;
+      if (state.requiredIds) bodyObj.required_ids = state.requiredIds.split(/[,+\s]+/).filter(Boolean);
+      const bodyJson = JSON.stringify(bodyObj);
       curlCmd = `curl -X POST "${displayUrl}" \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: aar_free_access" \\
   -d '${bodyJson}'`;
     } else {
       displayUrl = `${baseUrl}/recommend/${encodeURIComponent(seeds[0])}?limit=${state.limit}`;
+      if (targetScope) displayUrl += `&target_scope=${encodeURIComponent(targetScope)}`;
+      if (state.requiredIds) displayUrl += `&required_ids=${encodeURIComponent(state.requiredIds)}`;
       curlCmd = `curl -X GET "${displayUrl}" \\
   -H "x-api-key: aar_free_access"`;
     }
@@ -642,8 +648,8 @@ function renderSeedChips() {
 function addSeedWork(item) {
   if (!item || !item.workId) return;
   if (state.selectedSeeds.some(s => s.workId === item.workId)) return;
-  if (state.selectedSeeds.length >= 10) {
-    statusNote("warn", "Maximum of 10 seed works supported by API.");
+  if (state.selectedSeeds.length >= 100) {
+    statusNote("warn", "Maximum of 100 seed works supported by API.");
     return;
   }
   state.selectedSeeds.push({
@@ -891,7 +897,8 @@ async function runQuery(question) {
       seedIds = Array.from(new Set(seedIds));
 
       statusNote("info", `<span class="spinner" aria-hidden="true"></span> Finding resonant works for ${seedIds.length} seed work(s)…`);
-      const data = await recommend(seedIds, { limit: state.limit, signal: ctrl.signal, method: state.httpMethod });
+      const targetScope = state.types.size ? Array.from(state.types).map(t => t.toLowerCase()).join(",") : null;
+      const data = await recommend(seedIds, { limit: state.limit, targetScope, requiredIds: state.requiredIds, signal: ctrl.signal, method: state.httpMethod });
       renderRecommendationResults(data, seedIds.join(", "), state.selectedSeeds);
       return;
     }

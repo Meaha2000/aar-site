@@ -397,9 +397,9 @@ The recommendation endpoints seamlessly accept any supported work identifier for
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. Accepts native AAR IDs (`aar_1`), external platform IDs (`mal:9253`, `v17`), or canonical URIs. |
-| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 seed work IDs. Accepts native AAR IDs (`["aar_9253"]`), streaming IDs (`["tmdb:42509"]`), or catalog IDs (`["mal:5114"]`). |
+| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 100 seed work IDs. Accepts native AAR IDs (`["aar_9253"]`), streaming IDs (`["tmdb:42509"]`), or catalog IDs (`["mal:5114"]`). |
 | `required_ids` | `array[string]` or `string` | No | `null` | Filter recommendations to works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
-| `negative_work_ids` | `array[string]` | No | `[]` | Up to 10 disliked work IDs to steer recommendations away from (negative prompting). |
+| `negative_work_ids` | `array[string]` | No | `[]` | Up to 100 disliked work IDs to steer recommendations away from (negative prompting). |
 | `target_scope` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`, `"manhwa"`, `"manhua"`). |
 | `exclude_same_franchise` | `boolean` | No | `true` | Suppress direct sequels, prequels, and same-universe spin-offs via DB relation graph. |
 | `include_adult` | `boolean` | No | `false` | Include mature / 18+ titles in recommendations. |

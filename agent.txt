@@ -327,7 +327,8 @@ Work-to-work semantic recommendation based on narrative DNA, thematic essence, c
 #### Request Parameters
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 10 seed work identifiers. Accepts native AAR IDs (`"aar_9253"`), streaming IDs (`"tmdb:42509"`, `"tvdb:72025"`), or catalog IDs (`"mal:9253"`, `"anisearch:5048"`). |
+| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 100 seed work identifiers. Accepts native AAR IDs (`"aar_9253"`), streaming IDs (`"tmdb:42509"`, `"tvdb:72025"`), or catalog IDs (`"mal:9253"`, `"anisearch:5048"`). |
+| `negative_work_ids` | `array[string]` | No | `[]` | Up to 100 disliked work identifiers to steer recommendations away from (negative prompt guidance). |
 | `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. Supports streaming IDs (`tmdb:42509`, `tvdb:72025`, `imdb:tt0877057`), catalog IDs (`mal:9253`, `al:9253`), or native IDs (`aar_9253`). |
 | `required_ids` | `array[string]` or `string` | No | `null` | Filter recommendations to works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
 | `target_scope` | `string` | No | `null` | Restrict recommendations to a medium: `"anime"`, `"manga"`, `"visual_novel"`, `"light_novel"`, `"manhwa"`, `"manhua"`. |

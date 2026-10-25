@@ -80,6 +80,7 @@ export function buildSearchParams(opts) {
     max_year,
     min_score,
     include,
+    required_ids,
   } = opts;
 
   const p = new URLSearchParams();
@@ -131,6 +132,7 @@ export function buildSearchPayload(opts) {
     max_year,
     min_score,
     include,
+    required_ids,
   } = opts;
 
   const payload = { question };
