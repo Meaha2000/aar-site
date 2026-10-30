@@ -76,10 +76,17 @@ const els = {
   resetBtns:      Array.from(document.querySelectorAll("[data-reset-advanced]")),
   // Lore Advanced Controls
   loreControls:      $("[data-lore-controls]"),
+  toggleLoreBtn:     $("[data-toggle-lore-panel]"),
+  lorePanel:         $("[data-lore-panel]"),
+  loreSummary:       $("[data-lore-summary]"),
+  resetLoreBtn:      $("[data-reset-lore]"),
+  loreGranSelect:    $("[data-lore-granularity-select]"),
   loreSearchFilters: $("[data-lore-search-filters]"),
   loreRecFilters:    $("[data-lore-rec-filters]"),
   loreGranChips:     Array.from(document.querySelectorAll("[data-lore-granularity]")),
   advWorkId:         $("[data-adv-work-id]"),
+  loreWorkChip:      $("[data-lore-work-chip]"),
+  loreWorkAc:        $("[data-lore-work-ac]"),
   loadWorkArcsBtn:   $("[data-load-work-arcs]"),
   advArcName:        $("[data-adv-arc-name]"),
   advArcDatalist:    $("[data-adv-arc-datalist]"),
@@ -201,7 +208,10 @@ const state = {
   requiredIds: "",              // "" or string
   include: new Set(),           // "staff", "characters", "relations"
   isAdvancedOpen: false,
+  isLoreOpen: false,
   loreGranularity: "scene",
+  loreSelectedWork: null,       // { workId, title, mal_id, release_year }
+  loreWorkAcDebounce: null,
   inflight: null,               // AbortController
   lastQuery: "",
   // Recommend & Autocomplete state
@@ -318,6 +328,9 @@ function updateModeButtons() {
   const isLoreMode = state.endpointMode === "advanced_search" || state.endpointMode === "advanced_recommend" || state.endpointMode === "lore_ask";
   if (els.loreControls) {
     els.loreControls.hidden = !isLoreMode;
+  }
+  if (els.lorePanel) {
+    els.lorePanel.hidden = !(isLoreMode && state.isLoreOpen);
   }
   if (els.loreSearchFilters) {
     els.loreSearchFilters.hidden = !(state.endpointMode === "advanced_search" || state.endpointMode === "lore_ask");
@@ -1537,12 +1550,41 @@ if (document.readyState === "loading") {
 }
 
 
+function updateLoreSummaryPill() {
+  if (!els.loreSummary) return;
+  const granMap = {
+    scene: "Scene (with Timestamp)",
+    episode: "Full Episode",
+    arc: "Story Arc"
+  };
+  const parts = [`Unit: ${granMap[state.loreGranularity] || "Scene"}`];
+  const wid = els.advWorkId ? els.advWorkId.value.trim() : "";
+  if (state.loreSelectedWork && state.loreSelectedWork.title) {
+    parts.push(`Work: ${state.loreSelectedWork.title}`);
+  } else if (wid) {
+    parts.push(`Work: ${wid}`);
+  } else {
+    parts.push("All 7,538 Anime");
+  }
+  if (els.advArcName && els.advArcName.value.trim()) {
+    parts.push(`Arc: ${els.advArcName.value.trim()}`);
+  }
+  if (els.advCharacter && els.advCharacter.value.trim()) {
+    parts.push(`Char: ${els.advCharacter.value.trim()}`);
+  }
+  if (els.advEpExact && els.advEpExact.value !== "") {
+    parts.push(`Ep ${els.advEpExact.value}`);
+  } else if ((els.advEpMin && els.advEpMin.value !== "") || (els.advEpMax && els.advEpMax.value !== "")) {
+    parts.push(`Ep ${els.advEpMin?.value || "1"}–${els.advEpMax?.value || "∞"}`);
+  }
+  els.loreSummary.textContent = parts.join(" · ");
+}
+
 function renderLoreResults(data, lopts) {
   statusNote("", "");
   if (!els.results) return;
 
   const hits = Array.isArray(data?.results) ? data.results : (Array.isArray(data?.sources) ? data.sources : []);
-  const total = data?.total ?? hits.length;
   const elapsed = data?.elapsed_ms ? `${Math.round(data.elapsed_ms)} ms` : "";
   const granLabel = (data?.granularity || lopts.granularity || "scene").toUpperCase();
 
@@ -1571,10 +1613,16 @@ function renderLoreResults(data, lopts) {
 
   const rowsHtml = hits.map((item, idx) => {
     const title = escapeHtml(item.work_title || item.title_english || item.title || "Untitled Anime");
-    const epNum = item.episode_number != null ? `Ep ${item.episode_number}` : "";
+    const epNum = item.episode_number != null ? `Episode ${item.episode_number}` : "";
+    const epTitle = item.episode_title ? escapeHtml(item.episode_title) : "";
     const sceneNum = item.scene_number != null ? `Scene ${item.scene_number}` : "";
     const ts = item.timestamp_range ? escapeHtml(item.timestamp_range) : "";
     const arcName = item.arc_name ? escapeHtml(item.arc_name) : "";
+    const sagaName = item.saga_name ? escapeHtml(item.saga_name) : "";
+    const arcRange = (item.arc_start_episode != null && item.arc_end_episode != null)
+      ? `Ep ${item.arc_start_episode}–${item.arc_end_episode}`
+      : ((item.start_episode != null && item.end_episode != null) ? `Ep ${item.start_episode}–${item.end_episode}` : "");
+
     const score = typeof item.score === "number" ? item.score.toFixed(3) : (typeof item.rerank_score === "number" ? item.rerank_score.toFixed(3) : "—");
     const summary = escapeHtml(item.scene_summary || item.episode_summary || item.arc_summary || item.summary || "");
     const location = item.location ? escapeHtml(item.location) : "";
@@ -1590,8 +1638,16 @@ function renderLoreResults(data, lopts) {
       ? item.quotes.map(q => `<blockquote style="margin:.35rem 0;padding-left:.65rem;border-left:2px solid var(--rule-strong);font-style:italic" class="faint">"${escapeHtml(q)}"</blockquote>`).join("")
       : "";
 
-    const rangeBadge = (item.start_episode != null && item.end_episode != null)
-      ? `Episodes ${item.start_episode}–${item.end_episode}`
+    // Sub-scenes table when result is an Episode or Story Arc
+    const subScenes = Array.isArray(item.scenes) && item.scenes.length
+      ? `<div class="lore-meta-line" style="flex-direction:column;gap:.25rem;margin-top:.55rem">
+           <strong style="text-transform:uppercase;letter-spacing:.05em;font-size:.68rem;color:var(--sakura-deep)">Key Timed Scenes in this ${item.arc_id && !item.episode_number ? "Arc" : "Episode"}:</strong>
+           ${item.scenes.slice(0, 4).map(sc => `
+             <div style="font-family:var(--serif);font-size:.82rem;color:var(--ink-soft)">
+               <span class="mono" style="font-size:.72rem;color:var(--ink);font-weight:600">${sc.episode_number != null ? `Ep ${sc.episode_number} · ` : ""}Scene ${sc.scene_number ?? "?"} [${escapeHtml(sc.timestamp_range || "0:00")}]</span> — ${escapeHtml(sc.scene_summary || "")}
+             </div>
+           `).join("")}
+         </div>`
       : "";
 
     return `
@@ -1601,17 +1657,21 @@ function renderLoreResults(data, lopts) {
             <div>
               <span class="micro faint" style="margin-right:.5rem">#${idx + 1}</span>
               <strong style="font-size:1.05rem;color:var(--ink)">${title}</strong>
-              ${epNum ? `<span class="badge badge--sakura" style="margin-left:.45rem">${escapeHtml(epNum)}</span>` : ""}
+              ${arcName ? `<span class="badge" style="margin-left:.45rem;border-color:var(--sakura-deep);color:var(--sakura-deep)">Arc: ${arcName}${arcRange ? ` (${escapeHtml(arcRange)})` : ""}</span>` : (arcRange ? `<span class="badge badge--quiet" style="margin-left:.45rem">${escapeHtml(arcRange)}</span>` : "")}
+              ${epNum ? `<span class="badge badge--sakura" style="margin-left:.35rem">${escapeHtml(epNum)}${epTitle ? `: ${epTitle}` : ""}</span>` : ""}
               ${sceneNum ? `<span class="badge badge--quiet" style="margin-left:.3rem">${escapeHtml(sceneNum)}</span>` : ""}
-              ${ts ? `<span class="badge" style="margin-left:.3rem;font-family:var(--mono)">${ts}</span>` : ""}
-              ${rangeBadge ? `<span class="badge badge--quiet" style="margin-left:.35rem;font-family:var(--mono)">${escapeHtml(rangeBadge)}</span>` : ""}
+              ${ts ? `<span class="badge" style="margin-left:.3rem;font-family:var(--mono);font-weight:700">${ts}</span>` : ""}
             </div>
             <div class="micro faint" style="font-family:var(--mono)">
               ${malBadge ? `<span>${escapeHtml(malBadge)}</span> · ` : ""}<span>Score ${score}</span>
             </div>
           </div>
 
-          ${arcName ? `<div class="micro" style="margin-bottom:.4rem;color:var(--sakura-deep);font-weight:600;letter-spacing:.03em">STORY ARC: ${arcName} ${item.saga_name ? `(${escapeHtml(item.saga_name)})` : ""}</div>` : ""}
+          <div class="lore-meta-line" style="margin-top:0;margin-bottom:.45rem;border-top:none;padding-top:0">
+            ${arcName ? `<span><strong>Story Arc:</strong> ${arcName}${sagaName ? ` (${sagaName})` : ""}${arcRange ? ` [${escapeHtml(arcRange)}]` : ""}</span>` : `<span><strong>Story Arc:</strong> Standalone / Main Run</span>`}
+            ${epNum ? `<span>· <strong>Episode:</strong> ${escapeHtml(epNum)}${epTitle ? ` — "${epTitle}"` : ""}</span>` : ""}
+            ${sceneNum || ts ? `<span>· <strong>Scene &amp; Time:</strong> ${escapeHtml(sceneNum || "Scene")} (${ts || "Full"})</span>` : ""}
+          </div>
 
           <div class="passage" style="margin-bottom:var(--space-2);border-left:2px solid var(--sakura-deep);padding:.55rem .85rem;background:var(--paper-deep)">
             <p style="margin:0;line-height:1.6">${summary}</p>
@@ -1621,6 +1681,7 @@ function renderLoreResults(data, lopts) {
           ${chars ? `<div class="micro" style="margin-top:.4rem"><strong style="color:var(--ink)">Characters:</strong> <span class="faint">${chars}</span></div>` : ""}
           ${location ? `<div class="micro" style="margin-top:.25rem"><strong style="color:var(--ink)">Location:</strong> <span class="faint">${location}</span></div>` : ""}
           ${concepts ? `<div style="margin-top:.4rem">${concepts}</div>` : ""}
+          ${subScenes}
         </div>
       </article>`;
   }).join("");
@@ -1628,31 +1689,213 @@ function renderLoreResults(data, lopts) {
   els.results.innerHTML = answerHtml + `<div class="ledger">${rowsHtml}</div>`;
 }
 
+async function autoLoadArcsForWork(wid, displayTitle) {
+  if (!wid) return;
+  try {
+    if (els.advArcStatus) els.advArcStatus.textContent = "Loading story arcs…";
+    const data = await fetchArcIndex(wid);
+    const arcs = Array.isArray(data?.arcs) ? data.arcs : [];
+    if (els.advArcDatalist) {
+      els.advArcDatalist.innerHTML = arcs.map(a =>
+        `<option value="${escapeHtml(a.arc_name)}">Ep ${a.start_episode}–${a.end_episode} (${escapeHtml(a.arc_id)})</option>`
+      ).join("");
+    }
+    if (els.arcLockBadge) {
+      els.arcLockBadge.textContent = arcs.length ? `${arcs.length} Arcs Ready` : "Work Linked";
+    }
+    if (els.advArcStatus) {
+      els.advArcStatus.textContent = arcs.length
+        ? `Loaded ${arcs.length} arcs for ${data.title || displayTitle || wid}. Click or type in Story Arc above.`
+        : `No multi-episode arcs indexed for ${displayTitle || wid}.`;
+    }
+  } catch (e) {
+    if (els.advArcStatus) els.advArcStatus.textContent = `Could not load arcs for "${wid}".`;
+  }
+}
+
+function selectSingleLoreWork(work) {
+  const workId = work.mal_id ? `mal:${work.mal_id}` : (work.aar_id != null ? `aar:${work.aar_id}` : work.work_id);
+  const title = work.title || work.title_english || work.title_romaji || workId;
+  state.loreSelectedWork = {
+    workId,
+    title,
+    release_year: work.release_year || null
+  };
+  if (els.advWorkId) {
+    els.advWorkId.value = workId;
+    els.advWorkId.hidden = true;
+  }
+  if (els.loreWorkAc) {
+    els.loreWorkAc.hidden = true;
+  }
+  if (els.loreWorkChip) {
+    els.loreWorkChip.hidden = false;
+    els.loreWorkChip.innerHTML = `
+      <div style="min-width:0;overflow:hidden">
+        <span class="lore-work-chip__title">${escapeHtml(title)}</span>
+        <span class="lore-work-chip__id">${escapeHtml(workId)}</span>
+      </div>
+      <button type="button" class="lore-work-chip__clear" data-clear-lore-work title="Remove selected anime" aria-label="Remove selected anime">&times;</button>
+    `;
+    const clearBtn = els.loreWorkChip.querySelector("[data-clear-lore-work]");
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        state.loreSelectedWork = null;
+        if (els.advWorkId) {
+          els.advWorkId.value = "";
+          els.advWorkId.hidden = false;
+          els.advWorkId.focus();
+        }
+        els.loreWorkChip.hidden = true;
+        if (els.advArcDatalist) els.advArcDatalist.innerHTML = "";
+        if (els.advArcName) els.advArcName.value = "";
+        if (els.arcLockBadge) els.arcLockBadge.textContent = "Requires Work ID";
+        if (els.advArcStatus) els.advArcStatus.textContent = "Pre-filters retrieval to the exact episode range of the arc.";
+        updateLoreSummaryPill();
+        renderPreview(state.lastQuery);
+      });
+    }
+  }
+  updateLoreSummaryPill();
+  renderPreview(state.lastQuery);
+  autoLoadArcsForWork(workId, title);
+}
+
 function initLoreControls() {
+  // Collapsible drawer toggle
+  if (els.toggleLoreBtn && els.lorePanel) {
+    els.toggleLoreBtn.addEventListener("click", () => {
+      state.isLoreOpen = !state.isLoreOpen;
+      els.toggleLoreBtn.setAttribute("aria-expanded", String(state.isLoreOpen));
+      els.lorePanel.hidden = !state.isLoreOpen;
+    });
+  }
+
+  // Reset lore filters button
+  if (els.resetLoreBtn) {
+    els.resetLoreBtn.addEventListener("click", () => {
+      state.loreGranularity = "scene";
+      state.loreSelectedWork = null;
+      if (els.loreGranSelect) els.loreGranSelect.value = "scene";
+      for (const b of els.loreGranChips) {
+        const active = b.getAttribute("data-lore-granularity") === "scene";
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", String(active));
+      }
+      if (els.advWorkId) {
+        els.advWorkId.value = "";
+        els.advWorkId.hidden = false;
+      }
+      if (els.loreWorkChip) els.loreWorkChip.hidden = true;
+      if (els.loreWorkAc) els.loreWorkAc.hidden = true;
+      for (const inp of [els.advArcName, els.advCharacter, els.advConcept, els.advLocation, els.advEpExact, els.advEpMin, els.advEpMax, els.advPosIds, els.advNegQueries]) {
+        if (inp) inp.value = "";
+      }
+      if (els.advArcDatalist) els.advArcDatalist.innerHTML = "";
+      if (els.arcLockBadge) els.arcLockBadge.textContent = "Requires Work ID";
+      updateLoreSummaryPill();
+      renderPreview(state.lastQuery);
+    });
+  }
+
+  // Dropdown select for granularity
+  if (els.loreGranSelect) {
+    els.loreGranSelect.addEventListener("change", () => {
+      state.loreGranularity = els.loreGranSelect.value || "scene";
+      for (const b of els.loreGranChips) {
+        const active = b.getAttribute("data-lore-granularity") === state.loreGranularity;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", String(active));
+      }
+      updateLoreSummaryPill();
+      renderPreview(state.lastQuery);
+    });
+  }
+
   for (const btn of els.loreGranChips) {
     btn.addEventListener("click", () => {
       state.loreGranularity = btn.getAttribute("data-lore-granularity") || "scene";
+      if (els.loreGranSelect) els.loreGranSelect.value = state.loreGranularity;
       for (const b of els.loreGranChips) {
         const active = b === btn;
         b.classList.toggle("is-active", active);
         b.setAttribute("aria-pressed", String(active));
       }
+      updateLoreSummaryPill();
       renderPreview(state.lastQuery);
     });
   }
 
+  // Single-Work Autocomplete on advWorkId input
+  if (els.advWorkId && els.loreWorkAc) {
+    els.advWorkId.addEventListener("input", () => {
+      const raw = els.advWorkId.value.trim();
+      if (els.arcLockBadge) {
+        els.arcLockBadge.textContent = raw ? "Work ID Linked" : "Requires Work ID";
+      }
+      updateLoreSummaryPill();
+      renderPreview(state.lastQuery);
+
+      if (state.loreWorkAcDebounce) clearTimeout(state.loreWorkAcDebounce);
+      if (!raw || raw.length < 2 || /^(mal|al|anilist|imdb|tvdb|tmdb|kitsu|anidb|ap|aar)[_:]/i.test(raw)) {
+        els.loreWorkAc.hidden = true;
+        return;
+      }
+      state.loreWorkAcDebounce = setTimeout(async () => {
+        try {
+          const data = await suggestWorks(raw, 8);
+          const items = (Array.isArray(data?.results) ? data.results : []).filter(w => !w.type || String(w.type).toUpperCase() === "ANIME");
+          if (!items.length) {
+            els.loreWorkAc.hidden = true;
+            return;
+          }
+          els.loreWorkAc.innerHTML = items.map((item, idx) => {
+            const title = escapeHtml(item.title || "Untitled");
+            const year = item.release_year ? escapeHtml(String(item.release_year)) : "";
+            const wid = item.mal_id ? `mal:${item.mal_id}` : (item.aar_id != null ? `aar:${item.aar_id}` : item.work_id);
+            return `
+              <div class="ac-item" role="option" data-lore-ac-idx="${idx}">
+                <div class="ac-item__main">
+                  <span class="ac-item__title">${title}</span>
+                </div>
+                <div class="ac-item__meta">
+                  <span class="badge badge--sakura">ANIME</span>
+                  ${year ? `<span>${year}</span>` : ""}
+                  <span class="mono">${escapeHtml(wid)}</span>
+                </div>
+              </div>`;
+          }).join("");
+          els.loreWorkAc.hidden = false;
+
+          els.loreWorkAc.querySelectorAll("[data-lore-ac-idx]").forEach(row => {
+            row.addEventListener("mousedown", (ev) => {
+              ev.preventDefault();
+              const idx = Number(row.getAttribute("data-lore-ac-idx"));
+              if (items[idx]) selectSingleLoreWork(items[idx]);
+            });
+          });
+        } catch (err) {
+          els.loreWorkAc.hidden = true;
+        }
+      }, 180);
+    });
+
+    els.advWorkId.addEventListener("blur", () => {
+      setTimeout(() => {
+        if (els.loreWorkAc) els.loreWorkAc.hidden = true;
+      }, 180);
+    });
+  }
+
   const filterInputs = [
-    els.advWorkId, els.advArcName, els.advCharacter, els.advConcept,
+    els.advArcName, els.advCharacter, els.advConcept,
     els.advLocation, els.advEpExact, els.advEpMin, els.advEpMax,
     els.advPosIds, els.advNegQueries
   ].filter(Boolean);
 
   for (const inp of filterInputs) {
     inp.addEventListener("input", () => {
-      if (inp === els.advWorkId && els.arcLockBadge) {
-        const hasWork = Boolean(els.advWorkId.value.trim());
-        els.arcLockBadge.textContent = hasWork ? "Work ID Linked" : "Requires Work ID";
-      }
+      updateLoreSummaryPill();
       renderPreview(state.lastQuery);
     });
   }
@@ -1661,27 +1904,14 @@ function initLoreControls() {
     els.loadWorkArcsBtn.addEventListener("click", async () => {
       const wid = els.advWorkId.value.trim();
       if (!wid) {
-        if (els.advArcStatus) els.advArcStatus.textContent = "Enter a Work ID first (e.g. mal:21, imdb:tt0388629) to load its official story arcs.";
+        if (els.advArcStatus) els.advArcStatus.textContent = "Search an anime title or enter a Work ID first to load its story arcs.";
+        els.advWorkId.hidden = false;
         els.advWorkId.focus();
         return;
       }
-      try {
-        if (els.advArcStatus) els.advArcStatus.textContent = "Loading story arcs…";
-        const data = await fetchArcIndex(wid);
-        const arcs = Array.isArray(data?.arcs) ? data.arcs : [];
-        if (els.advArcDatalist) {
-          els.advArcDatalist.innerHTML = arcs.map(a =>
-            `<option value="${escapeHtml(a.arc_name)}">Ep ${a.start_episode}–${a.end_episode} (${escapeHtml(a.arc_id)})</option>`
-          ).join("");
-        }
-        if (els.advArcStatus) {
-          els.advArcStatus.textContent = arcs.length
-            ? `Loaded ${arcs.length} arcs for ${data.title || wid}. Click or type in the Story Arc field above.`
-            : `No multi-episode arcs indexed for ${wid}.`;
-        }
-      } catch (e) {
-        if (els.advArcStatus) els.advArcStatus.textContent = `Could not load arcs for "${wid}". Verify the Work ID format.`;
-      }
+      await autoLoadArcsForWork(wid);
     });
   }
+
+  updateLoreSummaryPill();
 }

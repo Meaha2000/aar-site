@@ -219,11 +219,32 @@
               </div>
               <div class="query-guidance" data-query-guidance role="region" aria-label="Search mode guidance"></div>
 
-              <!-- Impeccable Ruled Ledger Controls for Advanced Scene/Episode/Arc Modes -->
-              <div class="lore-ledger" id="lore-advanced-controls" data-lore-controls hidden>
+              <!-- Collapsible Toggle Bar for Scene, Episode & Arc Controls (just like Advanced Options) -->
+              <div class="advanced-toggle-bar lore-toggle-bar" data-lore-controls hidden>
+                <button type="button" class="advanced-toggle" data-toggle-lore-panel aria-expanded="false" aria-controls="lore-drawer-panel">
+                  <svg class="advanced-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                  <span>Scene, Episode &amp; Arc Options</span>
+                  <span class="advanced-toggle__summary" data-lore-summary>Scope: Scene (with Timestamp) &middot; All 7,538 Anime</span>
+                </button>
+                <button type="button" class="btn btn--quiet btn--reset-mini" data-reset-lore title="Reset scene and arc filters">
+                  Reset
+                </button>
+              </div>
+
+              <!-- Collapsible Ruled Ledger Drawer for Advanced Scene/Episode/Arc Modes -->
+              <div class="lore-ledger" id="lore-drawer-panel" data-lore-panel hidden>
                 <div class="lore-ledger__head">
-                  <span class="lore-ledger__title" data-lore-granularity-bar>Granularity</span>
-                  <div class="mode-row lore-ledger__chips" role="group" aria-label="Granularity" data-lore-granularity-chips>
+                  <div class="lore-gran-select-wrap">
+                    <label class="lore-ledger__title" for="lore-granularity-select" data-lore-granularity-bar>Retrieval Unit (Granularity)</label>
+                    <select id="lore-granularity-select" class="lore-field__input lore-gran-select" data-lore-granularity-select>
+                      <option value="scene" selected>Scene (Exact Timestamp + Episode + Story Arc)</option>
+                      <option value="episode">Full Episode (Complete Episode + Story Arc + Key Scenes)</option>
+                      <option value="arc">Story Arc (Multi-Episode Narrative Arc + Key Scenes)</option>
+                    </select>
+                  </div>
+                  <div class="mode-row lore-ledger__chips" role="group" aria-label="Granularity" data-lore-granularity-chips hidden>
                     <button class="chip is-active" type="button" data-lore-granularity="scene" aria-pressed="true">Scene (with Timestamp)</button>
                     <button class="chip" type="button" data-lore-granularity="episode" aria-pressed="false">Full Episode</button>
                     <button class="chip" type="button" data-lore-granularity="arc" aria-pressed="false">Story Arc</button>
@@ -233,13 +254,17 @@
 
                 <!-- Filters for Advanced Search & Lore Ask -->
                 <div class="lore-ledger__grid" data-lore-search-filters>
-                  <div class="lore-field">
+                  <div class="lore-field lore-field--work">
                     <div class="lore-field__label-row">
-                      <label class="lore-field__label" for="adv-work-id">Work ID (10 Formats)</label>
-                      <button type="button" class="lore-field__action" data-load-work-arcs title="Fetch official story arcs for this work">Load Work Arcs</button>
+                      <label class="lore-field__label" for="adv-work-id">Anime Work (Search Title or ID)</label>
+                      <button type="button" class="lore-field__action" data-load-work-arcs title="Fetch official story arcs for this work">Load Arcs</button>
                     </div>
-                    <input type="text" id="adv-work-id" class="lore-field__input" data-adv-work-id placeholder="mal:21, imdb:tt0388629, al:21, ap:one-piece" autocomplete="off">
-                    <span class="lore-field__hint">Required to unlock Story Arc filtering.</span>
+                    <div class="lore-work-picker" data-lore-work-picker>
+                      <div class="lore-work-chip" data-lore-work-chip hidden></div>
+                      <input type="text" id="adv-work-id" class="lore-field__input" data-adv-work-id placeholder="Type anime title (e.g. One Piece, Hunter x Hunter) or ID (mal:21)…" autocomplete="off">
+                      <div class="ac-dropdown lore-work-ac" data-lore-work-ac role="listbox" aria-label="Select anime work" hidden></div>
+                    </div>
+                    <span class="lore-field__hint">Search by anime title to select a single work and automatically load its story arcs.</span>
                   </div>
 
                   <div class="lore-field">
