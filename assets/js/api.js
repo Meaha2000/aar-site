@@ -370,3 +370,81 @@ export function recommend(workIds, { limit = 8, signal = null, method = "GET", t
   if (requiredIds) url += `&required_ids=${encodeURIComponent(Array.isArray(requiredIds) ? requiredIds.join(",") : String(requiredIds))}`;
   return request(url, { method: "GET", signal });
 }
+
+export function buildAdvancedSearchPayload(opts) {
+  const body = {
+    query: opts.question,
+    granularity: opts.granularity || "scene",
+    limit: Number(opts.limit || 10),
+    use_reranker: opts.useReranker !== false,
+  };
+  if (opts.workId) body.work_id = String(opts.workId).trim();
+  if (opts.franchiseId) body.franchise_id = String(opts.franchiseId).trim();
+  if (opts.excludeFranchiseId) body.exclude_franchise_id = String(opts.excludeFranchiseId).trim();
+  if (opts.episodeNumber !== "" && opts.episodeNumber != null) body.episode_number = Number(opts.episodeNumber);
+  if (opts.minEpisode !== "" && opts.minEpisode != null) body.min_episode = Number(opts.minEpisode);
+  if (opts.maxEpisode !== "" && opts.maxEpisode != null) body.max_episode = Number(opts.maxEpisode);
+  if (opts.arcId) body.arc_id = String(opts.arcId).trim();
+  if (opts.arcName) body.arc_name = String(opts.arcName).trim();
+  if (opts.character) body.character = String(opts.character).trim();
+  if (opts.concept) body.concept = String(opts.concept).trim();
+  if (opts.location) body.location = String(opts.location).trim();
+  if (opts.genre) body.genre = String(opts.genre).trim();
+  if (opts.formatType) body.format_type = String(opts.formatType).trim();
+  if (opts.minYear) body.min_year = Number(opts.minYear);
+  if (opts.maxYear) body.max_year = Number(opts.maxYear);
+  return body;
+}
+
+export async function runAdvancedSearch(opts, { signal } = {}) {
+  const path = opts.endpointMode === "lore_ask" ? "/lore_ask" : "/advanced_search";
+  const body = buildAdvancedSearchPayload(opts);
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify(body),
+    signal,
+  });
+  return parseJsonOrThrow(res);
+}
+
+export function buildAdvancedRecommendPayload(opts) {
+  const body = {
+    granularity: opts.granularity || "scene",
+    positive_ids: Array.isArray(opts.positiveIds) ? opts.positiveIds : [],
+    negative_ids: Array.isArray(opts.negativeIds) ? opts.negativeIds : [],
+    positive_queries: Array.isArray(opts.positiveQueries) ? opts.positiveQueries : [],
+    negative_queries: Array.isArray(opts.negativeQueries) ? opts.negativeQueries : [],
+    limit: Number(opts.limit || 10),
+    exclude_same_franchise: opts.excludeSameFranchise !== false,
+    exclude_same_work: opts.excludeSameWork !== false,
+    max_per_work: Number(opts.maxPerWork || 2),
+  };
+  if (opts.genre) body.genre = String(opts.genre).trim();
+  if (opts.formatType) body.format_type = String(opts.formatType).trim();
+  if (opts.character) body.character = String(opts.character).trim();
+  if (opts.concept) body.concept = String(opts.concept).trim();
+  if (opts.location) body.location = String(opts.location).trim();
+  if (opts.minYear) body.min_year = Number(opts.minYear);
+  if (opts.maxYear) body.max_year = Number(opts.maxYear);
+  return body;
+}
+
+export async function runAdvancedRecommend(opts, { signal } = {}) {
+  const body = buildAdvancedRecommendPayload(opts);
+  const res = await fetch(`${API_BASE}/advanced_recommend`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+    body: JSON.stringify(body),
+    signal,
+  });
+  return parseJsonOrThrow(res);
+}
+
+export async function fetchArcIndex(workId, { signal } = {}) {
+  const res = await fetch(`${API_BASE}/lore/arc-index/${encodeURIComponent(workId)}`, {
+    headers: authHeaders(),
+    signal,
+  });
+  return parseJsonOrThrow(res);
+}

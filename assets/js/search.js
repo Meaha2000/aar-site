@@ -13,8 +13,13 @@ import {
   parseRecommendInput,
   buildSearchParams,
   buildSearchPayload,
+  buildAdvancedSearchPayload,
+  runAdvancedSearch,
+  buildAdvancedRecommendPayload,
+  runAdvancedRecommend,
+  fetchArcIndex,
   ApiError
-} from "./api.js?v=10";
+} from "./api.js?v=11";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
   from "./config.js?v=10";
 
@@ -69,6 +74,25 @@ const els = {
   requiredIdsInput: $("[data-opt-required-ids]"),
   includeChips:   Array.from(document.querySelectorAll("[data-opt-include]")),
   resetBtns:      Array.from(document.querySelectorAll("[data-reset-advanced]")),
+  // Lore Advanced Controls
+  loreControls:      $("[data-lore-controls]"),
+  loreSearchFilters: $("[data-lore-search-filters]"),
+  loreRecFilters:    $("[data-lore-rec-filters]"),
+  loreGranChips:     Array.from(document.querySelectorAll("[data-lore-granularity]")),
+  advWorkId:         $("[data-adv-work-id]"),
+  loadWorkArcsBtn:   $("[data-load-work-arcs]"),
+  advArcName:        $("[data-adv-arc-name]"),
+  advArcDatalist:    $("[data-adv-arc-datalist]"),
+  advArcStatus:      $("[data-adv-arc-status]"),
+  arcLockBadge:      $("[data-arc-lock-badge]"),
+  advCharacter:      $("[data-adv-character]"),
+  advConcept:        $("[data-adv-concept]"),
+  advLocation:       $("[data-adv-location]"),
+  advEpExact:        $("[data-adv-ep-exact]"),
+  advEpMin:          $("[data-adv-ep-min]"),
+  advEpMax:          $("[data-adv-ep-max]"),
+  advPosIds:         $("[data-adv-pos-ids]"),
+  advNegQueries:     $("[data-adv-neg-queries]"),
 };
 
 const MODE_CONFIG = {
@@ -86,6 +110,21 @@ const MODE_CONFIG = {
     placeholder: "Search title, enter ID (e.g. mal:5114), or paste URL…",
     buttonText: () => "Find Similar Works",
     modeText: () => "Recommend Me",
+  },
+  advanced_search: {
+    placeholder: "Describe a specific scene, battle, dialogue, episode event, or story arc…",
+    buttonText: () => "Search Scenes & Arcs",
+    modeText: () => "Advanced Scene Search",
+  },
+  advanced_recommend: {
+    placeholder: "Describe a scene, episode, or story arc vibe to find resonant counterparts…",
+    buttonText: () => "Recommend Scenes / Arcs",
+    modeText: () => "Advanced Recommend",
+  },
+  lore_ask: {
+    placeholder: "Ask a detailed lore question answered with exact episode & timestamp citations…",
+    buttonText: () => "Ask Lore AI",
+    modeText: () => "Lore Ask AI",
   },
 };
 
@@ -116,6 +155,33 @@ const MODE_GUIDANCE = {
       "Add up to 100 seed works to blend distinct tropes and genres",
       "Results are ranked by shared narrative tags and semantic similarity"
     ]
+  },
+  advanced_search: {
+    title: "How Advanced Scene, Episode & Arc Search Works (Anime Only · 7,538 Anime · 102,574 Episodes)",
+    summary: "Currently active for <strong>Anime only</strong> across <strong>7,538 anime works</strong> and <strong>102,574 episodes</strong> (<strong>764,823 timestamped scenes</strong> and <strong>10,576 official story arcs</strong>). Pinpoint exact moments with start/end timestamps, episode breakdowns, or arc pre-filtering across all 10 external ID formats.",
+    tips: [
+      "Scene search with timestamp: <em>\"Whitebeard dies standing up declaring the One Piece is real\"</em> with Work ID <code>imdb:tt0388629</code> and Arc <code>Marineford</code>",
+      "Story Arc filter requires passing a Work ID in any of the 10 supported formats (<code>mal:21</code>, <code>imdb:tt0388629</code>, <code>al:21</code>, <code>anidb:8550</code>, <code>ap:one-piece</code>)",
+      "Switch Granularity between <strong>Scene (with Timestamp)</strong>, <strong>Full Episode</strong>, and <strong>Story Arc</strong>"
+    ]
+  },
+  advanced_recommend: {
+    title: "How Granular Scene, Episode & Arc Recommendation Works (Anime Only · 7,538 Anime · 102,574 Episodes)",
+    summary: "Currently active for <strong>Anime only</strong> across <strong>7,538 anime works</strong> and <strong>102,574 episodes</strong>. Uses Rocchio vector steering across positive and negative seeds at the <strong>Scene</strong>, <strong>Episode</strong>, or <strong>Story Arc</strong> level while isolating same-franchise duplicates.",
+    tips: [
+      "Describe a target scene or pass exact seed IDs like <code>mal:21#ep=485&amp;scene=4</code> or <code>mal:11061#ep=131</code>",
+      "Add Negative / Exclude prompts (e.g. <em>\"lighthearted school comedy\"</em>) to steer vectors away from unwanted tones",
+      "Switch Granularity to <strong>Story Arc</strong> to find arcs across other anime structurally resonant with <code>Marineford</code> or <code>Chimera Ant</code>"
+    ]
+  },
+  lore_ask: {
+    title: "How Grounded Lore Ask AI Works (Anime Only · 7,538 Anime · 102,574 Episodes)",
+    summary: "Currently active for <strong>Anime only</strong> across <strong>7,538 anime works</strong> and <strong>102,574 episodes</strong>. Retrieves exact timestamped scenes, characters, and dialogue quotes from the Lore Engine and synthesizes a live LLM answer cited by episode and second.",
+    tips: [
+      "Ask specific episode/event questions: <em>\"What happens when Kenshiro fights Raoh in episode 108?\"</em>",
+      "Combine with Work ID, Story Arc, or Character filters below to scope the AI strictly to a single arc or character",
+      "Unlike Search and Recommend modes, <strong>Lore Ask AI</strong> invokes a live LLM to reason over retrieved scenes"
+    ]
   }
 };
 
@@ -135,6 +201,7 @@ const state = {
   requiredIds: "",              // "" or string
   include: new Set(),           // "staff", "characters", "relations"
   isAdvancedOpen: false,
+  loreGranularity: "scene",
   inflight: null,               // AbortController
   lastQuery: "",
   // Recommend & Autocomplete state
@@ -147,6 +214,31 @@ const state = {
 };
 
 /* ---- Request shaping ------------------------------------------------------ */
+
+function currentLoreOptions(question) {
+  return {
+    endpointMode: state.endpointMode,
+    question: question || "",
+    granularity: state.loreGranularity || "scene",
+    limit: state.limit,
+    useReranker: true,
+    workId: els.advWorkId ? els.advWorkId.value.trim() : "",
+    arcName: els.advArcName ? els.advArcName.value.trim() : "",
+    character: els.advCharacter ? els.advCharacter.value.trim() : "",
+    concept: els.advConcept ? els.advConcept.value.trim() : "",
+    location: els.advLocation ? els.advLocation.value.trim() : "",
+    episodeNumber: els.advEpExact && els.advEpExact.value !== "" ? els.advEpExact.value : null,
+    minEpisode: els.advEpMin && els.advEpMin.value !== "" ? els.advEpMin.value : null,
+    maxEpisode: els.advEpMax && els.advEpMax.value !== "" ? els.advEpMax.value : null,
+    positiveIds: els.advPosIds && els.advPosIds.value.trim()
+      ? els.advPosIds.value.split(",").map(s => s.trim()).filter(Boolean)
+      : [],
+    positiveQueries: question ? [question] : [],
+    negativeQueries: els.advNegQueries && els.advNegQueries.value.trim()
+      ? els.advNegQueries.value.split(",").map(s => s.trim()).filter(Boolean)
+      : [],
+  };
+}
 
 function currentOptions(question) {
   return {
@@ -223,6 +315,17 @@ function updateModeButtons() {
     renderSeedChips();
   }
 
+  const isLoreMode = state.endpointMode === "advanced_search" || state.endpointMode === "advanced_recommend" || state.endpointMode === "lore_ask";
+  if (els.loreControls) {
+    els.loreControls.hidden = !isLoreMode;
+  }
+  if (els.loreSearchFilters) {
+    els.loreSearchFilters.hidden = !(state.endpointMode === "advanced_search" || state.endpointMode === "lore_ask");
+  }
+  if (els.loreRecFilters) {
+    els.loreRecFilters.hidden = state.endpointMode !== "advanced_recommend";
+  }
+
   renderGuidance();
 }
 
@@ -231,6 +334,42 @@ function renderPreview(question) {
   if (!els.preview) return;
   const baseUrl = "https://api.aarecords.tech";
   const method = state.httpMethod;
+
+  if (state.endpointMode === "advanced_search" || state.endpointMode === "lore_ask" || state.endpointMode === "advanced_recommend") {
+    const lopts = currentLoreOptions(question || "<your query>");
+    const path = state.endpointMode === "advanced_recommend"
+      ? "/advanced_recommend"
+      : (state.endpointMode === "lore_ask" ? "/lore_ask" : "/advanced_search");
+    const body = state.endpointMode === "advanced_recommend"
+      ? buildAdvancedRecommendPayload(lopts)
+      : buildAdvancedSearchPayload(lopts);
+    const displayUrl = `${baseUrl}${path}`;
+    const jsonStr = JSON.stringify(body, null, 2);
+    const curlCmd = `curl -X POST "${displayUrl}" \\
+  -H "Content-Type: application/json" \\
+  -H "x-api-key: aar_free_access" \\
+  -d '${JSON.stringify(body)}'`;
+
+    els.preview.innerHTML = `
+      <div class="code">
+        <div class="code__bar">
+          <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+            <span class="badge badge--method badge--post">POST</span>
+            <span class="micro">${escapeHtml(displayUrl)}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.4rem">
+            <button class="btn btn--quiet" type="button" data-copy-text="${escapeHtml(jsonStr)}">
+              <span>Copy JSON</span>
+            </button>
+            <button class="btn btn--quiet" type="button" data-copy-text="${escapeHtml(curlCmd)}">
+              <span>Copy cURL</span>
+            </button>
+          </div>
+        </div>
+        <div class="code__body"><pre data-preview-body><code class="language-json">${escapeHtml(jsonStr)}</code></pre></div>
+      </div>`;
+    return;
+  }
 
   if (state.endpointMode === "recommend") {
     let seeds = state.selectedSeeds.map(s => s.workId);
@@ -836,7 +975,8 @@ function setBusy(busy) {
 
 async function runQuery(question) {
   const q = (question || "").trim();
-  if (state.endpointMode !== "recommend" && !q) {
+  const hasAdvPosIds = state.endpointMode === "advanced_recommend" && els.advPosIds && els.advPosIds.value.trim();
+  if (state.endpointMode !== "recommend" && !hasAdvPosIds && !q) {
     els.input && els.input.focus();
     return;
   }
@@ -900,6 +1040,24 @@ async function runQuery(question) {
       const targetScope = state.types.size ? Array.from(state.types).map(t => t.toLowerCase()).join(",") : null;
       const data = await recommend(seedIds, { limit: state.limit, targetScope, requiredIds: state.requiredIds, signal: ctrl.signal, method: state.httpMethod });
       renderRecommendationResults(data, seedIds.join(", "), state.selectedSeeds);
+      return;
+    }
+
+    if (state.endpointMode === "advanced_search" || state.endpointMode === "lore_ask") {
+      const lopts = currentLoreOptions(q);
+      if ((lopts.arcName || lopts.arcId) && !lopts.workId) {
+        statusNote("warn", "<strong>Work ID Required for Story Arc Filter.</strong> Please specify the Work ID (e.g. <code>mal:21</code>, <code>imdb:tt0388629</code>, or <code>al:21</code>) when filtering by an arc.");
+        return;
+      }
+      const data = await runAdvancedSearch(lopts, { signal: ctrl.signal });
+      renderLoreResults(data, lopts);
+      return;
+    }
+
+    if (state.endpointMode === "advanced_recommend") {
+      const lopts = currentLoreOptions(q);
+      const data = await runAdvancedRecommend(lopts, { signal: ctrl.signal });
+      renderLoreResults(data, lopts);
       return;
     }
 
@@ -1276,6 +1434,7 @@ function init() {
   initChips();
   initModes();
   initAdvanced();
+  initLoreControls();
   initAutocompleteListeners();
   updateModeButtons();
   updateSummaryPill();
@@ -1375,4 +1534,154 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
   init();
+}
+
+
+function renderLoreResults(data, lopts) {
+  statusNote("", "");
+  if (!els.results) return;
+
+  const hits = Array.isArray(data?.results) ? data.results : (Array.isArray(data?.sources) ? data.sources : []);
+  const total = data?.total ?? hits.length;
+  const elapsed = data?.elapsed_ms ? `${Math.round(data.elapsed_ms)} ms` : "";
+  const granLabel = (data?.granularity || lopts.granularity || "scene").toUpperCase();
+
+  if (els.resultsHd) {
+    els.resultsHd.hidden = false;
+    els.resultsHd.innerHTML = `
+      <div class="results-bar">
+        <span><strong>${hits.length}</strong> ${escapeHtml(granLabel)} records retrieved</span>
+        <span class="faint">${elapsed ? `· ${escapeHtml(elapsed)}` : ""} · Anime Lore Engine (7,538 Anime · 102,574 Episodes)</span>
+      </div>`;
+  }
+
+  let answerHtml = "";
+  if (data?.answer) {
+    answerHtml = `
+      <section class="answer-card" style="margin-bottom:var(--space-6);padding:var(--space-5);border:1px solid var(--rule-strong);border-left:3px solid var(--sakura-deep);background:var(--paper-deep)">
+        <div class="micro" style="color:var(--sakura-deep);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Grounded Lore AI Synthesis · ${escapeHtml(data.model || "LLM")}</div>
+        <div style="line-height:1.7;white-space:pre-wrap">${escapeHtml(data.answer)}</div>
+      </section>`;
+  }
+
+  if (!hits.length && !answerHtml) {
+    renderEmpty();
+    return;
+  }
+
+  const rowsHtml = hits.map((item, idx) => {
+    const title = escapeHtml(item.work_title || item.title_english || item.title || "Untitled Anime");
+    const epNum = item.episode_number != null ? `Ep ${item.episode_number}` : "";
+    const sceneNum = item.scene_number != null ? `Scene ${item.scene_number}` : "";
+    const ts = item.timestamp_range ? escapeHtml(item.timestamp_range) : "";
+    const arcName = item.arc_name ? escapeHtml(item.arc_name) : "";
+    const score = typeof item.score === "number" ? item.score.toFixed(3) : (typeof item.rerank_score === "number" ? item.rerank_score.toFixed(3) : "—");
+    const summary = escapeHtml(item.scene_summary || item.episode_summary || item.arc_summary || item.summary || "");
+    const location = item.location ? escapeHtml(item.location) : "";
+    const malBadge = item.mal_id ? `mal:${item.mal_id}` : (item.aar_id ? `aar:${item.aar_id}` : "");
+
+    const chars = Array.isArray(item.characters) && item.characters.length
+      ? item.characters.map(c => escapeHtml(c)).join(", ")
+      : "";
+    const concepts = Array.isArray(item.concepts) && item.concepts.length
+      ? item.concepts.map(c => `<span class="badge badge--quiet" style="font-size:.7rem;margin-right:.3rem">${escapeHtml(c)}</span>`).join("")
+      : "";
+    const quotes = Array.isArray(item.quotes) && item.quotes.length
+      ? item.quotes.map(q => `<blockquote style="margin:.35rem 0;padding-left:.65rem;border-left:2px solid var(--rule-strong);font-style:italic" class="faint">"${escapeHtml(q)}"</blockquote>`).join("")
+      : "";
+
+    const rangeBadge = (item.start_episode != null && item.end_episode != null)
+      ? `Episodes ${item.start_episode}–${item.end_episode}`
+      : "";
+
+    return `
+      <article class="index-row">
+        <div class="index-row__main" style="padding:var(--space-4) 0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:.45rem">
+            <div>
+              <span class="micro faint" style="margin-right:.5rem">#${idx + 1}</span>
+              <strong style="font-size:1.05rem;color:var(--ink)">${title}</strong>
+              ${epNum ? `<span class="badge badge--sakura" style="margin-left:.45rem">${escapeHtml(epNum)}</span>` : ""}
+              ${sceneNum ? `<span class="badge badge--quiet" style="margin-left:.3rem">${escapeHtml(sceneNum)}</span>` : ""}
+              ${ts ? `<span class="badge" style="margin-left:.3rem;font-family:var(--mono)">${ts}</span>` : ""}
+              ${rangeBadge ? `<span class="badge badge--quiet" style="margin-left:.35rem;font-family:var(--mono)">${escapeHtml(rangeBadge)}</span>` : ""}
+            </div>
+            <div class="micro faint" style="font-family:var(--mono)">
+              ${malBadge ? `<span>${escapeHtml(malBadge)}</span> · ` : ""}<span>Score ${score}</span>
+            </div>
+          </div>
+
+          ${arcName ? `<div class="micro" style="margin-bottom:.4rem;color:var(--sakura-deep);font-weight:600;letter-spacing:.03em">STORY ARC: ${arcName} ${item.saga_name ? `(${escapeHtml(item.saga_name)})` : ""}</div>` : ""}
+
+          <div class="passage" style="margin-bottom:var(--space-2);border-left:2px solid var(--sakura-deep);padding:.55rem .85rem;background:var(--paper-deep)">
+            <p style="margin:0;line-height:1.6">${summary}</p>
+            ${quotes}
+          </div>
+
+          ${chars ? `<div class="micro" style="margin-top:.4rem"><strong style="color:var(--ink)">Characters:</strong> <span class="faint">${chars}</span></div>` : ""}
+          ${location ? `<div class="micro" style="margin-top:.25rem"><strong style="color:var(--ink)">Location:</strong> <span class="faint">${location}</span></div>` : ""}
+          ${concepts ? `<div style="margin-top:.4rem">${concepts}</div>` : ""}
+        </div>
+      </article>`;
+  }).join("");
+
+  els.results.innerHTML = answerHtml + `<div class="ledger">${rowsHtml}</div>`;
+}
+
+function initLoreControls() {
+  for (const btn of els.loreGranChips) {
+    btn.addEventListener("click", () => {
+      state.loreGranularity = btn.getAttribute("data-lore-granularity") || "scene";
+      for (const b of els.loreGranChips) {
+        const active = b === btn;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", String(active));
+      }
+      renderPreview(state.lastQuery);
+    });
+  }
+
+  const filterInputs = [
+    els.advWorkId, els.advArcName, els.advCharacter, els.advConcept,
+    els.advLocation, els.advEpExact, els.advEpMin, els.advEpMax,
+    els.advPosIds, els.advNegQueries
+  ].filter(Boolean);
+
+  for (const inp of filterInputs) {
+    inp.addEventListener("input", () => {
+      if (inp === els.advWorkId && els.arcLockBadge) {
+        const hasWork = Boolean(els.advWorkId.value.trim());
+        els.arcLockBadge.textContent = hasWork ? "Work ID Linked" : "Requires Work ID";
+      }
+      renderPreview(state.lastQuery);
+    });
+  }
+
+  if (els.loadWorkArcsBtn && els.advWorkId) {
+    els.loadWorkArcsBtn.addEventListener("click", async () => {
+      const wid = els.advWorkId.value.trim();
+      if (!wid) {
+        if (els.advArcStatus) els.advArcStatus.textContent = "Enter a Work ID first (e.g. mal:21, imdb:tt0388629) to load its official story arcs.";
+        els.advWorkId.focus();
+        return;
+      }
+      try {
+        if (els.advArcStatus) els.advArcStatus.textContent = "Loading story arcs…";
+        const data = await fetchArcIndex(wid);
+        const arcs = Array.isArray(data?.arcs) ? data.arcs : [];
+        if (els.advArcDatalist) {
+          els.advArcDatalist.innerHTML = arcs.map(a =>
+            `<option value="${escapeHtml(a.arc_name)}">Ep ${a.start_episode}–${a.end_episode} (${escapeHtml(a.arc_id)})</option>`
+          ).join("");
+        }
+        if (els.advArcStatus) {
+          els.advArcStatus.textContent = arcs.length
+            ? `Loaded ${arcs.length} arcs for ${data.title || wid}. Click or type in the Story Arc field above.`
+            : `No multi-episode arcs indexed for ${wid}.`;
+        }
+      } catch (e) {
+        if (els.advArcStatus) els.advArcStatus.textContent = `Could not load arcs for "${wid}". Verify the Work ID format.`;
+      }
+    });
+  }
 }

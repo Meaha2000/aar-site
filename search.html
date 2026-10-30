@@ -186,7 +186,20 @@
               <button class="chip" type="button" data-mode="recommend" aria-pressed="false">
                 Recommend Me
               </button>
+              <button class="chip" type="button" data-mode="advanced_search" aria-pressed="false">
+                Advanced Scene Search
+              </button>
+              <button class="chip" type="button" data-mode="advanced_recommend" aria-pressed="false">
+                Advanced Recommend
+              </button>
+              <button class="chip" type="button" data-mode="lore_ask" aria-pressed="false">
+                Lore Ask AI
+              </button>
             </div>
+            <p class="mode-disclaimer" data-mode-disclaimer>
+              <span class="mode-disclaimer__tag">Retrieval Note</span>
+              <strong>Search</strong>, <strong>Recommend</strong>, <strong>Advanced Scene Search</strong>, and <strong>Advanced Recommend</strong> are direct deterministic &amp; hybrid database retrieval instruments — <em>not a conversational chatbot</em>. Only <strong>Ask AI Mode</strong> and <strong>Lore Ask AI</strong> invoke a live LLM to synthesize grounded answers from retrieved records.
+            </p>
 
             <form class="query-bar query-bar--soft" data-search-form data-active-mode="search" role="search">
               <div class="seed-chips-bar" data-seed-chips hidden></div>
@@ -205,6 +218,96 @@
                 </button>
               </div>
               <div class="query-guidance" data-query-guidance role="region" aria-label="Search mode guidance"></div>
+
+              <!-- Impeccable Ruled Ledger Controls for Advanced Scene/Episode/Arc Modes -->
+              <div class="lore-ledger" id="lore-advanced-controls" data-lore-controls hidden>
+                <div class="lore-ledger__head">
+                  <span class="lore-ledger__title" data-lore-granularity-bar>Granularity</span>
+                  <div class="mode-row lore-ledger__chips" role="group" aria-label="Granularity" data-lore-granularity-chips>
+                    <button class="chip is-active" type="button" data-lore-granularity="scene" aria-pressed="true">Scene (with Timestamp)</button>
+                    <button class="chip" type="button" data-lore-granularity="episode" aria-pressed="false">Full Episode</button>
+                    <button class="chip" type="button" data-lore-granularity="arc" aria-pressed="false">Story Arc</button>
+                  </div>
+                  <span class="lore-ledger__scope">Anime Only &middot; 7,538 Works &middot; 102,574 Episodes &middot; 764,823 Timed Scenes &middot; 10,576 Arcs</span>
+                </div>
+
+                <!-- Filters for Advanced Search & Lore Ask -->
+                <div class="lore-ledger__grid" data-lore-search-filters>
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-work-id">Work ID (10 Formats)</label>
+                      <button type="button" class="lore-field__action" data-load-work-arcs title="Fetch official story arcs for this work">Load Work Arcs</button>
+                    </div>
+                    <input type="text" id="adv-work-id" class="lore-field__input" data-adv-work-id placeholder="mal:21, imdb:tt0388629, al:21, ap:one-piece" autocomplete="off">
+                    <span class="lore-field__hint">Required to unlock Story Arc filtering.</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-arc-name">Story Arc Filter</label>
+                      <span class="lore-field__meta" data-arc-lock-badge>Requires Work ID</span>
+                    </div>
+                    <input type="text" id="adv-arc-name" class="lore-field__input" data-adv-arc-name list="adv-arc-datalist" placeholder="e.g. Marineford, Chimera Ant, Enies Lobby" autocomplete="off">
+                    <datalist id="adv-arc-datalist" data-adv-arc-datalist></datalist>
+                    <span class="lore-field__hint" data-adv-arc-status>Pre-filters retrieval to the exact episode range of the arc.</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-character">Character Present</label>
+                    </div>
+                    <input type="text" id="adv-character" class="lore-field__input" data-adv-character placeholder="e.g. Iskandar, Whitebeard, Shiki Ryougi" autocomplete="off">
+                    <span class="lore-field__hint">Filters to scenes featuring this character.</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-concept">Concept / Ability / Item</label>
+                    </div>
+                    <input type="text" id="adv-concept" class="lore-field__input" data-adv-concept placeholder="e.g. Bankai, Reality Marble, Gungi" autocomplete="off">
+                    <span class="lore-field__hint">Matches canon terms, weapons, or named techniques.</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-location">Scene Location</label>
+                    </div>
+                    <input type="text" id="adv-location" class="lore-field__input" data-adv-location placeholder="e.g. Underground Tomb, Enies Lobby" autocomplete="off">
+                    <span class="lore-field__hint">Matches setting or environment of the scene.</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label">Episode Number / Range</label>
+                    </div>
+                    <div class="lore-field__range">
+                      <input type="number" class="lore-field__input" data-adv-ep-exact placeholder="Exact Ep" min="0" step="1">
+                      <input type="number" class="lore-field__input" data-adv-ep-min placeholder="Min Ep" min="0" step="1">
+                      <input type="number" class="lore-field__input" data-adv-ep-max placeholder="Max Ep" min="0" step="1">
+                    </div>
+                    <span class="lore-field__hint">Pinpoint a single episode or bound a range.</span>
+                  </div>
+                </div>
+
+                <!-- Seed Controls for Advanced Recommend -->
+                <div class="lore-ledger__grid lore-ledger__grid--two" data-lore-rec-filters hidden>
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-pos-ids">Positive Seed IDs (Optional)</label>
+                    </div>
+                    <input type="text" id="adv-pos-ids" class="lore-field__input" data-adv-pos-ids placeholder="mal:21#ep=485&amp;scene=4, mal:11061#ep=131, imdb:tt0388629#arc=Marineford" autocomplete="off">
+                    <span class="lore-field__hint">Comma-separated scene, episode, or arc IDs (or describe your positive target in the main bar above).</span>
+                  </div>
+
+                  <div class="lore-field">
+                    <div class="lore-field__label-row">
+                      <label class="lore-field__label" for="adv-neg-queries">Negative / Exclude Prompts (Optional)</label>
+                    </div>
+                    <input type="text" id="adv-neg-queries" class="lore-field__input" data-adv-neg-queries placeholder="e.g. lighthearted school comedy, cooking" autocomplete="off">
+                    <span class="lore-field__hint">Rocchio negative steering: pushes recommendations away from these themes.</span>
+                  </div>
+                </div>
+              </div>
             </form>
 
             <!-- Advanced Options Toggle Bar -->
