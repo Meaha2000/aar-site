@@ -1641,3 +1641,14 @@
   max-height: 260px;
   overflow-y: auto;
 }
+
+
+[hidden],
+.lore-toggle-bar[hidden],
+.lore-ledger[hidden],
+.lore-ledger__grid[hidden],
+.lore-work-chip[hidden],
+.lore-field__input[hidden],
+.ac-dropdown[hidden] {
+  display: none !important;
+}
