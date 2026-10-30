@@ -1843,7 +1843,7 @@ function initLoreControls() {
       }
       state.loreWorkAcDebounce = setTimeout(async () => {
         try {
-          const data = await suggestWorks(raw, 8);
+          const data = await searchAutocomplete(raw, { limit: 8 });
           const items = (Array.isArray(data?.results) ? data.results : []).filter(w => !w.type || String(w.type).toUpperCase() === "ANIME");
           if (!items.length) {
             els.loreWorkAc.hidden = true;
