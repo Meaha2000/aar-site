@@ -19,7 +19,7 @@ import {
   runAdvancedRecommend,
   fetchArcIndex,
   ApiError
-} from "./api.js?v=11";
+} from "./api.js?v=14";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
   from "./config.js?v=10";
 
@@ -1714,12 +1714,20 @@ async function autoLoadArcsForWork(wid, displayTitle) {
 }
 
 function selectSingleLoreWork(work) {
-  const workId = work.mal_id ? `mal:${work.mal_id}` : (work.aar_id != null ? `aar:${work.aar_id}` : work.work_id);
+  let workId = "";
+  if (work.mal_id) {
+    workId = `mal:${work.mal_id}`;
+  } else if (work.work_id) {
+    workId = String(work.work_id).trim();
+  } else if (work.aar_id != null) {
+    const cleanAar = String(work.aar_id).trim().replace(/^aar_/i, "");
+    workId = `aar:${cleanAar}`;
+  }
   const title = work.title || work.title_english || work.title_romaji || workId;
   state.loreSelectedWork = {
     workId,
     title,
-    release_year: work.release_year || null
+    release_year: work.release_year || work.year || null
   };
   if (els.advWorkId) {
     els.advWorkId.value = workId;
@@ -1837,33 +1845,42 @@ function initLoreControls() {
       renderPreview(state.lastQuery);
 
       if (state.loreWorkAcDebounce) clearTimeout(state.loreWorkAcDebounce);
-      if (!raw || raw.length < 2 || /^(mal|al|anilist|imdb|tvdb|tmdb|kitsu|anidb|ap|aar)[_:]/i.test(raw)) {
+      if (!raw || raw.length < 2 || /^(mal|al|anilist|imdb|tvdb|tmdb|kitsu|anidb|ap|aar|work)[_:]/i.test(raw)) {
         els.loreWorkAc.hidden = true;
         return;
       }
       state.loreWorkAcDebounce = setTimeout(async () => {
         try {
-          const data = await searchAutocomplete(raw, { limit: 8 });
-          const items = (Array.isArray(data?.results) ? data.results : []).filter(w => !w.type || String(w.type).toUpperCase() === "ANIME");
+          const data = await searchAutocomplete(raw, { limit: 10 });
+          const rawList = Array.isArray(data?.results)
+            ? data.results
+            : Array.isArray(data?.suggestions)
+              ? data.suggestions
+              : Array.isArray(data) ? data : [];
+          const items = rawList.filter(w => {
+            const wid = String(w.work_id || "");
+            if (wid.startsWith("work:") && !wid.startsWith("work:anime:")) return false;
+            return true;
+          }).slice(0, 8);
           if (!items.length) {
             els.loreWorkAc.hidden = true;
             return;
           }
           els.loreWorkAc.innerHTML = items.map((item, idx) => {
             const title = escapeHtml(item.title || "Untitled");
-            const year = item.release_year ? escapeHtml(String(item.release_year)) : "";
-            const wid = item.mal_id ? `mal:${item.mal_id}` : (item.aar_id != null ? `aar:${item.aar_id}` : item.work_id);
+            const year = (item.release_year || item.year) ? escapeHtml(String(item.release_year || item.year)) : "";
+            const badgeId = item.aar_id ? String(item.aar_id) : (item.work_id || "");
             return `
-              <div class="ac-item" role="option" data-lore-ac-idx="${idx}">
-                <div class="ac-item__main">
-                  <span class="ac-item__title">${title}</span>
+              <button type="button" class="ac-item" role="option" data-lore-ac-idx="${idx}">
+                <div class="ac-item__body">
+                  <div class="ac-item__title">${title}</div>
+                  <div class="ac-item__meta">
+                    <span class="ac-type">ANIME</span>
+                    ${year ? `<span>${year}</span>` : ""}
+                    <span class="mono">${escapeHtml(badgeId)}</span>
+                  </div>
                 </div>
-                <div class="ac-item__meta">
-                  <span class="badge badge--sakura">ANIME</span>
-                  ${year ? `<span>${year}</span>` : ""}
-                  <span class="mono">${escapeHtml(wid)}</span>
-                </div>
-              </div>`;
+              </button>`;
           }).join("");
           els.loreWorkAc.hidden = false;
 
@@ -1877,7 +1894,7 @@ function initLoreControls() {
         } catch (err) {
           els.loreWorkAc.hidden = true;
         }
-      }, 180);
+      }, 160);
     });
 
     els.advWorkId.addEventListener("blur", () => {
