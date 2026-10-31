@@ -22,7 +22,7 @@
   --plum-deep:   #321421; /* darkest plum shade */
 
   --sakura:      #E07A8A; /* vibrant blossom pink */
-  --sakura-deep: #B83A50; /* deep rose accent for high-contrast text & actions */
+  --sakura-deep: #94263B; /* deep rose accent for high-contrast text & actions */
   --sakura-wash: rgba(224, 122, 138, 0.08); /* soft blossom tint */
   --sakura-glow: rgba(45, 25, 35, 0.08); /* soft elevation glow */
 
@@ -30,7 +30,7 @@
   --btn-shadow: 0 4px 14px rgba(45, 25, 35, 0.12);
   --card-shadow: 0 6px 24px rgba(45, 25, 35, 0.05);
 
-  --moss:  #3D6B48; /* status ok / live */
+  --moss:  #285232; /* status ok / live */
   --amber: #94681E; /* warning / rate-limit */
   --rust:  #A83236; /* error */
 

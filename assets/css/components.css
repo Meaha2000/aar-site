@@ -35,7 +35,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -51,13 +51,13 @@
 
 
 .badge--telegram {
-  background: rgba(42, 171, 238, 0.12);
-  color: #2AABEE;
-  border: 1px solid rgba(42, 171, 238, 0.35);
+  color: var(--plum);
+  border-color: var(--rule-strong);
+  background: var(--bg-elevated);
 }
 
 .badge--method {
-  font-size: .625rem;
+  font-size: 0.75rem;
   padding: .2rem .45rem;
   border-radius: 3px;
   font-weight: 700;
@@ -442,7 +442,7 @@
   width: 100%;
   border-bottom: 1px solid var(--rule-strong);
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -485,7 +485,7 @@
 }
 .passage__subheading {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -543,7 +543,7 @@
   align-items: baseline;
 }
 .field:last-child { border-bottom: 0; }
-.field__name { font-family: var(--mono); font-size: .6875rem; font-weight: 600;
+.field__name { font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
                letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
 .field__value { font-family: var(--serif); font-size: .9375rem; color: var(--ink); }
 .field__value .mono { font-size: .8125rem; }
@@ -612,7 +612,7 @@
   align-items: center;
   gap: .45rem;
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--ink-soft);
@@ -638,14 +638,14 @@
 }
 [data-health][data-state="ok"]::before {
   background: var(--moss);
-  box-shadow: 0 0 8px var(--moss);
+  box-shadow: none;
 }
 [data-health][data-state="warn"] {
   border-color: rgba(148, 104, 30, 0.4);
 }
 [data-health][data-state="warn"]::before {
   background: var(--amber);
-  box-shadow: 0 0 8px var(--amber);
+  box-shadow: none;
 }
 [data-health][data-state="error"] {
   border-color: rgba(168, 50, 54, 0.45);
@@ -653,7 +653,7 @@
 }
 [data-health][data-state="error"]::before {
   background: var(--rust);
-  box-shadow: 0 0 8px var(--rust);
+  box-shadow: none;
 }
 
 /* ---- Shelf: example prompts list ---------------------------------------- */
@@ -704,7 +704,7 @@
 }
 .shelf__tag {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -784,7 +784,7 @@
   align-items: center;
   gap: .5rem;
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -816,7 +816,7 @@
 
 .advanced-toggle__summary {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--ink-faint);
   letter-spacing: .02em;
@@ -824,7 +824,7 @@
 }
 
 .btn--reset-mini {
-  font-size: .6875rem;
+  font-size: 0.75rem;
   padding: .35rem .65rem;
 }
 
@@ -856,7 +856,7 @@
 }
 .advanced-label {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -976,7 +976,7 @@
 
 .catalog-contribute__badge {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   letter-spacing: .06em;
   font-weight: 600;
   padding: .25rem .6rem;
@@ -1069,7 +1069,7 @@
 
 .ledger-hint {
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 400;
   color: var(--ink-faint);
   text-transform: none;
@@ -1239,11 +1239,19 @@
   align-items: center;
   gap: .25rem;
   font-family: var(--mono);
-  font-size: .6875rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--sakura-deep);
   background: var(--sakura-wash);
   padding: .25rem .55rem;
   border-radius: 3px;
   border: 1px solid var(--sakura);
+}
+
+.feature-card__title {
+  display: inline;
+  vertical-align: middle;
+}
+.feature-card__desc {
+  margin-top: var(--space-2);
 }

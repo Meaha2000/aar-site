@@ -1,0 +1,16 @@
+{
+  "detector": {
+    "ignoreRules": [
+      "cream-palette"
+    ],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "fraunces",
+        "createdAt": "2026-10-31T17:33:55.728Z",
+        "reason": "DESIGN.md canonical literary serif font"
+      }
+    ]
+  }
+}

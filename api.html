@@ -36,7 +36,7 @@
 <link rel="preload" href="assets/fonts/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/base.css?v=5">
+<link rel="stylesheet" href="assets/css/base.css?v=20">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
 
@@ -189,11 +189,11 @@
               <span class="micro" style="color:var(--moss);font-weight:600">● Production Gateway Active</span>
             </div>
             <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
-              <a href="https://api.aarecords.tech/docs" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.6875rem;padding:.3rem .7rem">
+              <a href="https://api.aarecords.tech/docs" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.75rem;padding:.3rem .7rem">
                 <span>Swagger UI</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
-              <a href="https://api.aarecords.tech/redoc" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.6875rem;padding:.3rem .7rem">
+              <a href="https://api.aarecords.tech/redoc" target="_blank" rel="noopener" class="btn btn--quiet" style="font-size:.75rem;padding:.3rem .7rem">
                 <span>ReDoc</span>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
               </a>
@@ -213,7 +213,7 @@
               <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
                   <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">GATEWAY BASE URL</span>
-                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.725rem;padding:.15rem .45rem">Live Gateway</span>
+                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.75rem;padding:.15rem .45rem">Live Gateway</span>
                 </div>
                 <div style="display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;margin-bottom:.4rem">
                   <div style="flex:1;min-width:0;padding:.45rem .7rem;display:flex;align-items:center;overflow:hidden">
@@ -235,7 +235,7 @@
               <div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
                   <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">PUBLIC FREE API KEY</span>
-                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.725rem;padding:.15rem .45rem">Free Tier</span>
+                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.75rem;padding:.15rem .45rem">Free Tier</span>
                 </div>
                 <div style="display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;margin-bottom:.4rem">
                   <div style="flex:1;min-width:0;padding:.45rem .7rem;display:flex;align-items:center;overflow:hidden">
@@ -258,13 +258,13 @@
           <div style="margin-bottom:var(--space-5)">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2)">
               <div class="micro" style="color:var(--ink-mute)">Strictly Enforced Rate Limits (Per Client IP &mdash; Free Public Key Only)</div>
-              <div class="micro" style="color:var(--ink-mute)">HTTP 429 on Overlimit with <code class="mono" style="font-size:.6875rem">Retry-After</code></div>
+              <div class="micro" style="color:var(--ink-mute)">HTTP 429 on Overlimit with <code class="mono" style="font-size:.75rem">Retry-After</code></div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:var(--space-3)">
-              <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4)">
+              <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4)">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
                   <span class="micro" style="color:var(--moss);font-weight:700">Search Endpoint (<code class="mono" style="font-size:.7rem">/search</code>)</span>
-                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.725rem">Discovery</span>
+                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.75rem">Discovery</span>
                 </div>
                 <div style="display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:.25rem">
                   <div>
@@ -279,10 +279,10 @@
                 </div>
                 <div class="faint" style="font-size:.75rem">Rolling 60-second window with 3 req/sec burst limit per IP.</div>
               </div>
-              <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4)">
+              <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4)">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
                   <span class="micro" style="color:var(--sakura-deep);font-weight:700">Ask Endpoint (<code class="mono" style="font-size:.7rem">/ask</code>)</span>
-                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.725rem">AI Synthesis</span>
+                  <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.75rem">AI Synthesis</span>
                 </div>
                 <div style="display:flex;align-items:baseline;gap:var(--space-3);margin-bottom:.25rem">
                   <div>
@@ -304,7 +304,7 @@
           </div>
 
           <!-- How to authenticate -->
-          <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);margin-bottom:var(--space-4)">
+          <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3);margin-bottom:var(--space-4)">
             <div class="micro" style="margin-bottom:.35rem;color:var(--ink-mute)">Authentication Methods Supported</div>
             <div class="field" style="margin-bottom:.25rem"><span class="field__name">Header</span><span class="field__value mono">x-api-key: aar_free_access</span></div>
             <div class="field" style="margin-bottom:.25rem"><span class="field__name">Query Param</span><span class="field__value mono" style="word-break:break-all">https://api.aarecords.tech/search?q=Bleach&amp;api_key=aar_free_access</span></div>
@@ -363,7 +363,7 @@
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:.5rem">
             <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
               <span class="badge" style="background:var(--sakura-deep);color:#fff;font-weight:700">Pre-Mapped Database IDs</span>
-              <span class="badge" style="background:rgba(212,122,138,0.08);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.6875rem">10 Industry Databases</span>
+              <span class="badge" style="background:rgba(212,122,138,0.08);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.75rem">10 Industry Databases</span>
             </div>
             <span class="faint" style="font-size:.75rem">Zero Fuzzy-Matching Overhead</span>
           </div>
@@ -469,7 +469,7 @@
             </table>
           </div>
 
-          <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);font-size:.85rem;line-height:1.6;color:var(--ink-soft)">
+          <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3);font-size:.85rem;line-height:1.6;color:var(--ink-soft)">
             <strong>Dual-Direction Interoperability:</strong>
             <ul style="margin:.3rem 0 0 1.2rem;padding:0">
               <li><strong>Input Resolution:</strong> Endpoints like <code class="mono">GET /recommend/{id}</code> and <code class="mono">POST /recommend (seed_work_ids)</code> accept native AAR IDs (<code>aar_9253</code>), catalog IDs (<code>mal:9253</code>, <code>al:9253</code>, <code>vndb:v17</code>), or streaming IDs (<code>tmdb:26209</code>, <code>tvdb:72025</code>, <code>imdb:tt0286390</code>) out of the box.</li>
@@ -484,7 +484,7 @@
             <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
               <span class="badge badge--sakura">Model Context Protocol</span>
               <span class="badge badge--live">Official MCP Server</span>
-              <span class="badge" style="background:rgba(212,122,138,0.08);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.6875rem">100% Shared Auth</span>
+              <span class="badge" style="background:rgba(212,122,138,0.08);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.75rem">100% Shared Auth</span>
             </div>
             <span class="faint" style="font-size:.75rem">Protocol Spec: 2025-11-25</span>
           </div>
@@ -502,7 +502,7 @@
               <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:8px;padding:var(--space-3) var(--space-4)">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
                   <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">MCP SERVER ENDPOINT (SSE)</span>
-                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.725rem;padding:.15rem .45rem">Live SSE Stream</span>
+                  <span class="badge" style="background:rgba(126,175,133,0.12);color:var(--moss);border:1px solid var(--moss);font-size:.75rem;padding:.15rem .45rem">Live SSE Stream</span>
                 </div>
                 <div style="display:flex;align-items:stretch;background:var(--paper);border:1px solid var(--rule-strong);border-radius:6px;overflow:hidden;margin-bottom:.4rem">
                   <div style="flex:1;min-width:0;padding:.45rem .7rem;display:flex;align-items:center;overflow:hidden">
@@ -520,7 +520,7 @@
               </div>
 
               <!-- Shared Key Registry & Rate Limits -->
-              <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4)">
+              <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem">
                   <span style="font-weight:700;color:var(--sakura-deep);font-size:.8125rem">Unified Authentication &amp; Free Tier Parity</span>
                 </div>
@@ -542,7 +542,7 @@
             <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:8px;padding:var(--space-3) var(--space-4);display:flex;flex-direction:column">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
                 <span class="micro" style="color:var(--ink-mute);font-weight:700;letter-spacing:0.04em">AI CLIENT CONFIGURATION (JSON)</span>
-                <button class="btn btn--quiet" type="button" data-copy-text='{"mcpServers":{"aar":{"url":"https://mcp.aarecords.tech/sse"}}}' style="border:none;border-radius:4px;padding:.15rem .5rem;font-size:.6875rem;font-weight:600;display:inline-flex;align-items:center;gap:.25rem;background:var(--paper);border:1px solid var(--rule)">
+                <button class="btn btn--quiet" type="button" data-copy-text='{"mcpServers":{"aar":{"url":"https://mcp.aarecords.tech/sse"}}}' style="border:none;border-radius:4px;padding:.15rem .5rem;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:.25rem;background:var(--paper);border:1px solid var(--rule)">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                   <span data-copy-label>Copy JSON</span>
                 </button>
@@ -554,7 +554,7 @@
     }
   }
 }</code></pre>
-              <div class="faint" style="font-size:.71875rem;margin-top:.4rem;color:var(--ink-mute)">
+              <div class="faint" style="font-size:.75rem;margin-top:.4rem;color:var(--ink-mute)">
                 Compatible with Claude Desktop (<code class="mono">claude_desktop_config.json</code>), Cursor (<code class="mono">.cursor/mcp.json</code>), Antigravity, Cline, and Windsurf.
               </div>
             </div>
@@ -564,7 +564,7 @@
           <div style="border-top:1px solid var(--rule);padding-top:var(--space-3)">
             <div class="micro" style="color:var(--ink-mute);margin-bottom:.5rem;font-weight:700">EXPOSED MCP TOOLS</div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:var(--space-3)">
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_search</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Discovery</span>
@@ -572,7 +572,7 @@
                 <div class="faint" style="font-size:.75rem;line-height:1.45">Search 144,000+ works by forgotten plot memories and premises. Supports <code class="mono">include_sources</code> and <code class="mono">return_data</code> parameters.</div>
               </div>
 
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_ask</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Q&amp;A Synthesis</span>
@@ -580,7 +580,7 @@
                 <div class="faint" style="font-size:.75rem;line-height:1.45">Synthesize grounded answers to narrative questions with cited supporting works. Supports <code class="mono">include_sources</code> and <code class="mono">return_data</code> parameters.</div>
               </div>
 
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_lookup_work</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Metadata</span>
@@ -588,7 +588,7 @@
                 <div class="faint" style="font-size:.75rem;line-height:1.45">Retrieve canonical metadata, relations, and excerpts for a specific work ID.</div>
               </div>
 
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_find_similar</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Recommendations</span>
@@ -596,7 +596,7 @@
                 <div class="faint" style="font-size:.75rem;line-height:1.45">Find thematically similar works via centroid vectors &amp; trope re-ranking. Supports <code class="mono">include_sources</code> &amp; <code class="mono">return_data</code>.</div>
               </div>
 
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_stats</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Catalog</span>
@@ -604,7 +604,7 @@
                 <div class="faint" style="font-size:.75rem;line-height:1.45">Retrieve live index statistics and distribution across all 6 media formats (144,698 works).</div>
               </div>
 
-              <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
+              <div style="background:var(--paper);border-left:2px solid var(--rule-strong);padding:var(--space-2) var(--space-3)">
                 <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem">
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_health</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">System</span>
@@ -657,10 +657,10 @@
 
           <!-- TAB: /advanced_search -->
           <div class="tab-pane" id="tab-adv-search" role="tabpanel" aria-labelledby="btn-tab-adv-search" hidden>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/advanced_search</code>
               </div>
             </div>
@@ -690,10 +690,10 @@
 
           <!-- TAB: /advanced_recommend -->
           <div class="tab-pane" id="tab-adv-rec" role="tabpanel" aria-labelledby="btn-tab-adv-rec" hidden>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/advanced_recommend</code>
               </div>
             </div>
@@ -721,10 +721,10 @@
 
           <!-- TAB: /lore_ask -->
           <div class="tab-pane" id="tab-lore-ask" role="tabpanel" aria-labelledby="btn-tab-lore-ask" hidden>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/lore_ask</code>
               </div>
             </div>
@@ -746,9 +746,9 @@
 
           <!-- TAB: /lore/arc-index -->
           <div class="tab-pane" id="tab-arc-index" role="tabpanel" aria-labelledby="btn-tab-arc-index" hidden>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/lore/arc-index/{work_id}</code>
               </div>
             </div>
@@ -765,10 +765,10 @@
           <!-- TAB 1: /search -->
           <div class="tab-pane is-active" id="tab-search" role="tabpanel" aria-labelledby="btn-tab-search">
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/search</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/search" style="padding:.25rem .6rem;font-size:.75rem">
@@ -784,7 +784,7 @@
             </div>
 
                         <!-- Integration Profiles Callout -->
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+            <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
                 Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
@@ -792,22 +792,22 @@
             </div>
 
             <!-- Architecture & Speed: Dual Query Processing Modes -->
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+            <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
-                <span class="badge" style="background:rgba(126,175,133,0.14);color:var(--moss);border:1px solid var(--moss);font-size:.65rem;font-weight:700">Architecture &amp; Speed</span>
+                <span class="badge" style="background:rgba(126,175,133,0.14);color:var(--moss);border:1px solid var(--moss);font-size:.75rem;font-weight:700">Architecture &amp; Speed</span>
                 <span style="font-weight:700;font-size:.9375rem;color:var(--ink)">Dual Query Processing Modes: Fast Native vs. LLM Breakdown</span>
               </div>
               <p style="font-size:.84rem;line-height:1.55;color:var(--ink-soft);margin-bottom:var(--space-3)">
                 AAR is engineered to serve real-time user-facing search and automated agents at maximum velocity:
               </p>
               <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:var(--space-3)">
-                <div style="background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+                <div style="background:var(--paper-raised);border-left:2px solid var(--rule-strong);padding:var(--space-3)">
                   <div style="font-weight:700;color:var(--moss);font-size:.8125rem;margin-bottom:.25rem">Default Mode (<code class="mono" style="font-size:.75rem">query_breakdown: false</code>)</div>
                   <p class="faint" style="font-size:.78rem;line-height:1.5;margin:0">
                     <strong>Sub-second speed (~500ms).</strong> Native hybrid pipeline fusing ScaNN-cascade dense vectors (Qdrant int8), FTS5 BM25, in-memory character synergy aggregation, and deep Cross-Encoder reranking without any LLM delay. Active by default for all requests.
                   </p>
                 </div>
-                <div style="background:var(--paper-raised);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3)">
+                <div style="background:var(--paper-raised);border-left:2px solid var(--rule-strong);padding:var(--space-3)">
                   <div style="font-weight:700;color:var(--sakura-deep);font-size:.8125rem;margin-bottom:.25rem">Opt-In LLM Breakdown (<code class="mono" style="font-size:.75rem">query_breakdown: true</code>)</div>
                   <p class="faint" style="font-size:.78rem;line-height:1.5;margin:0">
                     <strong>Compound Query Decomposition.</strong> Pass <code class="mono" style="font-size:.75rem">"query_breakdown": true</code> in your request body when you want an LLM to decompose complex multi-part comparative queries (e.g. <em>"anime like Cowboy Bebop with themes like Psycho-Pass"</em>) into targeted sub-probes before retrieval (adds ~400&ndash;800ms).
@@ -923,9 +923,9 @@
           <!-- TAB 2: /autocomplete -->
           <div class="tab-pane" id="tab-autocomplete" role="tabpanel" aria-labelledby="btn-tab-autocomplete" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/autocomplete</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/autocomplete" style="padding:.25rem .6rem;font-size:.75rem">
@@ -940,7 +940,7 @@
               </p>
             </div>
 
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+            <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Instant Search-As-You-Type Integration</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
                 Designed for real-time frontend inputs, CLI tools, and chat bots. Returns canonical IDs, release years, review scores, popularity counts, formats (TV, Movie, Manga, VN), and poster thumbnails. Supports both <code class="mono">/autocomplete</code> and <code class="mono">/autocomplete.json</code>.
@@ -1007,10 +1007,10 @@
           <!-- TAB 3: /ask -->
           <div class="tab-pane" id="tab-ask" role="tabpanel" aria-labelledby="btn-tab-ask" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/ask</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/ask" style="padding:.25rem .6rem;font-size:.75rem">
@@ -1032,7 +1032,7 @@
             </div>
 
                         <!-- Integration Profiles Callout -->
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+            <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
                 Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
@@ -1124,9 +1124,9 @@
           <!-- TAB 3: /health -->
           <div class="tab-pane" id="tab-health" role="tabpanel" aria-labelledby="btn-tab-health" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/health</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/health" style="padding:.25rem .6rem;font-size:.75rem">
@@ -1168,9 +1168,9 @@
           <!-- TAB: /stats -->
           <div class="tab-pane" id="tab-stats" role="tabpanel" aria-labelledby="btn-tab-stats" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/stats</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/stats" style="padding:.25rem .6rem;font-size:.75rem">
@@ -1223,10 +1223,10 @@
           <!-- TAB 4: /recommend -->
           <div class="tab-pane" id="tab-recommend" role="tabpanel" aria-labelledby="btn-tab-recommend" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.5rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
-                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                 <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/recommend</code>
               </div>
               <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/recommend" style="padding:.25rem .6rem;font-size:.75rem">
@@ -1242,7 +1242,7 @@
             </div>
 
                         <!-- Integration Profiles Callout -->
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
+            <div style="background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
                 Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
@@ -1324,10 +1324,10 @@
           <!-- TAB 5: /suggest & /contributions -->
           <div class="tab-pane" id="tab-suggest" role="tabpanel" aria-labelledby="btn-tab-suggest" hidden>
             <!-- Endpoint Header Banner -->
-            <div style="display:flex;flex-direction:column;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.6rem .75rem;margin-bottom:var(--space-3)">
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);background:var(--paper-deep);border-left:2px solid var(--rule-strong);padding:.6rem .75rem;margin-bottom:var(--space-3)">
               <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2)">
                 <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                  <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                  <span class="badge badge--method badge--post" style="font-size:.75rem;font-weight:700">POST</span>
                   <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/suggest</code>
                 </div>
                 <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/suggest" style="padding:.25rem .6rem;font-size:.75rem">
@@ -1336,7 +1336,7 @@
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);padding-top:.4rem;border-top:1px dashed var(--rule)">
                 <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-                  <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                  <span class="badge badge--method badge--get" style="font-size:.75rem;font-weight:700">GET</span>
                   <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/contributions/grouped</code>
                 </div>
                 <button class="btn btn--quiet" type="button" data-copy-text="https://api.aarecords.tech/contributions/grouped" style="padding:.25rem .6rem;font-size:.75rem">
