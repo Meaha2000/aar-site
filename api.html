@@ -311,24 +311,38 @@
             <div class="field" style="margin-bottom:0"><span class="field__name">Bearer Auth</span><span class="field__value mono">Authorization: Bearer aar_free_access</span></div>
           </div>
 
-          <!-- Fair Use & Heavy Load SLA Notice -->
-          <div style="border-top:1px solid var(--rule);padding-top:var(--space-4);display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)">
-            <div style="max-width:54ch">
-              <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem">
-                <span class="badge" style="background:rgba(212,122,138,0.12);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.725rem">Operational Notice</span>
-                <span style="font-size:.8125rem;font-weight:600;color:var(--ink)">Community Tier Reliability</span>
+          <!-- Dedicated Production Key Callout (Ruled Ledger Style) -->
+          <div style="border-top:1px solid var(--rule-strong);padding-top:var(--space-4);display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr));gap:var(--space-4);align-items:stretch">
+            <div style="border-left:2px solid var(--rule-strong);padding-left:var(--space-3);display:flex;flex-direction:column;justify-content:space-between">
+              <div>
+                <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem">
+                  <span class="badge" style="background:var(--paper-deep);color:var(--ink-soft);border:1px solid var(--rule-strong);font-size:.7rem">Public Shared Tier</span>
+                  <span style="font-size:.8125rem;font-weight:600;color:var(--ink)">Shared Evaluation Pool</span>
+                </div>
+                <p class="faint" style="font-size:.8125rem;line-height:1.55;margin:0">
+                  The public key (<code class="mono" style="font-size:.75rem">aar_free_access</code>) operates on a shared evaluation pool for rapid prototyping, personal tools, and open-source testing. During concurrent traffic bursts, unthrottled throughput is prioritized for dedicated partner keys.
+                </p>
               </div>
-              <p class="faint" style="font-size:.8125rem;line-height:1.55;margin:0">
-                This promotional tier is hosted on shared experimental community infrastructure. While thoroughly optimized for sub-second responses, <strong>100% uninterrupted uptime and peak latency are not unconditionally guaranteed during sudden concurrent traffic surges</strong>.
-              </p>
             </div>
-            <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3);min-width:260px">
-              <div class="micro" style="color:var(--sakura-deep);margin-bottom:.25rem">Higher Limits &amp; Direct Support</div>
-              <div style="font-size:.8125rem;color:var(--ink-soft);line-height:1.5">
-                For custom rate limits, enterprise SLA, bug reports, or partnership inquiries:
+
+            <div style="background:var(--paper-deep);border:1px solid var(--rule-strong);border-left:3px solid var(--sakura-deep);padding:var(--space-3) var(--space-4);display:flex;flex-direction:column;justify-content:space-between">
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.3rem">
+                  <span class="micro" style="color:var(--sakura-deep);font-weight:700;letter-spacing:0.04em">PRODUCTION &amp; PARTNER TIER</span>
+                  <span class="badge" style="background:var(--sakura-wash);color:var(--sakura-deep);border:1px solid var(--sakura);font-size:.7rem;font-weight:700">Dedicated Key</span>
+                </div>
+                <div style="font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.25rem">
+                  Need Higher API Limits for Production Apps?
+                </div>
+                <p class="faint" style="font-size:.8125rem;line-height:1.5;margin:0 0 .65rem 0">
+                  Get a dedicated partner API key with custom rate limits, isolated concurrency quotas, and direct integration support for media trackers, streaming platforms, and AI agents.
+                </p>
               </div>
-              <div style="margin-top:.4rem">
-                <a href="mailto:contact@aarecords.tech" style="color:var(--sakura-deep);font-weight:700;font-size:.875rem;text-decoration:underline">contact@aarecords.tech</a>
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:.5rem;border-top:1px solid var(--rule)">
+                <a href="mailto:contact@aarecords.tech?subject=Dedicated%20API%20Key%20Request%20%E2%80%94%20%5BProject%20Name%5D" class="btn btn--primary" style="font-size:.78rem;padding:.4rem .85rem;text-decoration:none">
+                  <span>Request Dedicated API Key &rarr;</span>
+                </a>
+                <a href="mailto:contact@aarecords.tech" class="mono" style="font-size:.75rem;color:var(--ink-soft);text-decoration:underline">contact@aarecords.tech</a>
               </div>
             </div>
           </div>
@@ -340,7 +354,7 @@
             <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">💡 Intended Scope &amp; Relational Depth</span>
           </div>
           <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0">
-            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, production metadata filtering, and grounded AI answer synthesis across <strong>144,000+ indexed canonical works and 444,000+ interconnected entities</strong> (characters, voice actors, directors, authors, composers, and work-to-work relationships). While deep production metadata is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
+            <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, production metadata filtering, and grounded AI answer synthesis across <strong>144,698 indexed canonical works and 444,000+ interconnected entities</strong> (characters, voice actors, directors, authors, composers, and work-to-work relationships). While deep production metadata is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.
           </p>
         </div>
 
@@ -587,7 +601,7 @@
                   <code class="mono" style="font-weight:700;color:var(--sakura-deep);font-size:.75rem">aar_stats</code>
                   <span class="badge" style="font-size:.7rem;padding:.1rem .35rem">Catalog</span>
                 </div>
-                <div class="faint" style="font-size:.75rem;line-height:1.45">Retrieve live index statistics and distribution across all 6 media formats (150,707+ works).</div>
+                <div class="faint" style="font-size:.75rem;line-height:1.45">Retrieve live index statistics and distribution across all 6 media formats (144,698 works).</div>
               </div>
 
               <div style="background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:var(--space-2) var(--space-3)">
@@ -773,7 +787,7 @@
             <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
-                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
               </div>
             </div>
 
@@ -1021,7 +1035,7 @@
             <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
-                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
               </div>
             </div>
 
@@ -1167,7 +1181,7 @@
             <div style="margin-bottom:var(--space-4)">
               <h3 style="font-size:1.25rem;margin-bottom:.4rem">Live Catalog Statistics</h3>
               <p class="faint" style="font-size:.9375rem;line-height:1.6">
-                Real-time metrics across all 150,707+ indexed works and the 6 unified media formats (Anime, Manga, Light Novels, Visual Novels, Manhwa, and Manhua), total narrative chunks, and relationship graph edges. Fully accessible with the public free key (<code>aar_free_access</code>).
+                Real-time metrics across all 144,698 indexed works and the 6 unified media formats (Anime, Manga, Light Novels, Visual Novels, Manhwa, and Manhua), total narrative chunks, and relationship graph edges. Fully accessible with the public free key (<code>aar_free_access</code>).
               </p>
             </div>
 
@@ -1231,7 +1245,7 @@
             <div style="background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:var(--space-3) var(--space-4);margin-bottom:var(--space-4)">
               <div class="micro" style="color:var(--sakura-deep);font-weight:700;margin-bottom:.25rem">Optimal Integration Profiles</div>
               <div style="font-size:.875rem;line-height:1.55;color:var(--ink-soft)">
-                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero hallucination), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
+                Designed specifically for <strong>Streaming Platforms</strong> (instant ~500ms search bars across character traits &amp; plot memories), <strong>AI Chatbots</strong> (grounded context blocks with exact character synergy and zero fabricated titles), and <strong>Autonomous AI Agents</strong> (fast, deterministic tool calling with strict schema validation).
               </div>
             </div>
 

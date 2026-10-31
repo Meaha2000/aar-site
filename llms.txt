@@ -174,7 +174,7 @@ For evaluation, open-source AI agents, and independent developers, AAR provides 
   - **3 requests per minute** per client IP.
   - **1 request per second** per client IP (burst protection).
 - **Rate Limit Response:** Exceeding these limits triggers an `HTTP 429 Too Many Requests` envelope with a standard `Retry-After` header.
-- **Fair Use Notice:** Hosted on experimental community infrastructure; 100% uptime and latency are not guaranteed under sudden concurrent load surges. For custom quotas, private enterprise keys, SLA support, or bug reports, email `contact@aarecords.tech`.
+- **Tier Notice:** The public free key (`aar_free_access`) runs on a shared evaluation pool. For dedicated production API keys, higher custom rate limits, isolated concurrency quotas, or partner integrations, email `contact@aarecords.tech`.
 
 ### 4.2. Production Gateway Access
 The official API gateway is accessible directly:
@@ -558,7 +558,7 @@ curl -X GET "https://api.aarecords.tech/stats" \
 ```json
 {
   "status": "healthy",
-  "total_works": 150707,
+  "total_works": 144698,
   "by_type": {
     "anime": 38434,
     "light_novel": 11724,
