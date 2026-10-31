@@ -617,6 +617,18 @@
             <button class="tab-btn" type="button" role="tab" id="btn-tab-recommend" aria-selected="false" aria-controls="tab-recommend" data-tab-target="tab-recommend">
               <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /recommend
             </button>
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-adv-search" aria-selected="false" aria-controls="tab-adv-search" data-tab-target="tab-adv-search">
+              <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /advanced_search
+            </button>
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-adv-rec" aria-selected="false" aria-controls="tab-adv-rec" data-tab-target="tab-adv-rec">
+              <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /advanced_recommend
+            </button>
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-lore-ask" aria-selected="false" aria-controls="tab-lore-ask" data-tab-target="tab-lore-ask">
+              <span class="badge badge--method badge--get">GET</span> <span class="badge badge--method badge--post">POST</span> /lore_ask
+            </button>
+            <button class="tab-btn" type="button" role="tab" id="btn-tab-arc-index" aria-selected="false" aria-controls="tab-arc-index" data-tab-target="tab-arc-index">
+              <span class="badge badge--method badge--get">GET</span> /lore/arc-index
+            </button>
             <button class="tab-btn" type="button" role="tab" id="btn-tab-suggest" aria-selected="false" aria-controls="tab-suggest" data-tab-target="tab-suggest">
               <span class="badge badge--method badge--post">POST</span> /suggest &amp; /contributions
             </button>
@@ -626,6 +638,114 @@
             <button class="tab-btn" type="button" role="tab" id="btn-tab-health" aria-selected="false" aria-controls="tab-health" data-tab-target="tab-health">
               <span class="badge badge--method badge--get">GET</span> /health
             </button>
+          </div>
+
+
+          <!-- TAB: /advanced_search -->
+          <div class="tab-pane" id="tab-adv-search" role="tabpanel" aria-labelledby="btn-tab-adv-search" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/advanced_search</code>
+              </div>
+            </div>
+            <p style="font-size:.9375rem;margin-bottom:var(--space-3)">
+              <strong>Granular Anime Scene, Episode &amp; Story Arc Search</strong> across <strong>7,538 Anime</strong>, <strong>102,574 Episodes</strong>, <strong>764,823 Timestamped Scenes</strong> (with exact <code>HH:MM:SS</code> start/end timestamps), and <strong>10,576 Story Arcs</strong>. Deterministic hybrid retrieval (Tantivy BM25 + Qdrant <code>voyage-4-large</code> + Voyage Reranker) &mdash; <strong>not a chatbot</strong>.
+            </p>
+            <div class="field"><span class="field__name">query / q</span><span class="field__value">Natural-language description of a scene, dialogue, fight, episode plot, or story arc (required).</span></div>
+            <div class="field"><span class="field__name">granularity</span><span class="field__value"><code>"scene"</code> (default, returns timestamped scenes), <code>"episode"</code>, or <code>"arc"</code>.</span></div>
+            <div class="field"><span class="field__name">work_id &amp; 10 ID formats</span><span class="field__value">Filter to a specific anime via <code>work_id</code> (e.g. <code>"mal:21"</code>, <code>"imdb:tt0388629"</code>, <code>"ap:one-piece"</code>) or explicit fields: <code>mal_id</code>, <code>anilist_id</code>, <code>aar_id</code>, <code>imdb_id</code>, <code>tmdb_id</code>, <code>tvdb_id</code>, <code>kitsu_id</code>, <code>anidb_id</code>, <code>anisearch_id</code>, <code>anime_planet_slug</code>.</span></div>
+            <div class="field"><span class="field__name">arc_id / arc_name</span><span class="field__value">Pre-filters search strictly within the episode boundaries of a story arc (<strong>requires passing a work ID in any of the 10 formats</strong>).</span></div>
+            <div class="field"><span class="field__name">episode_number / min_episode / max_episode</span><span class="field__value">Exact episode number or episode range boundaries.</span></div>
+            <div class="field"><span class="field__name">character / concept / location</span><span class="field__value">Filter scenes by participating character name, power/weapon/concept, or scene setting.</span></div>
+            <div class="code" style="margin-top:var(--space-3)">
+              <div class="code__bar"><span class="micro">cURL (POST /advanced_search)</span></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X POST "https://api.aarecords.tech/advanced_search" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "query": "Whitebeard dies standing up declaring the One Piece is real",
+    "granularity": "scene",
+    "imdb_id": "tt0388629",
+    "arc_name": "Marineford",
+    "limit": 5
+  }'</code></pre></div>
+            </div>
+          </div>
+
+          <!-- TAB: /advanced_recommend -->
+          <div class="tab-pane" id="tab-adv-rec" role="tabpanel" aria-labelledby="btn-tab-adv-rec" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/advanced_recommend</code>
+              </div>
+            </div>
+            <p style="font-size:.9375rem;margin-bottom:var(--space-3)">
+              <strong>Multi-Granularity Rocchio Vector Recommendation Engine</strong> across scenes, full episodes, or story arcs (<strong>7,538 Anime / 102,574 Episodes</strong>). Supports positive and negative seed IDs or natural-language descriptions with automatic franchise isolation.
+            </p>
+            <div class="field"><span class="field__name">granularity</span><span class="field__value"><code>"scene"</code>, <code>"episode"</code>, or <code>"arc"</code>.</span></div>
+            <div class="field"><span class="field__name">positive_ids / negative_ids</span><span class="field__value">List of seed IDs or objects (e.g. <code>[{"mal_id": 11061, "episode_number": 131}]</code> or <code>["imdb:tt0388629#arc=Marineford"]</code>).</span></div>
+            <div class="field"><span class="field__name">positive_queries / negative_queries</span><span class="field__value">List of natural-language scene/episode/arc descriptions to steer or repel recommendations.</span></div>
+            <div class="field"><span class="field__name">exclude_same_franchise / max_per_work</span><span class="field__value">Isolates recommendations from seed franchises (default <code>true</code>) and caps results per work (default <code>2</code>).</span></div>
+            <div class="code" style="margin-top:var(--space-3)">
+              <div class="code__bar"><span class="micro">cURL (POST /advanced_recommend)</span></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X POST "https://api.aarecords.tech/advanced_recommend" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "granularity": "episode",
+    "positive_ids": [{"mal_id": 11061, "episode_number": 131}],
+    "positive_queries": ["protagonist sacrifices everything in overwhelming rage to crush a ruthless enemy"],
+    "exclude_same_franchise": true,
+    "limit": 5
+  }'</code></pre></div>
+            </div>
+          </div>
+
+          <!-- TAB: /lore_ask -->
+          <div class="tab-pane" id="tab-lore-ask" role="tabpanel" aria-labelledby="btn-tab-lore-ask" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <span class="badge badge--method badge--post" style="font-size:.65rem;font-weight:700">POST</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/lore_ask</code>
+              </div>
+            </div>
+            <p style="font-size:.9375rem;margin-bottom:var(--space-3)">
+              <strong>Live LLM Scene &amp; Episode Grounded Q&amp;A</strong>. Retrieves exact timestamped scenes, episodes, and story arcs across <strong>7,538 Anime (102,574 Episodes)</strong> and synthesizes a direct, cited answer with <code>[1]</code>, <code>[2]</code> inline references, episode numbers, and timestamps. Accepts all filters supported by <code>/advanced_search</code>.
+            </p>
+            <div class="code" style="margin-top:var(--space-3)">
+              <div class="code__bar"><span class="micro">cURL (POST /lore_ask)</span></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X POST "https://api.aarecords.tech/lore_ask" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "query": "How does Kenshiro defeat Raoh in their final battle and what are Raoh final words?",
+    "granularity": "scene",
+    "limit": 6
+  }'</code></pre></div>
+            </div>
+          </div>
+
+          <!-- TAB: /lore/arc-index -->
+          <div class="tab-pane" id="tab-arc-index" role="tabpanel" aria-labelledby="btn-tab-arc-index" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);background:var(--paper-deep);border:1px solid var(--rule);border-radius:6px;padding:.5rem .75rem;margin-bottom:var(--space-3)">
+              <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+                <span class="badge badge--method badge--get" style="font-size:.65rem;font-weight:700">GET</span>
+                <code class="mono" style="font-size:.875rem;color:var(--ink);font-weight:600">https://api.aarecords.tech/lore/arc-index/{work_id}</code>
+              </div>
+            </div>
+            <p style="font-size:.9375rem;margin-bottom:var(--space-3)">
+              <strong>Lightweight Story Arc Directory Lookup (~1ms)</strong>. Returns the complete ordered list of story arc IDs, arc numbers, saga names, arc names, and start/end episode boundaries for any anime using any of the 10 external ID formats (without bulky summary text).
+            </p>
+            <div class="code" style="margin-top:var(--space-3)">
+              <div class="code__bar"><span class="micro">cURL (GET /lore/arc-index)</span></div>
+              <div class="code__body"><pre><code class="language-bash">curl -X GET "https://api.aarecords.tech/lore/arc-index/imdb:tt0388629" \
+  -H "x-api-key: aar_free_access"</code></pre></div>
+            </div>
           </div>
 
           <!-- TAB 1: /search -->

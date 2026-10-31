@@ -735,3 +735,25 @@ We welcome questions, developer integrations, collaboration ideas, bug reports, 
 - **Official Contact Email:** `contact@aarecords.tech`
 - **GitHub Repository:** https://github.com/Meaha2000/aar-site
 - **OpenAPI / Swagger UI:** https://api.aarecords.tech/docs
+
+
+---
+
+## Advanced Anime Lore Engine (Scenes, Episodes & Story Arcs)
+
+- **Scope (Anime Only):** Covers **7,538 Anime works**, **102,574 Episodes**, **764,823 Timestamped Scenes** (with exact `HH:MM:SS` start/end ranges), and **10,576 Story Arcs**.
+- **Important Retrieval Notice:** `/search`, `/recommend`, `/advanced_search`, and `/advanced_recommend` are deterministic database & vector retrieval engines (**NOT conversational chatbots**). Only `/ask` and `/lore_ask` use a live LLM to synthesize natural-language answers.
+
+### `POST /advanced_search` & `GET /advanced_search`
+Granular hybrid search (`Tantivy BM25` + `Qdrant voyage-4-large` + `Voyage Reranker`) across `granularity`: `"scene"` | `"episode"` | `"arc"`.
+- Returns full hierarchy on every hit: `saga_name`, `arc_id`, `arc_name`, `arc_start_episode`, `arc_end_episode`, `episode_number`, `episode_title`, `scene_number`, `timestamp_range`, `characters`, `concepts`, `location`, `quotes`, and `summary`.
+- Supports all 10 ID formats (`work_id`, `mal_id`, `anilist_id`, `aar_id`, `imdb_id`, `tmdb_id`, `tvdb_id`, `kitsu_id`, `anidb_id`, `anisearch_id`, `anime_planet_slug`) plus `arc_id` / `arc_name` (requires work ID), `episode_number`, `min_episode`, `max_episode`, `character`, `concept`, `location`, `genre`, `format_type`, `min_year`, `max_year`.
+
+### `POST /advanced_recommend` & `GET /advanced_recommend`
+Multi-granularity Rocchio vector recommendations (`"scene"`, `"episode"`, or `"arc"`) using `positive_ids`, `negative_ids`, `positive_queries`, `negative_queries`, `exclude_same_franchise`, `exclude_same_work`, and `max_per_work`.
+
+### `POST /lore_ask` & `GET /lore_ask`
+Live LLM Q&A grounded in retrieved timestamped anime scenes, episodes, and story arcs. Returns a synthesized `answer` with `[1]`, `[2]` citations alongside the exact `sources` array.
+
+### `GET /lore/arc-index` & `GET /lore/arc-index/{work_id}`
+Fast (~1ms) directory lookup returning all story arcs (`arc_id`, `arc_number`, `saga_name`, `arc_name`, `start_episode`, `end_episode`, `episodes_count`) for a work using any of the 10 ID formats (e.g. `/lore/arc-index/imdb:tt0388629` or `/lore/arc-index/mal:21`).
