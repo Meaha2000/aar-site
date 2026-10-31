@@ -19,9 +19,9 @@ import {
   runAdvancedRecommend,
   fetchArcIndex,
   ApiError
-} from "./api.js?v=14";
+} from "./api.js?v=16";
 import { API_BASE, API_KEY, DEFAULT_LIMIT, isConfigured, endpoint }
-  from "./config.js?v=10";
+  from "./config.js?v=16";
 
 /* ---- DOM ------------------------------------------------------------------ */
 

@@ -399,13 +399,7 @@ export function buildAdvancedSearchPayload(opts) {
 export async function runAdvancedSearch(opts, { signal } = {}) {
   const path = opts.endpointMode === "lore_ask" ? "/lore_ask" : "/advanced_search";
   const body = buildAdvancedSearchPayload(opts);
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
-    body: JSON.stringify(body),
-    signal,
-  });
-  return parseJsonOrThrow(res);
+  return request(path, { method: "POST", body, signal });
 }
 
 export function buildAdvancedRecommendPayload(opts) {
@@ -432,19 +426,9 @@ export function buildAdvancedRecommendPayload(opts) {
 
 export async function runAdvancedRecommend(opts, { signal } = {}) {
   const body = buildAdvancedRecommendPayload(opts);
-  const res = await fetch(`${API_BASE}/advanced_recommend`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
-    body: JSON.stringify(body),
-    signal,
-  });
-  return parseJsonOrThrow(res);
+  return request("/advanced_recommend", { method: "POST", body, signal });
 }
 
 export async function fetchArcIndex(workId, { signal } = {}) {
-  const res = await fetch(`${API_BASE}/lore/arc-index/${encodeURIComponent(workId)}`, {
-    headers: authHeaders(),
-    signal,
-  });
-  return parseJsonOrThrow(res);
+  return request(`/lore/arc-index/${encodeURIComponent(workId)}`, { method: "GET", signal });
 }
