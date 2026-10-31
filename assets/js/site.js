@@ -301,7 +301,48 @@ function initDrawer() {
   });
 }
 
+
+/* ---- Referral & UTM Source Tracker ---------------------------------------- */
+
+function initReferralTracker() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get("utm_source") || "";
+    const utmMedium = params.get("utm_medium") || "";
+    const utmCampaign = params.get("utm_campaign") || "";
+    const refParam = params.get("ref") || params.get("source") || "";
+    const referrer = document.referrer || "";
+    const isExternalRef = referrer && !referrer.includes(window.location.hostname);
+
+    if (!utmSource && !utmMedium && !utmCampaign && !refParam && !isExternalRef) {
+      return;
+    }
+
+    const dedupeKey = `aar.tracked:${utmSource}:${refParam}:${referrer}:${window.location.pathname}`;
+    if (sessionStorage.getItem(dedupeKey)) return;
+    sessionStorage.setItem(dedupeKey, "1");
+
+    const payload = JSON.stringify({
+      utm_source: utmSource,
+      utm_medium: utmMedium,
+      utm_campaign: utmCampaign,
+      ref: refParam,
+      referrer: referrer,
+      path: window.location.pathname,
+      query: window.location.search
+    });
+
+    fetch("https://api.aarecords.tech/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+      keepalive: true
+    }).catch(() => {});
+  } catch { /* ignore */ }
+}
+
 function boot() {
+  initReferralTracker();
   initTheme();
   initHealth();
   initNerd();
