@@ -1218,7 +1218,6 @@
   padding: var(--space-4) var(--space-5);
   border: 1px solid var(--rule-strong);
   border-top: 2px solid var(--sakura-deep);
-  border-radius: 4px;
   background: var(--paper-deep);
 }
 .submission-card--success {
