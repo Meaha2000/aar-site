@@ -174,13 +174,12 @@
       <!-- Hero Section -->
       <section class="section section--flush" id="hero">
         <div class="hero">
-          <div class="faint" style="font-family:var(--font-mono);font-size:.78rem;color:var(--sakura-deep);margin-bottom:var(--space-2)">Catalog Index &mdash; 144,698 Works &middot; Six Formats</div>
+          <div class="faint" style="font-family:var(--font-mono);font-size:.78rem;color:var(--sakura-deep);margin-bottom:var(--space-2)">Catalog Index &mdash; 144,698 Works &middot; 764,823 Timed Anime Scenes &middot; 10,576 Story Arcs</div>
           <h1 id="hero-title">You shouldn&rsquo;t need to know a title to find it.</h1>
           <p class="lead hero__lede">
-            Anime Akashic Records is a discovery engine across anime, manga, light novels, visual novels,
-            Korean manhwa, and Chinese manhua. Describe what you half-remember, or describe the story,
-            atmosphere, or themes you want &mdash; and get back works with synopsis excerpts that show why
-            each one fits.
+            Anime Akashic Records is a semantic discovery and granular scene-retrieval engine across anime, manga, light novels, visual novels,
+            Korean manhwa, and Chinese manhua. Pinpoint an exact anime episode and timestamp from a vague scene memory, map entire series into story arcs,
+            or discover new works by describing the premise, atmosphere, or themes you want.
           </p>
           <div class="stack-actions">
             <a class="btn btn--primary" href="/search">
@@ -241,9 +240,27 @@
             <div class="feature-card__icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             </div>
-            <div class="feature-card__title">Question Answering (/ask)</div>
+            <div class="feature-card__title">Question Answering (/ask &amp; /lore/ask)</div>
             <p class="feature-card__desc">
-              Conversational synthesis that produces structured AI prose answering questions directly, backed by catalog citations.
+              Grounded synthesis answering premise or in-episode lore questions directly, citing exact works, episodes, and timestamps.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="feature-card__title">Granular Scene &amp; Timestamp Search</div>
+            <p class="feature-card__desc">
+              Search 764,823 timestamped anime scenes and 102,574 episodes to find the exact episode, minute, and quote from a half-remembered moment.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            </div>
+            <div class="feature-card__title">Story Arc Index &amp; 10 ID Formats</div>
+            <p class="feature-card__desc">
+              Map long-running anime into structured story arcs and sagas with episode ranges using MAL, AniList, TMDB, IMDb, or TVDB IDs.
             </p>
           </div>
         </div>
@@ -256,52 +273,52 @@
           <p class="measure muted">Hand-picked prompts demonstrating memories, plot descriptions, and tropes &mdash; click any query to run it live in the demo.</p>
         </div>
         <ul class="shelf">
-          <li><a class="shelf__item" href="/search?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
+          <li><a class="shelf__item" href="/search?mode=advanced_search&amp;q=Whitebeard%20dies%20standing%20up%20declaring%20the%20One%20Piece%20is%20real">
             <span class="shelf__pos">01</span>
+            <span class="shelf__q">Whitebeard dies standing up declaring the One Piece is real</span>
+            <span class="shelf__tag">Scene &middot; Timestamp</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="/search?mode=advanced_search&amp;q=two%20girls%20realise%20they%20share%20the%20exact%20same%20first%20name%20when%20a%20third%20girl%20explains%20their%20nicknames">
+            <span class="shelf__pos">02</span>
+            <span class="shelf__q">Two girls realize they share the exact same first name when a third girl explains their nicknames</span>
+            <span class="shelf__tag">Scene &middot; Obscure Memory</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="/search?mode=lore_ask&amp;q=In%20which%20episode%20and%20timestamp%20does%20Rock%20Lee%20drop%20his%20ankle%20weights%20against%20Gaara%3F">
+            <span class="shelf__pos">03</span>
+            <span class="shelf__q">In which episode and timestamp does Rock Lee drop his ankle weights against Gaara?</span>
+            <span class="shelf__tag">Lore Ask AI &middot; Episode</span>
+            <span class="shelf__go" aria-hidden="true">&rarr;</span>
+          </a></li>
+          <li><a class="shelf__item" href="/search?q=A%20swordsman%20who%20cannot%20die%2C%20and%20the%20woman%20who%20follows%20him">
+            <span class="shelf__pos">04</span>
             <span class="shelf__q">A swordsman who cannot die, and the woman who follows him</span>
-            <span class="shelf__tag">Anime &middot; Memory</span>
+            <span class="shelf__tag">Work Search &middot; Memory</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="/search?q=Find%20fantasy%20stories%20with%20a%20quiet%2C%20melancholic%20atmosphere%20and%20slow%20journeys">
-            <span class="shelf__pos">02</span>
+            <span class="shelf__pos">05</span>
             <span class="shelf__q">Find fantasy stories with a quiet, melancholic atmosphere and slow journeys</span>
-            <span class="shelf__tag">Plot &middot; Setting</span>
+            <span class="shelf__tag">Plot &middot; Atmosphere</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="/search?q=Time-travel%20visual%20novel%20with%20branching%20timelines">
-            <span class="shelf__pos">03</span>
+            <span class="shelf__pos">06</span>
             <span class="shelf__q">Time-travel visual novel with branching timelines</span>
             <span class="shelf__tag">VN &middot; Mechanic</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
           <li><a class="shelf__item" href="/search?q=Weakest%20hunter%20reawakens%20in%20a%20double%20dungeon%20with%20a%20solo%20leveling%20system">
-            <span class="shelf__pos">04</span>
+            <span class="shelf__pos">07</span>
             <span class="shelf__q">Weakest hunter reawakens in a double dungeon with a solo leveling system</span>
             <span class="shelf__tag">Korean Manhwa</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
-          <li><a class="shelf__item" href="/search?q=Stories%20about%20characters%20who%20gradually%20realize%20that%20the%20world%20around%20them%20is%20not%20what%20it%20seems">
-            <span class="shelf__pos">05</span>
-            <span class="shelf__q">Stories about characters who gradually realize that the world around them is not what it seems</span>
-            <span class="shelf__tag">Theme &middot; Mystery</span>
-            <span class="shelf__go" aria-hidden="true">&rarr;</span>
-          </a></li>
-          <li><a class="shelf__item" href="/search?q=Studio%20that%20animated%20a%20demon-slaying%20brother%20and%20sister">
-            <span class="shelf__pos">06</span>
-            <span class="shelf__q">Studio that animated a demon-slaying brother and sister</span>
-            <span class="shelf__tag">Anime &middot; Studio</span>
-            <span class="shelf__go" aria-hidden="true">&rarr;</span>
-          </a></li>
           <li><a class="shelf__item" href="/search?q=Banished%20immortal%20cultivator%20returns%2010%2C000%20years%20later%20to%20rebuild%20his%20sect">
-            <span class="shelf__pos">07</span>
+            <span class="shelf__pos">08</span>
             <span class="shelf__q">Banished immortal cultivator returns 10,000 years later to rebuild his sect</span>
             <span class="shelf__tag">Chinese Manhua</span>
-            <span class="shelf__go" aria-hidden="true">&rarr;</span>
-          </a></li>
-          <li><a class="shelf__item" href="/search?q=Something%20cozy%20but%20a%20little%20lonely%2C%20for%20a%20rainy%20evening">
-            <span class="shelf__pos">08</span>
-            <span class="shelf__q">Something cozy but a little lonely, for a rainy evening</span>
-            <span class="shelf__tag">Atmosphere</span>
             <span class="shelf__go" aria-hidden="true">&rarr;</span>
           </a></li>
         </ul>

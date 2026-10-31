@@ -348,10 +348,89 @@
           </div>
         </div>
 
+                <!-- Quick Endpoint Matrix -->
+        <div style="border-top:2px solid var(--rule-strong);border-bottom:1px solid var(--rule);padding:var(--space-4) 0;margin-bottom:var(--space-8)">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-3)">
+            <div>
+              <span class="micro" style="color:var(--sakura-deep);font-weight:700;letter-spacing:0.04em">Quick Reference</span>
+              <h2 style="font-size:1.35rem;font-weight:700;margin:.15rem 0 0 0;color:var(--ink)">Production API Endpoints at a Glance</h2>
+            </div>
+            <span class="faint" style="font-size:.8125rem">Click any endpoint to jump to its interactive documentation tab</span>
+          </div>
+          <div class="compare-table-wrap">
+            <table class="responsive-compare-table">
+              <thead>
+                <tr>
+                  <th style="width:12%">Method</th>
+                  <th style="width:28%">Endpoint Path</th>
+                  <th style="width:18%">Engine Tier</th>
+                  <th style="width:42%">Primary Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-search" onclick="document.getElementById('btn-tab-search')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/search</a></td>
+                  <td>Work Catalog (144K)</td>
+                  <td>Natural-language plot, trope, and premise search across 6 formats.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-ask" onclick="document.getElementById('btn-tab-ask')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/ask</a></td>
+                  <td>Work Catalog + LLM</td>
+                  <td>Cited question answering and curated recommendations grounded in catalog records.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-recommend" onclick="document.getElementById('btn-tab-recommend')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/recommend/{work_id}</a></td>
+                  <td>Work Catalog (144K)</td>
+                  <td>Single-seed &amp; multi-seed (up to 100 works) thematic similarity (accepts MAL, AniList, TMDB, VNDB IDs).</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--post">POST</span></td>
+                  <td><a href="#btn-tab-adv-search" onclick="document.getElementById('btn-tab-adv-search')?.click()" class="mono" style="font-weight:700;color:var(--sakura-deep)">/advanced_search</a></td>
+                  <td>Scene &amp; Lore (764K)</td>
+                  <td>Pinpoint exact anime episodes, story arcs, and <code>HH:MM:SS</code> timestamped scenes.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--post">POST</span></td>
+                  <td><a href="#btn-tab-adv-rec" onclick="document.getElementById('btn-tab-adv-rec')?.click()" class="mono" style="font-weight:700;color:var(--sakura-deep)">/advanced_recommend</a></td>
+                  <td>Scene &amp; Lore (764K)</td>
+                  <td>Narrative arc &amp; scene-level similarity with optional work/episode seed pinning.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--post">POST</span></td>
+                  <td><a href="#btn-tab-lore-ask" onclick="document.getElementById('btn-tab-lore-ask')?.click()" class="mono" style="font-weight:700;color:var(--sakura-deep)">/lore_ask</a></td>
+                  <td>Scene &amp; Lore + LLM</td>
+                  <td>Deep episode, scene, and quote Q&amp;A with timestamped citations.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-arc-index" onclick="document.getElementById('btn-tab-arc-index')?.click()" class="mono" style="font-weight:700;color:var(--sakura-deep)">/lore/arc-index/{work_id}</a></td>
+                  <td>Arc Index (10.5K)</td>
+                  <td>Complete chronological saga/arc breakdown &amp; episode ranges for any anime ID.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-autocomplete" onclick="document.getElementById('btn-tab-autocomplete')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/autocomplete</a></td>
+                  <td>Work Catalog (144K)</td>
+                  <td>Instant sub-50ms prefix &amp; alias title lookup for search bars and seed pickers.</td>
+                </tr>
+                <tr>
+                  <td><span class="badge badge--method badge--get">GET</span></td>
+                  <td><a href="#btn-tab-stats" onclick="document.getElementById('btn-tab-stats')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/stats</a> &amp; <a href="#btn-tab-health" onclick="document.getElementById('btn-tab-health')?.click()" class="mono" style="font-weight:700;color:var(--ink)">/health</a></td>
+                  <td>System Telemetry</td>
+                  <td>Live corpus counts across works, episodes, scenes, arcs, and Qdrant vector liveness.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Intended Scope & Best Practices Callout -->
         <div style="background:var(--paper-raised);border:1px solid var(--sakura);border-radius:8px;padding:var(--space-4);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
           <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
-            <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">💡 Intended Scope &amp; Relational Depth</span>
+            <span style="font-weight:700;color:var(--sakura-deep);font-size:.9375rem">Intended Scope &amp; Relational Depth</span>
           </div>
           <p class="faint" style="font-size:.9rem;line-height:1.6;margin:0">
             <strong>Anime Akashic Records (AAR)</strong> is purpose-built for semantic retrieval, trope discovery, natural language query resolution, production metadata filtering, and grounded AI answer synthesis across <strong>144,698 indexed canonical works and 444,000+ interconnected entities</strong> (characters, voice actors, directors, authors, composers, and work-to-work relationships). While deep production metadata is fully indexed and filterable in every payload, AAR is not designed as a real-time minute-by-minute episode airing tracker or personal watch-list manager.

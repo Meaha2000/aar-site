@@ -175,8 +175,9 @@
 
         <div class="instrument">
           <div>
-            <!-- Mode Switcher -->
-            <div role="group" aria-label="Query mode" class="mode-row">
+            <!-- Mode Switcher (Grouped into Catalog Discovery vs Scene & Episode Lore) -->
+            <div role="group" aria-label="Query mode" class="mode-row" style="align-items:center">
+              <span class="mono faint" style="font-size:.75rem;padding-right:.25rem">Catalog (144k Works):</span>
               <button class="chip is-active" type="button" data-mode="search" aria-pressed="true">
                 Search Mode
               </button>
@@ -186,6 +187,7 @@
               <button class="chip" type="button" data-mode="recommend" aria-pressed="false">
                 Recommend Me
               </button>
+              <span class="mono faint" style="font-size:.75rem;padding-left:.5rem;padding-right:.25rem;border-left:1px solid var(--rule-strong)">Scene &amp; Arc Lore (764k Scenes):</span>
               <button class="chip" type="button" data-mode="advanced_search" aria-pressed="false">
                 Advanced Scene Search
               </button>
@@ -218,6 +220,7 @@
                 </button>
               </div>
               <div class="query-guidance" data-query-guidance role="region" aria-label="Search mode guidance"></div>
+              <div class="mode-examples" data-mode-examples style="display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-top:.55rem;padding-top:.45rem;border-top:1px dashed var(--rule)"></div>
 
               <!-- Collapsible Toggle Bar for Scene, Episode & Arc Controls (just like Advanced Options) -->
               <div class="advanced-toggle-bar lore-toggle-bar" data-lore-controls hidden>

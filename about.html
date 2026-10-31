@@ -170,8 +170,9 @@
         <div style="max-width:54rem">
           <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:var(--space-3);flex-wrap:wrap">
             <span class="badge badge--sakura">Mainly an Anime API</span>
-            <span class="badge badge--live">144,000+ Canonical Titles</span>
-            <span class="badge badge--sakura">Plot &amp; Story Discovery</span>
+            <span class="badge badge--live">144,698 Canonical Works</span>
+            <span class="badge badge--sakura">764,823 Timed Anime Scenes</span>
+            <span class="badge">10,576 Story Arcs</span>
           </div>
           <h1 style="font-size:clamp(1.9rem,4.5vw,3.1rem);line-height:1.24;word-spacing:0.04em;letter-spacing:-0.005em;margin-bottom:var(--space-3)">
             The Intelligent Anime Discovery API
@@ -191,89 +192,29 @@
           </p>
         </div>
 
-        <!-- Core Mission / What it is -->
-        <div style="background:var(--paper-raised);border:1px solid var(--rule-strong);border-radius:8px;padding:var(--space-6);margin-bottom:var(--space-8);box-shadow:var(--card-shadow)">
+        <!-- Core Mission & Unified Discovery -->
+        <div style="border-top:2px solid var(--rule-strong);border-bottom:1px solid var(--rule);padding:var(--space-5) 0;margin-bottom:var(--space-8)">
           <h2 style="font-size:clamp(1.45rem,2.8vw,1.95rem);line-height:1.28;word-spacing:0.03em;letter-spacing:0;margin-bottom:var(--space-2)">What is Anime Akashic Records?</h2>
-          <p style="font-size:1rem;line-height:1.7;color:var(--ink);margin-bottom:var(--space-3)">
-            At its core, <strong>Anime Akashic Records is primarily an Anime API</strong>, engineered specifically to solve
-            the discovery problem that traditional anime databases cannot handle. It is <strong>best paired with traditional anime APIs for exact metadata and images</strong>: use traditional platforms (like Jikan or AniList) for high-res assets, live watchlists, and schedules, and use AAR for natural-language semantic discovery, narrative plot matching, and deep recommendations.
+          <p style="font-size:1rem;line-height:1.7;color:var(--ink);margin-bottom:var(--space-3);max-width:70ch">
+            At its core, <strong>Anime Akashic Records (AAR) is a narrative, scene, and story-arc retrieval API</strong> engineered to solve the discovery problems that traditional anime databases cannot handle. While platforms like MyAnimeList, AniList, and TMDB excel at exact title lookups, broadcast schedules, and watchlists, AAR indexes the narrative itself across <strong>144,698 canonical works</strong>, <strong>102,574 anime episodes</strong>, <strong>764,823 timestamped scenes</strong> (with exact <code>HH:MM:SS</code> ranges), and <strong>10,576 canonical story arcs</strong>.
           </p>
-          <p style="font-size:.95rem;line-height:1.65;color:var(--ink-soft);margin:0">
-            Most existing anime databases are digital phonebooks: if you already know the exact title in English or Japanese,
-            they will show you the page. But if you describe what happens in the story, or the emotional tone you are craving,
-            they struggle to return relevant matches.
-            AAR expands this dynamic: you can describe any plot, trope, relationship, aesthetic mood, or studio style in plain English,
-            and the API returns relevant matching works paired with supporting synopsis excerpts.
-          </p>
-        </div>
-
-        <!-- NEW SECTION: More Than Remembering / Discover by Story Premise -->
-        <div style="margin-bottom:var(--space-8)">
-          <div style="margin-bottom:var(--space-4)">
-            <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-2)">More Than Remembering: Discover by Story Premise &amp; Themes</h2>
-            <p class="faint" style="font-size:.95rem;margin:0">
-              AAR is designed for dual-path discovery: pinpointing works you half-remember, and surfacing fresh works that match the exact experience you want to explore.
-            </p>
-          </div>
-
-          <div class="feature-grid">
+          <div class="feature-grid" style="margin-top:var(--space-4)">
             <div class="feature-card">
-              <div class="feature-card__title">Discover by Story Premise</div>
-              <div style="font-style:italic;color:var(--sakura-deep);font-size:.875rem;margin-bottom:var(--space-2);line-height:1.5">
-                &ldquo;Find anime with a quiet, melancholic atmosphere, winter landscapes, and a slow journey of self-discovery.&rdquo;
-              </div>
+              <div class="feature-card__title">Pinpoint Forgotten Works &amp; Scenes</div>
               <p class="feature-card__desc">
-                Explore new works through detailed narrative premises, setting dynamics, and story progression &mdash; even if you do not know any title beforehand or have never seen the work before.
+                Describe a half-remembered plot twist, a visual gag, or a single scene in plain language — AAR resolves the exact work, episode number, story arc, and <code>HH:MM:SS</code> timestamp window.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Explore Specific Themes</div>
-              <div style="font-style:italic;color:var(--sakura-deep);font-size:.875rem;margin-bottom:var(--space-2);line-height:1.5">
-                &ldquo;Find stories about characters who gradually realize that the world around them is not what it seems.&rdquo;
-              </div>
+              <div class="feature-card__title">Discover by Premise &amp; Atmosphere</div>
               <p class="feature-card__desc">
-                Search for nuanced narrative patterns, psychological conflicts, and character dynamics rather than relying on generic genre checkboxes like &ldquo;Mystery&rdquo; or &ldquo;Sci-Fi&rdquo;.
+                Go beyond rigid genre checkboxes like &ldquo;Action&rdquo; or &ldquo;Sci-Fi&rdquo;. Query nuanced story premises, psychological dynamics, or up to 100 seed works with negative exclusions.
               </p>
             </div>
             <div class="feature-card">
-              <div class="feature-card__title">Build Smarter Discovery Experiences</div>
-              <p class="feature-card__desc" style="margin-top:.25rem">
-                Streaming platforms, recommendation engines, and bots can use AAR to transform conversational user descriptions into ranked candidate titles, which can then be matched against their available catalog.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- The Problem with Traditional APIs (Calibrated) -->
-        <div style="margin-bottom:var(--space-8)">
-          <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:var(--space-3)">The Problem with Traditional Anime APIs</h2>
-          <div class="feature-grid">
-            <div class="feature-card">
-              <div class="feature-card__title">Exact Title Lookup Focus</div>
+              <div class="feature-card__title">Drop-In Partner ID Bridge</div>
               <p class="feature-card__desc">
-                Traditional APIs are built around exact keyword matching. Searching for a half-remembered plot like
-                <em>&ldquo;a boy whose arm transforms into a blade&rdquo;</em> often yields no helpful results because the title is <em>Parasyte</em>.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-card__title">Rigid, Shallow Tag Checkboxes</div>
-              <p class="feature-card__desc">
-                Filtering by &ldquo;Action&rdquo; or &ldquo;Fantasy&rdquo; still leaves thousands of unrelated titles.
-                Nuanced themes like <em>&ldquo;cozy winter solo travel&rdquo;</em> or <em>&ldquo;rivals who respect each other&rdquo;</em> cannot be expressed with checkboxes alone.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-card__title">Title-Only Output Without Context</div>
-              <p class="feature-card__desc">
-                When a traditional system recommends an anime, it usually provides only a title and an ID.
-                You have no immediate way to know <em>why</em> it fits your query without reading external third-party reviews.
-              </p>
-            </div>
-            <div class="feature-card">
-              <div class="feature-card__title">Cross-Medium Fragmentation</div>
-              <p class="feature-card__desc">
-                Anime adaptations frequently originate from manga, light novels, visual novels, or webtoons.
-                In conventional services, these are separated into disconnected databases, breaking cross-media continuity.
+                Pass native IDs from <strong>10 major platforms</strong> (<code>mal:21</code>, <code>tmdb:1429</code>, <code>al:21</code>, <code>vndb:v17</code>) directly to fetch structured episode-to-arc indexes or hybrid recommendations.
               </p>
             </div>
           </div>
