@@ -1613,29 +1613,41 @@ function renderLoreResults(data, lopts) {
 
   const rowsHtml = hits.map((item, idx) => {
     const title = escapeHtml(item.work_title || item.title_english || item.title || "Untitled Anime");
-    const epNum = item.episode_number != null ? `Episode ${item.episode_number}` : "";
+    const fmtEp = (n) => (n != null && n !== "") ? (Number.isInteger(Number(n)) ? String(Number(n)) : String(n)) : "";
+    const epNum = item.episode_number != null ? `Episode ${fmtEp(item.episode_number)}` : "";
     const epTitle = item.episode_title ? escapeHtml(item.episode_title) : "";
     const sceneNum = item.scene_number != null ? `Scene ${item.scene_number}` : "";
     const ts = item.timestamp_range ? escapeHtml(item.timestamp_range) : "";
     const arcName = item.arc_name ? escapeHtml(item.arc_name) : "";
     const sagaName = item.saga_name ? escapeHtml(item.saga_name) : "";
     const arcRange = (item.arc_start_episode != null && item.arc_end_episode != null)
-      ? `Ep ${item.arc_start_episode}–${item.arc_end_episode}`
-      : ((item.start_episode != null && item.end_episode != null) ? `Ep ${item.start_episode}–${item.end_episode}` : "");
+      ? `Ep ${fmtEp(item.arc_start_episode)}–${fmtEp(item.arc_end_episode)}`
+      : ((item.start_episode != null && item.end_episode != null) ? `Ep ${fmtEp(item.start_episode)}–${fmtEp(item.end_episode)}` : "");
 
     const score = typeof item.score === "number" ? item.score.toFixed(3) : (typeof item.rerank_score === "number" ? item.rerank_score.toFixed(3) : "—");
-    const summary = escapeHtml(item.scene_summary || item.episode_summary || item.arc_summary || item.summary || "");
+    const rawSum = String(item.scene_summary || item.episode_summary || item.arc_summary || item.summary || "").replace(/\*\*(.+?)\*\*/g, "$1");
+    const summary = escapeHtml(rawSum);
     const location = item.location ? escapeHtml(item.location) : "";
     const malBadge = item.mal_id ? `mal:${item.mal_id}` : (item.aar_id ? `aar:${item.aar_id}` : "");
 
     const chars = Array.isArray(item.characters) && item.characters.length
-      ? item.characters.map(c => escapeHtml(c)).join(", ")
+      ? item.characters.map(c => escapeHtml(typeof c === "object" && c !== null ? (c.name || c.character || "") : String(c))).filter(Boolean).join(", ")
       : "";
     const concepts = Array.isArray(item.concepts) && item.concepts.length
-      ? item.concepts.map(c => `<span class="badge badge--quiet" style="font-size:.7rem;margin-right:.3rem">${escapeHtml(c)}</span>`).join("")
+      ? item.concepts.map(c => {
+          const txt = typeof c === "object" && c !== null ? (c.name || c.concept || "") : String(c);
+          return txt ? `<span class="badge badge--quiet" style="font-size:.7rem;margin-right:.3rem">${escapeHtml(txt)}</span>` : "";
+        }).join("")
       : "";
     const quotes = Array.isArray(item.quotes) && item.quotes.length
-      ? item.quotes.map(q => `<blockquote style="margin:.35rem 0;padding-left:.65rem;border-left:2px solid var(--rule-strong);font-style:italic" class="faint">"${escapeHtml(q)}"</blockquote>`).join("")
+      ? item.quotes.map(q => {
+          if (typeof q === "object" && q !== null) {
+            const qText = escapeHtml(String(q.quote || q.text || "").replace(/\*\*(.+?)\*\*/g, "$1"));
+            const qSpeaker = q.speaker ? `<strong style="font-style:normal;color:var(--ink)">${escapeHtml(String(q.speaker))}:</strong> ` : "";
+            return qText ? `<blockquote style="margin:.35rem 0;padding-left:.65rem;border-left:2px solid var(--rule-strong);font-style:italic" class="faint">${qSpeaker}"${qText}"</blockquote>` : "";
+          }
+          return `<blockquote style="margin:.35rem 0;padding-left:.65rem;border-left:2px solid var(--rule-strong);font-style:italic" class="faint">"${escapeHtml(String(q))}"</blockquote>`;
+        }).join("")
       : "";
 
     // Sub-scenes table when result is an Episode or Story Arc
