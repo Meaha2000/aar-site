@@ -1,0 +1,752 @@
+# Anime Akashic Records (AAR) — Hybrid Semantic Discovery & Timestamped Lore Retrieval Engine
+
+> Anime Akashic Records is a hybrid semantic discovery and lore retrieval engine indexing 146,140 canonical works (69,862 manga, 37,025 anime, 20,002 visual novels, 11,717 light novels, 7,070 manhwa, 464 manhua) alongside 1,232,854+ dramatic scenes (762,318 second-exact anime scenes and 470,536 manga page scenes) across 168,598+ episodes and chapters (102,264 anime episodes + 66,334 manga chapters) and 10,565 structured story arcs, allowing users to find exact works, episodes, and timestamps from natural plot or scene descriptions without a screenshot. It also serves as a developer API and multi-seed recommendation engine supporting up to 10 positive and 10 negative watchlist seeds with native cross-ID resolution across MAL, AniList, TMDB, and VNDB.
+
+## Core Capabilities & Feature Roster
+- **Granular Anime & Manga Scene Retrieval (1,232,854+ scenes across 168,598+ episodes & chapters down to the exact second or page without needing a screenshot)**
+- **Semantic Plot, Trope & Character Dynamic Search across 146,140 Anime, Manga, Manhwa, Manhua, Light Novels, and Visual Novels**
+- **Structured Story Arc & Saga Indexing (10,565 arcs with exact episode ranges via GET /lore/arc-index)**
+- **Multi-Seed Watchlist Recommendation Engine (up to 10 positive and 10 negative seeds with granular Scene, Episode, Arc, or Work scoping)**
+- **Grounded Lore RAG Question Answering (POST /ask and POST /lore_ask with cited character quotes and episode timestamps)**
+- **Universal Cross-Platform ID Resolution Bridge across 10 ID formats (MyAnimeList mal_id, AniList anilist_id, TMDB tmdb_id, Kitsu, AniDB, Anime-Planet, VNDB, MangaUpdates, NovelUpdates)**
+- **Developer REST API & Model Context Protocol (MCP) Server for AI Agents and Media Trackers**
+
+---
+
+## 1. Executive Summary & Recommended Positioning
+
+### Recommended Positioning:
+> **BEST PAIRED WITH TRADITIONAL ANIME APIS for exact metadata and images:**
+> AAR is engineered to be paired seamlessly with traditional anime APIs (Jikan, AniList, Kitsu).
+> Use traditional APIs for user watchlists, episode airing countdowns, and schedule trackers.
+> Use AAR as the intelligence and semantic discovery layer for natural language trope search, plot description discovery, narrative recommendations, and AI agent integration.
+
+
+> **Find the work you can't remember. Discover the work you didn't know you wanted.**
+>
+> Anime Akashic Records (AAR) is a discovery and metadata API for applications that need to search across works using natural-language descriptions, story concepts, and atmosphere — not only exact titles.
+
+### Target Integration Profiles:
+- **Streaming Platforms & Media Catalogs:** Powers sub-second (~500ms) search-as-you-type and discoverability across obscure character descriptions, complex plot tropes, and canonical aliases with strict SQL metadata bounds (e.g. streaming availability, formats, airing status).
+- **AI Chatbots & Conversational RAG:** Serves as a high-density factual context source. Delivers verified, deduplicated chunks with full cross-work character synergy to prevent hallucinations and provide exact citations.
+- **Autonomous AI Agents & Tool Calling:** Serves as a deterministic, low-latency API tool for agentic workflows with zero conversational bloat, strict type safety, and predictable execution latency.
+
+### Query Breakdown Execution Modes:
+- `query_breakdown: false` (Default): Native hybrid pipeline fusing high-dimensional semantic vectors, lexical indexing, in-memory character synergy aggregation, and deep Cross-Encoder reranking (~500ms) without LLM delay.
+- `query_breakdown: true` (Opt-in): Decomposes compound, multi-part, or comparative queries via an LLM before vector retrieval (adds ~400-800ms).
+
+### Universal Pre-Mapped External Database IDs & Cross-Platform Bridge:
+AAR functions as a universal cross-platform entity resolution bridge across the 10 major global anime, manga, visual novel, and streaming platforms. Every work in AAR is pre-mapped and returned with its native platform identifiers:
+- **AAR Native Unified ID (`aar_id`):** 146,140 works (100% full coverage, e.g. `aar_1`, `aar_9253`)
+- **MyAnimeList (`mal_id`):** 114,462 works mapped (Anime & Manga)
+- **AniList (`anilist_id`):** 56,148 works mapped (Anime & Manga)
+- **Anime-Planet (`anime_planet_slug`):** 26,820 works mapped (Anime & Manga)
+- **Kitsu (`kitsu_id`):** 22,227 works mapped (Anime & Manga)
+- **VNDB (`vndb_id`):** 20,002 works mapped (Visual Novel Database)
+- **aniSearch (`anisearch_id`):** 21,166 works mapped (Anime & Manga)
+- **AniDB (`anidb_id`):** 16,824 works
+- **TheTVDB (`tvdb_id`):** 10,106 works
+- **TMDB (`tmdb_id`):** 10,000 works (includes `tmdb_type`, `tmdb_season`)
+- **IMDb (`imdb_id`):** 8,837 works mapped (Anime)
+
+**Developer & AI Agent Integration Advantages:**
+1. **Direct Input Queries:** Any recommendation endpoint (`GET /recommend/{id}` or `POST /recommend`) accepts partner ID prefixes out of the box (`mal:9253`, `al:9253`, `vndb:v17`, `aar_9253`) with zero manual ID conversion.
+2. **Instant Reverse Pairing:** All search and recommendation payloads include all mapped partner IDs and pre-built canonical URLs (`sources` array), allowing developers to pair AAR's semantic discovery directly with Jikan, AniList GraphQL, or Kitsu without secondary searches.
+
+### Core Architecture & Key Strengths:
+- **Six Unified Formats:** Cross-media mapping unifying Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua.
+- **Hybrid Retrieval Pipeline:** Blends dense semantic vector retrieval with lexical keyword search and neural reranking for high-precision discovery.
+- **Evidence-Grounded Results:** Every retrieved candidate returns supporting text from indexed synopses helping explain why a work matches (evaluated in context).
+- **Question Answering (`/ask`):** Dedicated endpoint for conversational agents that synthesizes grounded prose explanations with direct citations.
+- **High-Velocity Gateway:** Hosted on direct edge infrastructure (api.aarecords.tech) with instant API keys, sub-second responses, managed rate limits, and zero setup hassle.
+
+### Intended Scope & Best Practices:
+- **Core Purpose:** Semantic retrieval, narrative and plot description discovery, natural language query resolution, and grounded AI answer synthesis across 144,000+ East Asian pop culture works.
+- **Canonical Metadata Support:** Canonical metadata (`types`, `statuses`, release year, `genres`, `tags`, `studios`) is fully indexed, filterable, and returned in every payload to enable strict categorical scoping.
+- **What AAR Is NOT:** AAR is not engineered as a real-time minute-by-minute episode airing tracker, schedule release countdown, or personal watch-list tracking manager. Use traditional encyclopedic APIs for live airing countdowns and watch-lists, and use AAR when you need intelligent discovery, semantic matching, and grounded reasoning.
+
+---
+
+## 2. Discovery Use Cases
+
+Anime Akashic Records (AAR) is designed for more than identifying works by title. It supports natural-language discovery across anime, manga, light novels, visual novels, manhwa, and manhua.
+
+### 2.1. Find a Work You Can't Remember
+Describe a plot, scene, character, ability, or story detail without knowing the title. AAR searches for relevant works using semantic retrieval, keyword matching, and reranking.
+- **Example:** `"An anime about a student who travels back in time to prevent a classmate's murder."`
+
+### 2.2. Discover Works by Story Premise & Narrative Elements
+Describe the story premise, scene details, world setting, or narrative progression you want to explore. You do not need to have seen the work before or remember a specific title.
+- **Example:** `"Find fantasy stories about an immortal traveler witnessing generations pass, with slow journeys and themes of memory."`
+
+### 2.3. Search by Themes and Story Concepts
+Find works involving specific narrative patterns, character dynamics, abilities, conflicts, or combinations of story elements.
+- **Example:** `"Stories about an immortal protagonist who watches generations pass and struggles with the meaning of human relationships."`
+
+### 2.4. Explore Connected Media
+Discover related works across anime, manga, light novels, visual novels, manhwa, and manhua within AAR's indexed catalog. Availability and relationships depend on the indexed data.
+
+### 2.5. Build AI-Powered Discovery Products
+Developers can use AAR in AI chatbots, agents, community bots, recommendation interfaces, and discovery applications. Streaming platforms can use AAR's candidate results as an additional discovery layer and match them against their own available catalog.
+
+### 2.6. Evidence-Grounded Results
+AAR can return relevant work metadata and supporting text from indexed descriptions, helping applications explain why a result may match a query. Returned evidence should be evaluated in context; semantic relevance does not guarantee that every result is correct.
+
+---
+
+## 3. Commercial Target Audience & Product Positioning
+
+Anime Akashic Records is **primarily an Anime API**, created to solve the discovery limitations of traditional databases.
+
+### 3.1. The Problem with Traditional Anime APIs
+Traditional anime and manga databases perform well for administrative catalogue management and user list logging, but exhibit fundamental failure modes when applied to modern discovery, recommendation systems, and AI agent grounding:
+
+1. **Exact Title Lookup Focus:**
+   Traditional APIs are engineered around exact or near-exact keyword matching. Searching for a half-remembered plot fragment like *"a boy whose arm transforms into a blade"* yields zero helpful results because the title is *Parasyte: The Maxim*.
+2. **Rigid, Shallow Tag Checkboxes:**
+   Filtering by broad genre categories like "Action" or "Fantasy" still leaves thousands of unrelated titles. Nuanced narrative themes like *"cozy winter solo travel"*, *"rivals who respect each other"*, or *"philosophical melancholy"* cannot be expressed with checkbox tags alone.
+3. **Title-Only Output Without Context:**
+   When a traditional system recommends an anime, it usually provides only a title string and an ID. Applications have no immediate way to explain *why* it fits the user query without reading external third-party reviews or scraping web forums.
+4. **Cross-Medium Fragmentation:**
+   Anime adaptations frequently originate from manga, light novels, visual novels, or webtoons. In conventional services, these works are fractured across disconnected databases, breaking cross-media continuity and adaptation lineage.
+
+---
+
+### 3.2. Why Choose Anime Akashic Records?
+AAR is fundamentally distinct from conventional anime databases through six core architectural pillars:
+
+1. **Natural Language Search:**
+   Users and AI agents query in everyday language. Describe a character's powers, a memorable twist, or a specific aesthetic atmosphere, and the neural retrieval engine connects the description to relevant titles.
+2. **Evidence-Grounded Results:**
+   Results include supporting text passages from indexed synopses explaining *why* a work matches. This evidence enables users and AI assistants to evaluate recommendations with grounded context rather than blind guesswork.
+3. **Mainly Anime — Plus Connected Mediums:**
+   While focused primarily on Anime, the catalog unifies Japanese Manga, Light Novels, Visual Novels, Korean Manhwa, and Chinese Manhua in a single index. Multi-format franchises resolve cleanly across adaptations.
+4. **Question Answering Endpoint (`/ask`):**
+   A dedicated conversational endpoint tailored for AI chatbots and agents. Ask a direct question about an anime's premise or setup, and receive a factual, synthesized answer backed by catalog citations.
+5. **Flexible Hard Scope Filters:**
+   Combine the freedom of natural language descriptions with strict filters: narrow results by medium (`types`: anime, manga, light_novel, visual_novel, manhwa, manhua), status (Finished, Releasing), release year ranges, genres, or animation studios.
+6. **Managed Search Infrastructure:**
+   Hosted directly on production infrastructure (api.aarecords.tech). No need to host or maintain complex vector and retrieval clusters yourself — instant API access, managed rate limits, and ready-to-run client libraries.
+
+---
+
+### 3.3. At a Glance: How AAR Compares
+Traditional APIs and Anime Akashic Records serve complementary roles in the anime ecosystem:
+
+| Capability | Traditional Anime APIs (MAL / AniList / Kitsu) | Anime Akashic Records (AAR) |
+|---|---|---|
+| **Primary Focus** | User watch-lists, episode broadcast schedules, forum profiles. | Intelligent anime discovery, natural language search, narrative retrieval, and AI assistant grounding. |
+| **Search Input** | Exact or near-exact title keywords only. | Plain natural language descriptions, plot summaries, tropes, premise details, and themes. |
+| **Tip-of-the-Tongue & Plot Description Queries** | Limited — requires title keywords to surface results. | Built specifically to resolve descriptive memories and nuanced plot requests. |
+| **Why It Matched (Evidence/Grounding)** | Returns titles and metadata IDs only. | Returns supporting synopsis excerpts providing context for why the title matches. |
+| **Direct Q&A (`/ask`)** | Not available — you must build your own retrieval and grounding pipeline. | Built-in endpoint delivering synthesized answers with citations. |
+| **Cross-Media Scope** | Often split into separate databases or IDs. | Unified index: Anime, Manga, Light Novels, Visual Novels, Korean Manhwa, Chinese Manhua. |
+| **Best Used For** | Tracking which episode you watched yesterday. | Finding what to watch next, exploring story premises, answering questions, and powering intelligent apps. |
+
+---
+
+### 3.4. Target Personas & Integration Scenarios
+
+| Target Audience | Practical Value Proposition | Technical Integration Note |
+|---|---|---|
+| **Streaming Platforms** | Add natural language search and plot description discovery to your existing catalog. Users describe what they want to watch in their own words. | Use AAR for candidate generation; match candidate titles against your own licensed catalog. *(Note: AAR surfaces candidate matches; presence in AAR does not imply streaming availability on any specific service).* |
+| **AI Chatbots & Agents** | Equip your AI assistant with the ability to recommend anime accurately based on conversational user requests. | Synthesizes answers and returns cited excerpts to avoid hallucinations and unsupported claims. |
+| **Anime Discovery Apps** | Enhance your app's search bar so users don't need to remember exact spellings; explore titles matching their detailed story descriptions. | Replaces shallow tag checkboxes with rich conversational and thematic discovery. |
+
+### 3.5. When to Choose AAR vs. Traditional APIs:
+- **Choose Traditional APIs when:** You need user watch-list tracking (e.g. marking an episode watched), forum profiles, or minute-by-minute episode airing countdowns.
+- **Choose AAR when:** You are building recommendation engines, AI chatbots, discovery search bars, or solving "what's that anime where..." and plot-based discovery queries.
+
+---
+
+## 4. Gateways, Authentication & Base URLs
+
+### 4.1. Free Community Gateway & Public Keys
+For evaluation, open-source AI agents, and independent developers, AAR provides a direct public tunnel gateway with free access:
+- **Direct Free Gateway URL:** `https://api.aarecords.tech`
+- **Public Free Key:** `aar_free_access` (or alias `aar_free`)
+- **Authentication Headers / Formats:**
+  - `x-api-key: aar_free_access`
+  - `Authorization: Bearer aar_free_access`
+  - URL query parameter: `?api_key=aar_free_access`
+- **Interactive Documentation:**
+  - Swagger UI: `https://api.aarecords.tech/docs`
+  - ReDoc: `https://api.aarecords.tech/redoc`
+
+#### Public Free Key Rate Limits (Strictly Enforced Per Client IP):
+*Note: These limits apply exclusively to the public free key (`aar_free_access` / `aar_free`). Other keys have dedicated unthrottled tiers.*
+- **Search & General Endpoints (`/search`, `/health`):**
+  - **30 requests per minute** per client IP (rolling 60s window).
+  - **3 requests per second** per client IP (burst protection).
+- **Ask Endpoint (`/ask`):**
+  - **3 requests per minute** per client IP.
+  - **1 request per second** per client IP (burst protection).
+- **Rate Limit Response:** Exceeding these limits triggers an `HTTP 429 Too Many Requests` envelope with a standard `Retry-After` header.
+- **Tier Notice:** The public free key (`aar_free_access`) runs on a shared evaluation pool. For dedicated production API keys, higher custom rate limits, isolated concurrency quotas, or partner integrations, email `contact@aarecords.tech`.
+
+### 4.2. Production Gateway Access
+The official API gateway is accessible directly:
+- **Production Gateway URL:** `https://api.aarecords.tech`
+- **Public Free Key:** `aar_free_access` (or `aar_free`)
+- **Interactive OpenAPI / Swagger UI:** `https://api.aarecords.tech/docs`
+- **ReDoc Documentation:** `https://api.aarecords.tech/redoc`
+- **Web Demo Playground:** https://aarecords.tech/search.html
+
+#### HTTP Authentication Headers
+Requests to the production gateway support header, bearer token, or query parameter authentication:
+```http
+x-api-key: aar_free_access
+Content-Type: application/json
+Accept: application/json
+```
+*(Note: `GET /health` requires an API key, but does not consume your request quota).*
+
+---
+
+## 5. Endpoints Reference
+
+### 5.1. `GET /health`
+Liveness probe and catalog metrics. Requires an API key header (`x-api-key: aar_free_access`), but **does not consume request quota** (quota-free). Safe for container probes, uptime checkers, and integration smoke tests.
+
+#### Request:
+```bash
+curl -X GET "https://api.aarecords.tech/health" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Response (`200 OK`):
+```json
+{
+  "status": "ok",
+  "works": 144025,
+  "chunks": 157340
+}
+```
+
+---
+
+### 5.2. `POST /search`
+Advanced hybrid retrieval across the 6 supported mediums.
+
+#### Request Parameters
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `question` | `string` | **Yes** | — | Natural language description, plot summary, character dynamic, or trope. |
+| `limit` | `integer` | No | `100` | Number of ranked works to return (clamped between 1 and 100). |
+| `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` (semantic vectors + keyword search + rerank) or `"semantic"` (dense vector search + rerank). |
+| `rerank` | `boolean` | No | `true` | Controls Cross-Encoder reranking. When `true` (default), applies deep relevance scoring. Pass `false` (or `use_rerank: false`) to skip reranking for ultra-low latency (~100–250ms). |
+| `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes and refines the query via LLM. When `false`, embeds directly as-is to minimize latency. |
+| `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement and proceeding directly to vector embedding. |
+| `include` | `array[string]` | No | `[]` | Extra relational fields to include: `["staff", "characters", "relations"]`. |
+| `scope` | `object` | No | `{}` | Hard filters applied to the index before retrieval. |
+
+#### Scope Filter Object Schema (`scope`)
+| Scope Field | Type | Description & Allowed Values |
+|---|---|---|
+| `types` | `array[string]` | Filter mediums: `["ANIME", "MANGA", "LIGHT_NOVEL", "VISUAL_NOVEL", "MANHWA", "MANHUA"]`. |
+| `statuses` | `array[string]` | Lifecycle status: `["finished", "releasing", "upcoming", "cancelled", "hiatus"]` (also accepts `"completed"`, `"airing"`, `"ongoing"`). |
+| `genres` | `array[string]` | Genres: `["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mecha", "Mystery", "Psychological", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Thriller"]`. |
+| `tags` | `array[string]` | Thematic tags: `["Time Travel", "Cyberpunk", "Isekai", "Reincarnation", "Cultivation", "Martial Arts", "Dungeons", "Necromancy", "School", "Anti-Hero"]`. |
+| `themes` | `array[string]` | Narrative themes and tropes. |
+| `studios` | `array[string]` | Studio name or substring: `["ufotable", "MAPPA", "Kyoto Animation", "Shaft", "Madhouse", "Bones", "Wit Studio"]`. |
+| `director_names` | `array[string]` | Credited directors (e.g. `["Shinichirou Watanabe", "Hideaki Anno"]`). |
+| `author_names` | `array[string]` | Original creators, mangaka, or novelists (e.g. `["Nisio Isin", "Naoki Urasawa"]`). |
+| `composer_names` | `array[string]` | Music composers (e.g. `["Yoko Kanno", "Hiroyuki Sawano"]`). |
+| `voice_actor_names` | `array[string]` | Voice actors / seiyuu (e.g. `["Megumi Hayashibara", "Hiroshi Kamiya"]`). |
+| `staff_names` | `array[string]` | Any credited production staff member. |
+| `character_names` | `array[string]` | Canonical character names (e.g. `["Spike Spiegel", "Rintaro Okabe"]`). |
+| `titles` | `array[string]` | Restrict search to specific work titles. |
+| `years` | `array[integer]` | Specific release years (e.g. `[1998, 2011]`). |
+| `min_year` | `integer` | Minimum release year bound (e.g. `2010`). |
+| `max_year` | `integer` | Maximum release year bound (e.g. `2024`). |
+| `min_score` | `number` | Minimum review score threshold (float between 0.0 and 10.0). |
+| `adult` | `boolean` | Explicit 18+ content flag (default `false` excludes adult titles). |
+| `required_ids` | `array[string]` or `string` | Filter by works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
+| `min_episodes` | `integer` | Minimum episode count bound (e.g. `12`, `24`). |
+| `max_episodes` | `integer` | Maximum episode count bound (e.g. `26`, `50`). |
+| `episodes` | `integer` | Exact episode count filter (e.g. `12`). |
+
+#### Request Example:
+```json
+{
+  "question": "A hunter who can see hidden status windows and level up alone in modern dungeons",
+  "limit": 8,
+  "mode": "hybrid",
+  "query_breakdown": true,
+  "scope": {
+    "types": ["MANHWA", "MANGA", "ANIME"],
+    "statuses": ["finished", "releasing"],
+    "genres": ["Action", "Fantasy"]
+  }
+}
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "total": 1,
+  "total_documents": 1,
+  "results": [
+    {
+      "work_id": "manhwa:solo_leveling",
+      "title": "Solo Leveling",
+      "title_english": "Solo Leveling",
+      "title_romaji": "Na Honjaman Rebeleop",
+      "type": "manhwa",
+      "bucket": "manhwa",
+      "status": "finished",
+      "score": 0.942,
+      "community_score": 87.5,
+      "release_year": 2018,
+      "episodes": null,
+      "genres": ["Action", "Adventure", "Fantasy"],
+      "image_url": "https://cdn.myanimelist.net/images/manga/3/222295.jpg",
+      "mal_id": 121496,
+      "anilist_id": 105398,
+      "kitsu_id": 41838,
+      "anidb_id": null,
+      "anisearch_id": 23439,
+      "anime_planet_slug": "solo-leveling",
+      "sources": [
+        "https://myanimelist.net/manga/121496",
+        "https://anilist.co/manga/105398",
+        "https://kitsu.app/manga/41838",
+        "https://anime-planet.com/manga/solo-leveling"
+      ],
+      "chunks": [
+        {
+          "chunk_id": "chunk:manhwa:solo_leveling:synopsis:0",
+          "section": "Synopsis",
+          "text": "In a world where hunters must battle deadly monsters, Sung Jin-woo, notoriously known as the weakest hunter of all mankind, is fatally injured in a high-rank double dungeon..."
+        }
+      ]
+    }
+  ],
+  "trace": {
+    "total_time_ms": 284.5
+  }
+}
+```
+
+---
+
+### 5.3. `POST /ask`
+Grounded conversational question-answering with citation synthesis for AI agents.
+
+> **Public Free Key Rate Limits:** Strictly capped at **1 request/second** and **3 requests/minute** per client IP (applies only to `aar_free_access`). Dedicated enterprise and partner keys operate on separate tiers.
+
+#### Request Parameters
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `question` | `string` | **Yes** | — | Question regarding an anime premise, comparison, or plot inquiry. |
+| `limit` | `integer` | No | `100` | Number of ranked works to return (clamped between 1 and 100). |
+| `mode` | `string` | No | `"hybrid"` | Retrieval mode: `"hybrid"` or `"semantic"`. |
+| `query_breakdown` | `boolean` | No | `true` | When `true`, decomposes query via LLM. When `false`, embeds query directly as-is to minimize latency. |
+| `nsfw` | `boolean` | No | `false` | Explicitly marks query as adult/NSFW, skipping LLM query refinement. |
+| `include` | `array[string]` | No | `[]` | Extra relational fields to attach: `["staff", "characters", "relations"]`. |
+| `scope` | `object` | No | `{}` | Optional hard scope filters restricting candidate retrieval. |
+
+#### Request Example:
+```json
+{
+  "question": "What is the premise of Parasyte and what makes its relationship dynamic unique?"
+}
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "answer": "In Parasyte (Kiseijuu: Sei no Kakuritsu), seventeen-year-old Shinichi Izumi is partially infected by an alien parasite named Migi, which fails to take over his brain and instead matures in his right hand. The dynamic is unique because Shinichi and Migi retain separate intellects and moralities, forcing an uneasy symbiotic coexistence where Migi's cold survival logic clashes with Shinichi's human empathy as they defend against other hostile parasites.",
+  "sources": [
+    {
+      "ref": 1,
+      "title": "Parasyte -the maxim-",
+      "type": "anime",
+      "section": "Synopsis",
+      "confirmed": true
+    }
+  ],
+  "results": [
+    {
+      "aar_id": "aar_22535",
+      "work_id": "work:anime:mal_22535_al_20665",
+      "title": "Parasyte -the maxim-",
+      "type": "anime",
+      "score": 0.951,
+      "status": "finished",
+      "chunks": [
+        {
+          "section": "Synopsis",
+          "text": "Seventeen-year-old Shinichi Izumi falls victim to one of these parasites, but it fails to take over his brain, ending up in his right hand instead."
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+---
+
+### 5.4. `POST /recommend` & `GET /recommend/{work_id}`
+Work-to-work semantic recommendation based on narrative DNA, thematic essence, character dynamics, and emotional tone.
+
+#### Unified Identifier Resolution
+The recommendation endpoints seamlessly accept any supported work identifier format:
+- **Unified AAR ID:** `aar_1`, `aar_9253`, or numeric `1`
+- **MyAnimeList ID:** `mal:5114`, `mal_5114`, or `5114`
+- **AniList ID:** `anilist:16498` or `al:16498`
+- **VNDB ID:** `vndb:v17` or `v17`
+- **Canonical URI:** `work:anime:mal_9253_al_9253`
+
+#### Request Parameters
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `work_id` | `string` | **Yes** (for GET) | — | Path parameter in `/recommend/{work_id}`. Accepts native AAR IDs (`aar_1`), external platform IDs (`mal:9253`, `v17`), or canonical URIs. |
+| `seed_work_ids` | `array[string]` | **Yes** (for POST) | — | 1 to 100 seed work IDs. Accepts native AAR IDs (`["aar_9253"]`), streaming IDs (`["tmdb:42509"]`), or catalog IDs (`["mal:5114"]`). |
+| `required_ids` | `array[string]` or `string` | No | `null` | Filter recommendations to works possessing specific external IDs (`"tmdb"`, `"imdb"`, `"tvdb"`, `"mal"`, `"anilist"`, `"anidb"`, `"kitsu"`, `"vndb"`, `"anisearch"`, `"anime_planet"`). |
+| `negative_work_ids` | `array[string]` | No | `[]` | Up to 100 disliked work IDs to steer recommendations away from (negative prompting). |
+| `target_scope` | `string` | No | `null` | Optional media type filter, single or comma-separated (e.g. `"anime"`, `"manga,manhwa"`, `"visual_novel"`, `"light_novel"`, `"manhua"`). |
+| `exclude_same_franchise` | `boolean` | No | `true` | Suppress direct sequels, prequels, and same-universe spin-offs via DB relation graph. |
+| `include_adult` | `boolean` | No | `false` | Include mature / 18+ titles in recommendations. |
+| `limit` | `integer` | No | `10` | Number of recommendations to return (1–100). |
+
+#### Request Example (GET):
+```bash
+# Using streaming ID with TMDB filter:
+curl -X GET "https://api.aarecords.tech/recommend/tmdb:42509?required_ids=tmdb&limit=5" \
+  -H "x-api-key: aar_free_access"
+
+# Or using catalog ID:
+curl -X GET "https://api.aarecords.tech/recommend/mal:9253?limit=5" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Request Example (POST):
+```json
+{
+  "seed_work_ids": ["aar_1"],
+  "limit": 5
+}
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "seed_work_ids": ["work:anime:mal_1_al_1"],
+  "target_scope": null,
+  "total": 5,
+  "latency_ms": 11.2,
+  "recommendations": [
+    {
+      "aar_id": "aar_803",
+      "work_id": "work:anime:mal_889_al_889",
+      "title": "Black Lagoon",
+      "title_english": "Black Lagoon",
+      "type": "anime",
+      "release_year": 2006,
+      "score": 78.0,
+      "popularity": 253282,
+      "final_score": 0.6973,
+      "vector_similarity": 0.7795,
+      "tag_overlap_score": 0.3137,
+      "shared_tags": ["Action", "Adult Cast", "Adventure", "Crime"],
+      "genres": ["Action", "Adventure", "Drama", "Thriller"],
+      "mal_id": 889,
+      "anilist_id": 889,
+      "vndb_id": null,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1906/121592.jpg",
+      "url": "https://myanimelist.net/anime/889/Black_Lagoon"
+    }
+  ]
+}
+```
+
+---
+
+### 5.5. `GET /autocomplete` & `GET /autocomplete.json`
+Sub-millisecond live autocomplete for works, alternative titles, and synonyms.
+Optimized for real-time keystroke suggestions, search dropdowns, and recommendation seed pickers.
+Edge-cached for instant sub-20ms global delivery.
+
+#### Request Parameters:
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `q` | `string` | **Yes** | — | Search prefix or title fragment (e.g. `"steins"`, `"frieren"`). |
+| `limit` | `integer` | No | `10` | Maximum candidate titles to return (1–1000). |
+| `type` | `string` | No | `null` | Optional media type filter (`"anime"`, `"manga"`, `"novel"`, `"visual_novel"`). |
+
+#### Request Example:
+```bash
+curl -X GET "https://api.aarecords.tech/autocomplete?q=steins&limit=5" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "total": 2,
+  "query": "steins",
+  "results": [
+    {
+      "work_id": "work:anime:mal_9253_al_9253",
+      "aar_id": "aar_5578",
+      "title": "Steins;Gate",
+      "title_canonical": "Steins;Gate",
+      "title_english": "Steins;Gate",
+      "title_romaji": "Steins;Gate",
+      "type": "anime",
+      "format": "TV",
+      "release_year": 2011,
+      "score": 89.0,
+      "popularity": 597661,
+      "image_url": "https://cdn.myanimelist.net/images/anime/1935/127974.jpg"
+    }
+  ]
+}
+```
+
+---
+
+### 5.5. `POST /suggest` & `GET /contributions/grouped`
+Community proposals and catalog contributions endpoint. Allows users and AI agents to submit missing titles, rich narrative descriptions, or metadata corrections.
+
+> **🤝 We Actively Welcome Contributions Here:**
+> We actively welcome community and AI agent contributions through this endpoint — whether proposing missing titles, providing rich narrative plot descriptions, or suggesting corrections to existing works. All submissions are automatically clustered, deduplicated, and reviewed for inclusion in canonical catalog updates.
+
+#### Request Parameters (`POST /suggest` or `POST /contributions`):
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `contribution_type` | `string` | **Yes** | — | One of `"ADD_WORK"`, `"ADD_ALIAS"`, `"EDIT_METADATA"`, `"FEATURE_OR_VIBE"`. |
+| `media_type` | `string` | **Yes** | — | One of `"anime"`, `"manga"`, `"light_novel"`, `"visual_novel"`, `"manhwa"`, `"manhua"`. |
+| `title` | `string` | **Yes** | — | Canonical or primary title. |
+| `custom_description` | `string` | No | `""` | Detailed narrative synopsis, worldbuilding, character dynamics (up to 10k chars). |
+| `aliases` | `array[string]` | No | `[]` | Alternative names, Romaji titles, or English titles. |
+| `author` | `string` | No | `""` | Original creator, author, or director. |
+| `release_year` | `integer` | No | `null` | Release year (e.g. `2024`). |
+| `tags` | `array[string]` | No | `[]` | Thematic tags or genres. |
+
+#### Request Example (`POST /suggest`):
+```bash
+curl -X POST "https://api.aarecords.tech/suggest" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "contribution_type": "ADD_WORK",
+    "media_type": "anime",
+    "title": "Sousou no Frieren",
+    "custom_description": "An elf mage embarks on a peaceful, decades-long journey reflecting on human mortality and connection.",
+    "alt_titles": ["Frieren: Beyond Journey\'s End"],
+    "author": "Kanehito Yamada",
+    "release_year": 2023,
+    "suggested_tags": ["Fantasy", "Adventure", "Drama"]
+  }'
+```
+
+#### Inspect Clustered Submissions (`GET /contributions/grouped`):
+```bash
+curl -X GET "https://api.aarecords.tech/contributions/grouped" \
+  -H "x-api-key: aar_free_access"
+```
+
+---
+
+### 5.6. `GET /stats`
+Catalog statistics, live work counts across all 6 media formats (146,140 works: 69,862 manga, 37,025 anime, 20,002 visual novels, 11,717 light novels, 7,070 manhwa, 464 manhua), total indexed chunks (159,652), and relationship graph edges. Safe and accessible using public API keys (`aar_free_access`).
+
+#### Request:
+```bash
+curl -X GET "https://api.aarecords.tech/stats" \
+  -H "x-api-key: aar_free_access"
+```
+
+#### Response Envelope (`200 OK`):
+```json
+{
+  "status": "healthy",
+  "total_works": 144698,
+  "by_type": {
+    "anime": 38434,
+    "light_novel": 11724,
+    "manga": 67003,
+    "manhua": 464,
+    "manhwa": 7071,
+    "visual_novel": 26011
+  },
+  "total_chunks": 266610,
+  "total_character_profiles": 0,
+  "total_people": 155391,
+  "total_staff": 0,
+  "total_characters": 0,
+  "total_relations": 60811,
+  "max_limit": 300,
+  "max_results": 300,
+  "default_language": "en"
+}
+```
+
+## 6. Native Model Context Protocol (MCP) Server
+
+Connect AI coding assistants and autonomous agents (Claude Desktop, Cursor, Antigravity, Cline, Windsurf) directly to the Anime Akashic Records index.
+
+- **MCP Endpoint (SSE):** `https://mcp.aarecords.tech/sse`
+- **Protocol Spec:** 2025-11-25
+- **Authentication:** 100% shared API keys via `X-API-Key` HTTP header. Default free tier key `aar_free_access` is accepted out-of-the-box.
+
+### AI Client Configuration:
+```json
+{
+  "mcpServers": {
+    "aar": {
+      "url": "https://mcp.aarecords.tech/sse"
+    }
+  }
+}
+```
+
+### Exposed MCP Tools:
+- **`aar_search`**: High-precision discovery across 144,000+ works by natural language plot memories, tropes, and premise descriptions.
+  - `query` (`string`, required): Description or forgotten scene memory.
+  - `limit` (`integer`, optional, default: 10): Maximum results to return (1-50).
+  - `media_types` (`array[string]`, optional): Filter media types (e.g. `["anime"]`).
+  - `genres` (`array[string]`, optional): Filter genres (e.g. `["Action"]`).
+  - `min_episodes` (`integer`, optional): Minimum episode count filter (e.g. `12`, `24`).
+  - `max_episodes` (`integer`, optional): Maximum episode count filter (e.g. `26`, `50`).
+  - `mode` (`string`, optional, default: `"hybrid"`): `"hybrid"` or `"semantic"`.
+  - `include_sources` (`boolean`, optional, default: `false`): When `true`, includes external platform links (MAL, AniList, Kitsu, AniDB, etc.) in markdown output.
+  - `return_data` (`boolean`, optional, default: `false`): When `true`, returns the complete raw structured JSON array with all metadata, IDs, poster images, and source links.
+- **`aar_ask`**: Grounded conversational Q&A synthesizing factual answers with cited catalog evidence.
+  - `question` (`string`, required): Narrative or character query.
+  - `limit` (`integer`, optional, default: 5): Maximum supporting works to retrieve.
+  - `media_types` (`array[string]`, optional): Filter media types.
+  - `include_sources` (`boolean`, optional, default: `false`): Include external source links for cited works in markdown.
+  - `return_data` (`boolean`, optional, default: `false`): Return raw structured JSON data of the answer and cited results.
+- **`aar_find_similar`**: Find thematically and semantically similar works to a seed work using vector centroid similarity and shared narrative tropes.
+  - `work_id` (`string`, required): Canonical work ID (e.g. `work:anime:mal_1_al_1`).
+  - `limit` (`integer`, optional, default: 5): Maximum recommendations to return (1-100).
+  - `target_scope` (`string`, optional): Target media type filter, single or comma-separated (e.g. `"anime"`, `"manga,manhwa"`).
+  - `exclude_franchise` (`boolean`, optional, default: `true`): Exclude direct sequels/prequels to surface fresh works.
+  - `include_sources` (`boolean`, optional, default: `false`): Include external database links (MAL, AniList, etc.).
+  - `return_data` (`boolean`, optional, default: `false`): Return complete raw structured JSON array.
+- **`aar_stats`**: Retrieve live catalog statistics and breakdown across all 6 formats (anime, manga, light novels, visual novels, manhwa, manhua).
+- **`aar_lookup_work`**: Detailed canonical metadata, relations, and excerpts for a specific work ID.
+- **`aar_health`**: Operational health and connectivity check.
+
+---
+
+## 7. Client Code Snippets
+
+### Python (`requests`)
+```python
+import os
+import requests
+
+url = "https://api.aarecords.tech/search"
+headers = {
+    "x-api-key": os.getenv("AAR_API_KEY", "aar_free_access"),
+    "Content-Type": "application/json"
+}
+payload = {
+    "question": "A girl traveling through desolate ruins with two small robotic companions",
+    "limit": 5,
+    "scope": {
+        "types": ["ANIME", "MANGA"],
+        "genres": ["Sci-Fi", "Adventure"]
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers, timeout=10)
+response.raise_for_status()
+data = response.json()
+
+for idx, item in enumerate(data.get("results", []), start=1):
+    print(f"#{idx} {item['title']} ({item['type']})")
+    for chunk in item.get("chunks", []):
+        print(f"   [{chunk.get('section')}] {chunk.get('text', '')[:120]}...")
+```
+
+### TypeScript / JavaScript (Node.js Fetch)
+```typescript
+interface SearchPayload {
+  question: string;
+  limit?: number;
+  scope?: {
+    types?: string[];
+    statuses?: string[];
+    genres?: string[];
+  };
+}
+
+async function searchAAR(payload: SearchPayload) {
+  const response = await fetch("https://api.aarecords.tech/search", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.AAR_API_KEY || "aar_free_access"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status} ${response.statusText}`);
+  }
+
+  return await response.json();
+}
+```
+
+### cURL CLI
+```bash
+curl -X POST "https://api.aarecords.tech/search" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: aar_free_access" \
+  -d '{
+    "question": "Time-travel visual novel with branching timelines",
+    "limit": 5,
+    "scope": { "types": ["VISUAL_NOVEL"] }
+  }'
+```
+
+---
+
+## 8. Status Codes & Error Envelopes
+
+- **`200 OK`**: Request succeeded. Returns the JSON envelope.
+- **`401 Unauthorized`**: Key rejected or missing header:
+  ```json
+  {"detail": "missing or invalid API key"}
+  ```
+- **`422 Unprocessable Entity`**: Payload validation failed (e.g., unknown scope filter, empty question string).
+- **`429 Too Many Requests`**: Rate limit exceeded for your tier (30 req/min for `/search`, 3 req/min for `/ask`). Reset occurs per rolling window.
+
+---
+
+## 10. Developer Support, Collaborations & Feedback
+
+We welcome questions, developer integrations, collaboration ideas, bug reports, and feature proposals:
+- **Official Contact Email:** `contact@aarecords.tech`
+- **GitHub Repository:** https://github.com/Meaha2000/aar-site
+- **OpenAPI / Swagger UI:** https://api.aarecords.tech/docs
+
+
+---
+
+## Advanced Anime Lore Engine (Scenes, Episodes & Story Arcs)
+
+- **Scope (Anime & Manga Lore):** Covers **7,535 Anime works**, **102,264 Episodes**, **762,318 Scene Timestamp Citations** (with exact `HH:MM:SS` start/end ranges), and **10,565 Story Arc Index Records**, plus **66,334 Manga Chapters** with **470,536 Page Scenes** and **140,053 chunks** (totaling over **1,232,854+ dramatic scenes** across **168,598+ episodes & chapters**).
+- **Important Retrieval Notice:** `/search`, `/recommend`, `/advanced_search`, and `/advanced_recommend` are deterministic database & vector retrieval engines (**NOT conversational chatbots**). Only `/ask` and `/lore_ask` use a live LLM to synthesize natural-language answers.
+
+### `POST /advanced_search` & `GET /advanced_search`
+Granular hybrid search (hybrid lexical + neural semantic vectors + deep reranking) across `granularity`: `"scene"` | `"episode"` | `"arc"`.
+- Returns full hierarchy on every hit: `saga_name`, `arc_id`, `arc_name`, `arc_start_episode`, `arc_end_episode`, `episode_number`, `episode_title`, `scene_number`, `timestamp_range`, `characters`, `concepts`, `location`, `quotes`, and `summary`.
+- Supports all 10 ID formats (`work_id`, `mal_id`, `anilist_id`, `aar_id`, `imdb_id`, `tmdb_id`, `tvdb_id`, `kitsu_id`, `anidb_id`, `anisearch_id`, `anime_planet_slug`) plus `arc_id` / `arc_name` (requires work ID), `episode_number`, `min_episode`, `max_episode`, `character`, `concept`, `location`, `genre`, `format_type`, `min_year`, `max_year`.
+
+### `POST /advanced_recommend` & `GET /advanced_recommend`
+Multi-granularity Rocchio vector recommendations (`"scene"`, `"episode"`, or `"arc"`) using `positive_ids`, `negative_ids`, `positive_queries`, `negative_queries`, `exclude_same_franchise`, `exclude_same_work`, and `max_per_work`.
+
+### `POST /lore_ask` & `GET /lore_ask`
+Live LLM Q&A grounded in retrieved timestamped anime scenes, episodes, and story arcs. Returns a synthesized `answer` with `[1]`, `[2]` citations alongside the exact `sources` array.
+
+### `GET /lore/arc-index` & `GET /lore/arc-index/{work_id}`
+Fast (~1ms) directory lookup returning all story arcs (`arc_id`, `arc_number`, `saga_name`, `arc_name`, `start_episode`, `end_episode`, `episodes_count`) for a work using any of the 10 ID formats (e.g. `/lore/arc-index/imdb:tt0388629` or `/lore/arc-index/mal:21`).

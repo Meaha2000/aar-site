@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-surface-bg: #fafafa;
+    --color-surface-card: #ffffff;
+    --color-surface-border: #e4e4e7;
+  }
+  .dark {
+    --color-surface-bg: #09090b;
+    --color-surface-card: #121215;
+    --color-surface-border: #27272a;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Numeric discipline */
+  .tabular-nums, table, [data-tabular] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.3);
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(82, 82, 91, 0.4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(161, 161, 170, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(82, 82, 91, 0.7);
+}
+
+/* Sleek Visible Scrollbar for Horizontal Tab Navigation */
+.tabs-scrollbar {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(161, 161, 170, 0.45) transparent;
+}
+.tabs-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+.tabs-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+}
+.dark .tabs-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+.tabs-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.5);
+  border-radius: 9999px;
+}
+.dark .tabs-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(161, 161, 170, 0.4);
+}
+.tabs-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(161, 161, 170, 0.8);
+}
+
+/* Glass & Surface Helpers */
+.surface-card {
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-surface-border);
+}
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.dark .glass-panel {
+  background: rgba(18, 18, 21, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* Subtle Sakura Ambient Animation (GPU Accelerated) */
+@keyframes sakuraFall {
+  0% {
+    transform: translate3d(0, -5vh, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(var(--sakura-sway, 24px), 50vh, 0) rotate(160deg);
+  }
+  100% {
+    transform: translate3d(calc(var(--sakura-sway, 24px) * -0.6), 108vh, 0) rotate(320deg);
+  }
+}
+
+@keyframes sakuraSway {
+  0%, 100% {
+    transform: rotate(-12deg) scale(1);
+  }
+  50% {
+    transform: rotate(16deg) scale(0.92);
+  }
+}
+
+.sakura-petal-fall {
+  will-change: transform;
+  animation-name: sakuraFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.sakura-petal-sway {
+  animation-name: sakuraSway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+
+
+.glass-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(228, 228, 231, 0.8);
+}
+.dark .glass-header {
+  background-color: rgba(9, 9, 11, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(39, 39, 42, 0.8);
+}
