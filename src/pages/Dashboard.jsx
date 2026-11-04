@@ -199,6 +199,12 @@ export function Dashboard() {
 
   // Polar Checkout Handler for Plans
   const handleUpgrade = async (targetTier) => {
+    if (user?.tier === 'founder') {
+      const ok = window.confirm(
+        'WARNING: You are currently on the Lifetime Founder Grant (50,000 Normal + 10,000 Advanced requests/mo, ∞ Lifetime).\n\nIf you switch to another paid plan, you will permanently lose your Founder Grant and cannot revert back to it. Are you sure you want to proceed?'
+      );
+      if (!ok) return;
+    }
     setBillingLoading(targetTier);
     setBillingMessage(null);
     try {
@@ -916,13 +922,17 @@ export function Dashboard() {
                         Current Plan Details
                       </span>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase ${
-                        user?.tier !== 'free_sandbox' && user?.auto_renew === false
+                        user?.tier !== 'free_sandbox' && user?.tier !== 'founder' && user?.auto_renew === false
                           ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
                           : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                       }`}>
-                        {user?.tier !== 'free_sandbox' && user?.auto_renew === false ? 'Cancels at Period End' : 'Active'}
+                        {user?.tier === 'founder' ? '∞ Lifetime Active' : user?.tier !== 'free_sandbox' && user?.auto_renew === false ? 'Cancels at Period End' : 'Active'}
                       </span>
-                      {typeof user?.days_remaining === 'number' && (
+                      {user?.tier === 'founder' ? (
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30">
+                          ∞ Never Expires
+                        </span>
+                      ) : typeof user?.days_remaining === 'number' && (
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-brand-500/15 text-brand-600 dark:text-brand-400 border border-brand-500/30">
                           {user.days_remaining} {user.days_remaining === 1 ? 'day' : 'days'} remaining
                         </span>
@@ -930,8 +940,11 @@ export function Dashboard() {
                     </div>
 
                     <div className="flex flex-wrap items-baseline gap-3">
-                      <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                        {user?.tier_name || 'Free Sandbox'}
+                      <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                        <span>{user?.tier_name || 'Free Sandbox'}</span>
+                        {user?.tier === 'founder' && (
+                          <span className="text-2xl leading-none text-purple-600 dark:text-purple-400 font-bold" title="Lifetime Plan">∞</span>
+                        )}
                       </h3>
                     </div>
 
@@ -939,7 +952,9 @@ export function Dashboard() {
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-brand-500" />
                         <span>
-                          {user?.tier === 'free_sandbox'
+                          {user?.tier === 'founder'
+                            ? 'Next Monthly Quota Refill:'
+                            : user?.tier === 'free_sandbox'
                             ? 'Daily Quota Reset:'
                             : user?.auto_renew === false
                             ? 'Plan Expires On:'
@@ -948,16 +963,21 @@ export function Dashboard() {
                         </span>
                       </div>
                       <div>
-                        <span>Time Left: </span>
+                        <span>Plan Duration: </span>
                         <strong className="text-brand-600 dark:text-brand-400">
-                          {typeof user?.days_remaining === 'number' ? `${user.days_remaining} days` : '—'}
+                          {user?.tier === 'founder' ? '∞ Lifetime (50k Normal + 10k Adv / mo)' : typeof user?.days_remaining === 'number' ? `${user.days_remaining} days` : '—'}
                         </strong>
                       </div>
                     </div>
+                    {user?.tier === 'founder' && (
+                      <p className="text-[11px] text-amber-600 dark:text-amber-400 font-mono pt-1">
+                        * Permanent Founder Grant: Refills 50,000 Normal + 10,000 Advanced requests every 30 days forever. Switching to another paid plan permanently forfeits this grant.
+                      </p>
+                    )}
                   </div>
 
                   {/* Auto-Renew Toggle & Cancel Subscription Controls (for Paid Plans) */}
-                  {user?.tier && user.tier !== 'free_sandbox' && (
+                  {user?.tier && user.tier !== 'free_sandbox' && user.tier !== 'founder' && (
                     <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-zinc-100 dark:border-zinc-800">
                       {/* Auto-Renew ON/OFF Toggle */}
                       <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/70 border border-zinc-200 dark:border-zinc-700/80">
