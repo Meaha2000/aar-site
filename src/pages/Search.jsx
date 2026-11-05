@@ -134,6 +134,7 @@ export function Search() {
   const [searchMethod, setSearchMethod] = useState('hybrid'); // 'hybrid' | 'dense'
   const [granularity, setGranularity] = useState('scene'); // 'scene' | 'episode' | 'arc'
   const [mediaType, setMediaType] = useState('all'); // Media type filter (catalog only)
+  const [adultFilter, setAdultFilter] = useState(true); // Default ON => sends adult: false
   
   // Multi-Seed & Negative Seed state for Catalog Recommend (+ and - up to 10 each)
   const [recommendSearchText, setRecommendSearchText] = useState('');
@@ -428,7 +429,7 @@ export function Search() {
     try {
       let data = null;
       if (targetMode === 'catalog_search') {
-        data = await searchApi.search(targetQuery.trim(), limit, searchMethod, mediaType);
+        data = await searchApi.search(targetQuery.trim(), limit, searchMethod, mediaType, adultFilter);
       } else if (targetMode === 'scene_search') {
         const scopeFilters = {};
         let workObj = loreSelectedWork;
@@ -464,7 +465,7 @@ export function Search() {
           }
         }
         const negIds = negativeSeeds.map(s => s.id);
-        data = await searchApi.recommend(posIds, limit, negIds, mediaType);
+        data = await searchApi.recommend(posIds, limit, negIds, mediaType, adultFilter);
       } else if (targetMode === 'lore_recommend') {
         let activeWork = loreSelectedWork;
         if (!activeWork && loreWorkSearchText.trim()) {
@@ -539,7 +540,7 @@ export function Search() {
           data = await searchApi.advancedRecommend(prompt, limit, loreGranularity || granularity);
         }
       } else if (targetMode === 'catalog_ask') {
-        data = await searchApi.ask(targetQuery.trim(), limit, mediaType);
+        data = await searchApi.ask(targetQuery.trim(), limit, mediaType, adultFilter);
       } else if (targetMode === 'lore_ask') {
         const scopeFilters = {};
         let workObj = loreSelectedWork;
@@ -1700,13 +1701,13 @@ export function Search() {
                     if (results) {
                       setTimeout(() => {
                         if (activeMode === 'catalog_search' && query.trim()) {
-                          searchApi.search(query.trim(), limit, searchMethod, val).then(setResults).catch(err => setError(err.message));
+                          searchApi.search(query.trim(), limit, searchMethod, val, adultFilter).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_recommend' && positiveSeeds.length > 0) {
                           const posIds = positiveSeeds.map(s => s.id);
                           const negIds = negativeSeeds.map(s => s.id);
-                          searchApi.recommend(posIds, limit, negIds, val).then(setResults).catch(err => setError(err.message));
+                          searchApi.recommend(posIds, limit, negIds, val, adultFilter).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_ask' && query.trim()) {
-                          searchApi.ask(query.trim(), limit, val).then(setResults).catch(err => setError(err.message));
+                          searchApi.ask(query.trim(), limit, val, adultFilter).then(setResults).catch(err => setError(err.message));
                         }
                       }, 50);
                     }
@@ -1736,6 +1737,45 @@ export function Search() {
                 <option value={20}>20 records</option>
               </select>
             </div>
+
+            {/* Adult Filter Switch (Catalog Suite: ON = adult:false hides +18, OFF = allows +18) */}
+            {suite === 'catalog' && (
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">Adult Filter:</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={adultFilter}
+                  title={adultFilter ? "Adult content hidden (adult: false)" : "Adult content allowed"}
+                  onClick={() => {
+                    const nextVal = !adultFilter;
+                    setAdultFilter(nextVal);
+                    if (results) {
+                      setTimeout(() => {
+                        if (activeMode === 'catalog_search' && query.trim()) {
+                          searchApi.search(query.trim(), limit, searchMethod, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
+                        } else if (activeMode === 'catalog_recommend' && positiveSeeds.length > 0) {
+                          const posIds = positiveSeeds.map(s => s.id);
+                          const negIds = negativeSeeds.map(s => s.id);
+                          searchApi.recommend(posIds, limit, negIds, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
+                        } else if (activeMode === 'catalog_ask' && query.trim()) {
+                          searchApi.ask(query.trim(), limit, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
+                        }
+                      }, 50);
+                    }
+                  }}
+                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none ${
+                    adultFilter ? 'bg-brand-600' : 'bg-zinc-300 dark:bg-zinc-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-xs transition-transform duration-200 ${
+                      adultFilter ? 'translate-x-4' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            )}
 
             {latencyMs !== null && (
               <span className="ml-auto font-mono text-[11px] text-zinc-400">

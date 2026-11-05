@@ -327,12 +327,15 @@ export const authApi = {
 
 // Search & Retrieval API Methods
 export const searchApi = {
-  search: (query, limit = 8, mode = 'hybrid', mediaType = null) => {
+  search: (query, limit = 8, mode = 'hybrid', mediaType = null, adultFilter = true) => {
+    const scope = {};
+    if (mediaType && mediaType !== 'all') scope.types = [mediaType];
+    if (adultFilter) scope.adult = false;
     const body = typeof query === 'object' && query !== null ? query : {
       question: query,
       limit,
       mode: mode === 'dense' ? 'semantic' : 'hybrid',
-      ...(mediaType && mediaType !== 'all' ? { scope: { types: [mediaType] } } : {}),
+      ...(Object.keys(scope).length > 0 ? { scope } : {}),
     };
     return apiRequest(API_PATHS.SEARCH, {
       method: 'POST',
@@ -345,7 +348,7 @@ export const searchApi = {
     body: JSON.stringify(payload),
   }),
 
-  recommend: (seedIds, limit = 6, negativeIds = [], mediaType = null) => {
+  recommend: (seedIds, limit = 6, negativeIds = [], mediaType = null, adultFilter = true) => {
     if (typeof seedIds === 'object' && !Array.isArray(seedIds) && seedIds !== null) {
       return apiRequest(API_PATHS.RECOMMEND, {
         method: 'POST',
@@ -360,6 +363,7 @@ export const searchApi = {
     };
     if (negs.length > 0) body.negative_work_ids = negs;
     if (mediaType && mediaType !== 'all') body.target_scope = mediaType;
+    if (adultFilter) body.scope = { ...(body.scope || {}), adult: false };
     return apiRequest(API_PATHS.RECOMMEND, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -371,11 +375,14 @@ export const searchApi = {
     body: JSON.stringify(payload),
   }),
 
-  ask: (question, limit = 3, mediaType = null) => {
+  ask: (question, limit = 3, mediaType = null, adultFilter = true) => {
+    const scope = {};
+    if (mediaType && mediaType !== 'all') scope.types = [mediaType];
+    if (adultFilter) scope.adult = false;
     const body = typeof question === 'object' && question !== null ? question : {
       question,
       limit,
-      ...(mediaType && mediaType !== 'all' ? { scope: { types: [mediaType] } } : {}),
+      ...(Object.keys(scope).length > 0 ? { scope } : {}),
     };
     return apiRequest(API_PATHS.ASK, {
       method: 'POST',
