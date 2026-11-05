@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { searchApi } from '../lib/api';
 import { safeCopyToClipboard } from '../lib/utils';
+import { MarkdownContent } from '../components/MarkdownContent';
 
 // Safe helper to extract and render dialogue quotes with zero React object-child errors
 function formatQuote(q) {
@@ -1834,9 +1835,11 @@ export function Search() {
                   {activeMode === 'lore_ask' ? 'Deep Lore AI Synthesis (Second-Exact Citations)' : 'Catalog Grounded AI Answer Layer'}
                 </span>
               </div>
-              <p className="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-sans">
-                {results.answer}
-              </p>
+              <MarkdownContent
+                content={results.answer}
+                sources={results.sources}
+                variant={activeMode === 'lore_ask' ? 'rose' : 'emerald'}
+              />
             </div>
           )}
 

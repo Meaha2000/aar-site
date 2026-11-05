@@ -1,13 +1,46 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { authApi, getSessionToken, setSessionToken } from '../lib/api';
 
 const AuthContext = createContext();
+const CACHED_USER_KEY = 'aar_cached_user';
+
+function readCachedUser() {
+  try {
+    const token = getSessionToken();
+    if (!token) return null;
+    const raw = localStorage.getItem(CACHED_USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedUser(userData) {
+  try {
+    if (userData) {
+      localStorage.setItem(CACHED_USER_KEY, JSON.stringify(userData));
+    } else {
+      localStorage.removeItem(CACHED_USER_KEY);
+    }
+  } catch {
+    // Ignore storage quota errors
+  }
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUserState] = useState(() => readCachedUser());
+  const [loading, setLoading] = useState(() => !readCachedUser() && !!getSessionToken());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const lastRefreshRef = useRef(0);
+
+  const setUser = useCallback((nextUser) => {
+    setUserState((prev) => {
+      const resolved = typeof nextUser === 'function' ? nextUser(prev) : nextUser;
+      writeCachedUser(resolved);
+      return resolved;
+    });
+  }, []);
 
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => {
@@ -23,6 +56,7 @@ export function AuthProvider({ children }) {
       return null;
     }
     try {
+      lastRefreshRef.current = Date.now();
       const data = await authApi.getMe();
       const userData = data?.user || data;
       setUser(userData);
@@ -30,14 +64,17 @@ export function AuthProvider({ children }) {
       return userData;
     } catch (err) {
       console.warn('Auth check error:', err.status, err.message);
-      if (err?.status === 401 || /invalid.*session|expired.*session|missing.*session|unauthorized/i.test(err?.message || '')) {
+      if (
+        err?.status === 401 ||
+        /invalid.*session|expired.*session|missing.*session|unauthorized/i.test(err?.message || '')
+      ) {
         setSessionToken('');
         setUser(null);
       }
       setLoading(false);
       return null;
     }
-  }, []);
+  }, [setUser]);
 
   const loginWithToken = async (token) => {
     setSessionToken(token);
@@ -48,7 +85,12 @@ export function AuthProvider({ children }) {
     return userData;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Ignore network errors on logout
+    }
     setSessionToken('');
     setUser(null);
     window.location.href = '/';
@@ -64,7 +106,6 @@ export function AuthProvider({ children }) {
         const code = searchParams.get('code');
         const state = searchParams.get('state');
         if (code && (state === 'google_direct_oauth' || !state)) {
-          // Immediately clean URL so code is not visible or re-used
           window.history.replaceState({}, document.title, window.location.pathname);
           try {
             setLoading(true);
@@ -73,7 +114,11 @@ export function AuthProvider({ children }) {
             if (exchangeRes?.session_token) {
               setSessionToken(exchangeRes.session_token);
               setUser(exchangeRes.user);
-              if (exchangeRes.is_new_user || exchangeRes.needs_onboarding || !exchangeRes.user?.onboarded) {
+              if (
+                exchangeRes.is_new_user ||
+                exchangeRes.needs_onboarding ||
+                !exchangeRes.user?.onboarded
+              ) {
                 window.location.href = '/welcome';
                 return;
               }
@@ -97,9 +142,12 @@ export function AuthProvider({ children }) {
             if (exchangeRes?.session_token) {
               setSessionToken(exchangeRes.session_token);
               setUser(exchangeRes.user);
-              // Clean URL hash without reload
               window.history.replaceState(null, '', window.location.pathname);
-              if (exchangeRes.is_new_user || exchangeRes.needs_onboarding || !exchangeRes.user?.onboarded) {
+              if (
+                exchangeRes.is_new_user ||
+                exchangeRes.needs_onboarding ||
+                !exchangeRes.user?.onboarded
+              ) {
                 window.location.href = '/welcome';
                 return;
               }
@@ -115,6 +163,42 @@ export function AuthProvider({ children }) {
     }
 
     initAuth();
+  }, [refreshUser, setUser]);
+
+  // Cross-tab session synchronization & background quota refresh on tab visibility
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === CACHED_USER_KEY) {
+        try {
+          setUserState(e.newValue ? JSON.parse(e.newValue) : null);
+        } catch {
+          // Ignore malformed JSON
+        }
+      } else if (e.key && e.key.includes('session_token')) {
+        if (!e.newValue) {
+          setUserState(null);
+        } else {
+          refreshUser();
+        }
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (
+        document.visibilityState === 'visible' &&
+        getSessionToken() &&
+        Date.now() - lastRefreshRef.current > 30000
+      ) {
+        refreshUser();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [refreshUser]);
 
   return (

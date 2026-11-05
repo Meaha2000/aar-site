@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
@@ -7,13 +7,27 @@ import { AuthModal } from './components/AuthModal';
 import { Footer } from './components/Footer';
 import { SakuraBackdrop } from './components/SakuraBackdrop';
 import { Home } from './pages/Home';
-import { Search } from './pages/Search';
-import { Dashboard } from './pages/Dashboard';
-import { Onboarding } from './pages/Onboarding';
-import { ApiDocs } from './pages/ApiDocs';
-import { About } from './pages/About';
-import { Contact } from './pages/Contact';
-import { Pricing } from './pages/Pricing';
+
+const Search = lazy(() => import('./pages/Search').then((m) => ({ default: m.Search })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then((m) => ({ default: m.Dashboard })));
+const Onboarding = lazy(() => import('./pages/Onboarding').then((m) => ({ default: m.Onboarding })));
+const ApiDocs = lazy(() => import('./pages/ApiDocs').then((m) => ({ default: m.ApiDocs })));
+const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
+const Contact = lazy(() => import('./pages/Contact').then((m) => ({ default: m.Contact })));
+const Pricing = lazy(() => import('./pages/Pricing').then((m) => ({ default: m.Pricing })));
+
+function RouteLoadingFallback() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/70 dark:border-zinc-800/70 shadow-sm">
+        <span className="w-2 h-2 rounded-full bg-brand-500 animate-ping" />
+        <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
+          Loading module...
+        </span>
+      </div>
+    </div>
+  );
+}
 
 class AppErrorBoundary extends React.Component {
   constructor(props) {
@@ -65,13 +79,22 @@ function MainApp() {
       const utm_campaign = params.get('utm_campaign') || '';
       const ref = params.get('ref') || '';
       const referrer = document.referrer || '';
-      const isInternalRef = referrer && (referrer.includes('aarecords.tech') || referrer.includes('yuidev.tech') || referrer.includes('localhost'));
+      const isInternalRef =
+        referrer &&
+        (referrer.includes('aarecords.tech') ||
+          referrer.includes('yuidev.tech') ||
+          referrer.includes('localhost'));
       const trackKey = `aar_tracked_${window.location.pathname}_${window.location.search}`;
-      if (!sessionStorage.getItem(trackKey) && (utm_source || utm_medium || utm_campaign || ref || (referrer && !isInternalRef))) {
+      if (
+        !sessionStorage.getItem(trackKey) &&
+        (utm_source || utm_medium || utm_campaign || ref || (referrer && !isInternalRef))
+      ) {
         sessionStorage.setItem(trackKey, '1');
-        const apiBase = import.meta.env.VITE_API_BASE_URL !== undefined && import.meta.env.VITE_API_BASE_URL !== ''
-          ? import.meta.env.VITE_API_BASE_URL
-          : 'https://api.aarecords.tech';
+        const apiBase =
+          import.meta.env.VITE_API_BASE_URL !== undefined &&
+          import.meta.env.VITE_API_BASE_URL !== ''
+            ? import.meta.env.VITE_API_BASE_URL
+            : 'https://api.aarecords.tech';
         fetch(`${apiBase.replace(/\/$/, '')}/track`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -82,9 +105,9 @@ function MainApp() {
             ref: ref || null,
             referrer: referrer || null,
             path: window.location.pathname,
-            query: window.location.search || null
+            query: window.location.search || null,
           }),
-          keepalive: true
+          keepalive: true,
         }).catch(() => {});
       }
     } catch (_) {}
@@ -121,7 +144,8 @@ function MainApp() {
         window.history.pushState(null, '', href);
         const nextPath = window.location.pathname;
         setCurrentPath(nextPath);
-        const hasSearchQuery = nextPath.startsWith('/search') && window.location.search.includes('q=');
+        const hasSearchQuery =
+          nextPath.startsWith('/search') && window.location.search.includes('q=');
         if (nextPath !== prevPath && !hasSearchQuery) {
           window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -169,7 +193,8 @@ function MainApp() {
           Page Not Found
         </h2>
         <p className="text-xs text-zinc-500">
-          The requested route <code className="font-mono text-zinc-400">{currentPath}</code> does not exist on this platform.
+          The requested route <code className="font-mono text-zinc-400">{currentPath}</code> does
+          not exist on this platform.
         </p>
         <a
           href="/"
@@ -197,7 +222,7 @@ function MainApp() {
       <AuthModal />
       <main className="relative z-10 flex-1">
         <AppErrorBoundary key={currentPath}>
-          {renderRoute()}
+          <Suspense fallback={<RouteLoadingFallback />}>{renderRoute()}</Suspense>
         </AppErrorBoundary>
       </main>
       <div className="relative z-10">
