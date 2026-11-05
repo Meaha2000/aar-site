@@ -18,6 +18,38 @@ export function BillingTab({
   handleTopup,
   handleCustomVolumeCheckout,
 }) {
+  const pendingCoupons = Array.isArray(user?.pending_coupons) ? user.pending_coupons : [];
+  const getPlanCoupon = (planId) => {
+    const matched = pendingCoupons.find(
+      (c) => c.target_plan === planId || c.target_plan === 'all'
+    );
+    if (matched) return matched;
+    if (
+      user?.pending_coupon_code &&
+      (user?.pending_coupon_plan === planId || user?.pending_coupon_plan === 'all')
+    ) {
+      return {
+        code: user.pending_coupon_code,
+        target_plan: user.pending_coupon_plan,
+        discount_percent: user.pending_discount_percent,
+        discounted_price: user.pending_discounted_price,
+      };
+    }
+    return null;
+  };
+
+  const getDiscountedPrice = (basePrice, coupon) => {
+    if (!coupon || !basePrice) return null;
+    if (typeof coupon.discounted_price === 'number' && coupon.discounted_price > 0) {
+      return Number(coupon.discounted_price).toFixed(2).replace(/\.00$/, '');
+    }
+    if (typeof coupon.discount_percent === 'number' && coupon.discount_percent > 0) {
+      const p = basePrice * (1 - coupon.discount_percent / 100);
+      return p.toFixed(2);
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       {billingMessage && (
@@ -234,7 +266,10 @@ export function BillingTab({
               rpm: '600 RPM · 80 LLM RPM',
               current: user?.tier === 'business',
             },
-          ].map((plan) => (
+          ].map((plan) => {
+            const matchedCoupon = getPlanCoupon(plan.id);
+            const discountedPrice = getDiscountedPrice(plan.price, matchedCoupon);
+            return (
             <div
               key={plan.id}
               className={`p-5 rounded-2xl flex flex-col justify-between transition-all ${
@@ -248,18 +283,38 @@ export function BillingTab({
                   <span className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
                     {plan.name}
                   </span>
-                  {plan.current && (
+                  {plan.current ? (
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
                       Current
                     </span>
-                  )}
+                  ) : matchedCoupon ? (
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                      {matchedCoupon.code} (-{matchedCoupon.discount_percent ? `${matchedCoupon.discount_percent}%` : `$${matchedCoupon.discount_usd}`})
+                    </span>
+                  ) : null}
                 </div>
 
-                <div className="flex items-baseline gap-1 font-mono">
-                  <span className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                    ${plan.price}
-                  </span>
-                  <span className="text-xs text-zinc-400">/mo</span>
+                <div className="flex items-baseline gap-1.5 font-mono flex-wrap">
+                  {discountedPrice !== null ? (
+                    <>
+                      <span className="text-sm line-through text-zinc-400 dark:text-zinc-500 tabular-nums">
+                        ${plan.price}
+                      </span>
+                      <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                        ${discountedPrice}
+                      </span>
+                      <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                        1st mo
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
+                        ${plan.price}
+                      </span>
+                      <span className="text-xs text-zinc-400">/mo</span>
+                    </>
+                  )}
                 </div>
 
                 <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400 font-mono pt-2 border-t border-zinc-100 dark:border-zinc-800">
@@ -287,6 +342,8 @@ export function BillingTab({
                   >
                     {billingLoading === plan.id
                       ? 'Redirecting...'
+                      : discountedPrice !== null
+                      ? `Subscribe ($${discountedPrice} 1st mo)`
                       : `Subscribe ($${plan.price}/mo)`}
                   </button>
                 ) : (
@@ -299,7 +356,8 @@ export function BillingTab({
                 )}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

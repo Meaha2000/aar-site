@@ -3,6 +3,7 @@ import { Gift, Info, RefreshCw } from 'lucide-react';
 import { formatDateTime, formatCurrency, formatNumber } from '../../lib/utils';
 
 export function CouponsLedgerTab({
+  user,
   couponCode,
   setCouponCode,
   couponLoading,
@@ -60,6 +61,30 @@ export function CouponsLedgerTab({
             {couponLoading ? 'Redeeming...' : 'Apply Coupon'}
           </button>
         </form>
+
+        {Array.isArray(user?.pending_coupons) && user.pending_coupons.length > 0 && (
+          <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block">
+              Active Pending Plan Discounts (Oldest Applied First)
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {user.pending_coupons.map((c, i) => (
+                <span
+                  key={`${c.code}-${i}`}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                >
+                  <span>{c.code}</span>
+                  <span className="text-zinc-400">•</span>
+                  <span className="uppercase">{c.target_plan}</span>
+                  <span className="text-zinc-400">•</span>
+                  <span>
+                    {c.discount_percent ? `${c.discount_percent}% OFF` : `$${c.discounted_price}`} (1st mo)
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Audit & Usage Ledger Table */}

@@ -282,6 +282,14 @@ export function Dashboard() {
     setCouponFeedback(null);
     try {
       const res = await authApi.redeemCoupon(couponCode.trim());
+      if (res?.checkout_url) {
+        setCouponFeedback({
+          type: 'success',
+          text: res.message || 'Promo code applied! Redirecting to Polar checkout...',
+        });
+        window.location.href = res.checkout_url;
+        return;
+      }
       await refreshUser();
       setCouponFeedback({
         type: 'success',
@@ -531,6 +539,7 @@ export function Dashboard() {
 
           {activeTab === 'coupons' && (
             <CouponsLedgerTab
+              user={user}
               couponCode={couponCode}
               setCouponCode={setCouponCode}
               couponLoading={couponLoading}

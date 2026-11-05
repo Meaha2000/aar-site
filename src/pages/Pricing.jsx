@@ -313,30 +313,68 @@ export function Pricing() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {PLANS.map((plan) => (
+          {PLANS.map((plan) => {
+            const pendingList = Array.isArray(user?.pending_coupons) ? user.pending_coupons : [];
+            const matchedCoupon = pendingList.find(
+              (c) => c.target_plan === plan.id || c.target_plan === 'all'
+            ) || (
+              (user?.pending_coupon_plan === plan.id || user?.pending_coupon_plan === 'all') && user?.pending_discount_percent > 0
+                ? {
+                    code: user.pending_coupon_code || 'PROMO',
+                    discount_percent: user.pending_discount_percent,
+                    discounted_price_usd: user.pending_discounted_price,
+                  }
+                : null
+            );
+            const hasCoupon = Boolean(matchedCoupon && plan.price > 0);
+            const discountedPrice = hasCoupon
+              ? Number(matchedCoupon.discounted_price_usd || (plan.price * (100 - matchedCoupon.discount_percent)) / 100).toFixed(2)
+              : null;
+
+            return (
             <div
               key={plan.id}
               className={`rounded-2xl p-5 flex flex-col justify-between relative transition-all ${
-                plan.highlight
+                hasCoupon
+                  ? 'border-2 border-emerald-500 bg-white dark:bg-zinc-900 shadow-xl shadow-emerald-500/10'
+                  : plan.highlight
                   ? 'border-2 border-brand-500 bg-white dark:bg-zinc-900 shadow-xl shadow-brand-500/10'
                   : 'border border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/80'
               }`}
             >
-              {plan.badge && (
+              {hasCoupon ? (
+                <div className="absolute -top-3 right-4 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-600 text-white shadow">
+                  {matchedCoupon.code}: {matchedCoupon.discount_percent}% OFF 1st Mo
+                </div>
+              ) : plan.badge ? (
                 <div className="absolute -top-3 right-4 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-brand-600 text-white shadow">
                   {plan.badge}
                 </div>
-              )}
+              ) : null}
 
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{plan.name}</h3>
                 </div>
-                <div className="flex items-baseline gap-1 mb-2">
-                  <span className="text-3xl font-extrabold text-zinc-900 dark:text-white font-mono">
-                    ${plan.price}
-                  </span>
-                  <span className="text-xs text-zinc-500 dark:text-zinc-400">/{plan.period}</span>
+                <div className="flex items-baseline gap-1.5 mb-2">
+                  {hasCoupon ? (
+                    <>
+                      <span className="text-base font-bold text-zinc-400 line-through font-mono">
+                        ${plan.price}
+                      </span>
+                      <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                        ${discountedPrice}
+                      </span>
+                      <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">1st mo</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-3xl font-extrabold text-zinc-900 dark:text-white font-mono">
+                        ${plan.price}
+                      </span>
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400">/{plan.period}</span>
+                    </>
+                  )}
                 </div>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-4 min-h-[36px]">
                   {plan.tagline}
@@ -407,12 +445,14 @@ export function Pricing() {
                 <a
                   href="/dashboard"
                   className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-center transition-all flex items-center justify-center gap-1.5 ${
-                    plan.highlight
+                    hasCoupon
+                      ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm'
+                      : plan.highlight
                       ? 'bg-brand-600 hover:bg-brand-500 text-white shadow-sm'
                       : 'bg-zinc-900 dark:bg-zinc-800 hover:bg-zinc-800 dark:hover:bg-zinc-700 text-white'
                   }`}
                 >
-                  <span>Manage in Dashboard</span>
+                  <span>{hasCoupon ? `Subscribe ($${discountedPrice} 1st mo)` : 'Manage in Dashboard'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               ) : (
@@ -429,7 +469,8 @@ export function Pricing() {
                 </button>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
