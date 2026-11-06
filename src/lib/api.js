@@ -327,7 +327,7 @@ export const authApi = {
 
 // Search & Retrieval API Methods
 export const searchApi = {
-  search: (query, limit = 8, mode = 'hybrid', mediaType = null, adultFilter = true) => {
+  search: (query, limit = 8, mode = 'hybrid', mediaType = null, adultFilter = true, queryBreakdown = false) => {
     const scope = {};
     if (mediaType && mediaType !== 'all') scope.types = [mediaType];
     if (adultFilter) scope.adult = false;
@@ -335,6 +335,7 @@ export const searchApi = {
       question: query,
       limit,
       mode: mode === 'dense' ? 'semantic' : 'hybrid',
+      ...(queryBreakdown ? { query_breakdown: true } : {}),
       ...(Object.keys(scope).length > 0 ? { scope } : {}),
     };
     return apiRequest(API_PATHS.SEARCH, {
@@ -382,6 +383,7 @@ export const searchApi = {
     const body = typeof question === 'object' && question !== null ? question : {
       question,
       limit,
+      ...(queryBreakdown ? { query_breakdown: true } : {}),
       ...(Object.keys(scope).length > 0 ? { scope } : {}),
     };
     return apiRequest(API_PATHS.ASK, {

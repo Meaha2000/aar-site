@@ -136,6 +136,7 @@ export function Search() {
   const [granularity, setGranularity] = useState('scene'); // 'scene' | 'episode' | 'arc'
   const [mediaType, setMediaType] = useState('all'); // Media type filter (catalog only)
   const [adultFilter, setAdultFilter] = useState(true); // Default ON => sends adult: false
+  const [queryBreakdown, setQueryBreakdown] = useState(false); // Default OFF => AI query breakdown
   
   // Multi-Seed & Negative Seed state for Catalog Recommend (+ and - up to 10 each)
   const [recommendSearchText, setRecommendSearchText] = useState('');
@@ -430,7 +431,7 @@ export function Search() {
     try {
       let data = null;
       if (targetMode === 'catalog_search') {
-        data = await searchApi.search(targetQuery.trim(), limit, searchMethod, mediaType, adultFilter);
+        data = await searchApi.search(targetQuery.trim(), limit, searchMethod, mediaType, adultFilter, queryBreakdown);
       } else if (targetMode === 'scene_search') {
         const scopeFilters = {};
         let workObj = loreSelectedWork;
@@ -453,6 +454,7 @@ export function Search() {
         if (loreEpisodeNum && String(loreEpisodeNum).trim() !== '') {
           scopeFilters.episode_number = Number(loreEpisodeNum);
         }
+        if (queryBreakdown) scopeFilters.query_breakdown = true;
         data = await searchApi.advancedSearch(targetQuery.trim(), limit, granularity, scopeFilters);
       } else if (targetMode === 'catalog_recommend') {
         let posIds = positiveSeeds.map(s => s.id);
@@ -541,7 +543,7 @@ export function Search() {
           data = await searchApi.advancedRecommend(prompt, limit, loreGranularity || granularity);
         }
       } else if (targetMode === 'catalog_ask') {
-        data = await searchApi.ask(targetQuery.trim(), limit, mediaType, adultFilter);
+        data = await searchApi.ask(targetQuery.trim(), limit, mediaType, adultFilter, queryBreakdown);
       } else if (targetMode === 'lore_ask') {
         const scopeFilters = {};
         let workObj = loreSelectedWork;
@@ -564,6 +566,7 @@ export function Search() {
         if (loreEpisodeNum && String(loreEpisodeNum).trim() !== '') {
           scopeFilters.episode_number = Number(loreEpisodeNum);
         }
+        if (queryBreakdown) scopeFilters.query_breakdown = true;
         data = await searchApi.loreAsk(targetQuery.trim(), limit, granularity, scopeFilters);
       }
       setLatencyMs(Math.round(performance.now() - startTime));
@@ -599,9 +602,11 @@ export function Search() {
     let curl = '';
     if (activeMode === 'catalog_search') {
       const scopePart = mediaType !== 'all' ? `, "scope": {"types": ["${mediaType}"]}` : '';
-      curl = `curl -X POST https://api.aarecords.tech/search \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"question": "${query}", "limit": ${limit}, "mode": "${searchMethod}"${scopePart}}'`;
+      const qbPart = queryBreakdown ? ', "query_breakdown": true' : '';
+      curl = `curl -X POST https://api.aarecords.tech/search \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"question": "${query}", "limit": ${limit}, "mode": "${searchMethod}"${qbPart}${scopePart}}'`;
     } else if (activeMode === 'scene_search') {
-      curl = `curl -X POST https://api.aarecords.tech/advanced-search \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"query": "${query}", "limit": ${limit}, "granularity": "${granularity}"}'`;
+      const qbPart = queryBreakdown ? ', "query_breakdown": true' : '';
+      curl = `curl -X POST https://api.aarecords.tech/advanced-search \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"query": "${query}", "limit": ${limit}, "granularity": "${granularity}"${qbPart}}'`;
     } else if (activeMode === 'catalog_recommend') {
       const posIds = positiveSeeds.map(s => `"${s.id}"`).join(', ');
       const negIds = negativeSeeds.map(s => `"${s.id}"`).join(', ');
@@ -625,9 +630,11 @@ export function Search() {
       }
     } else if (activeMode === 'catalog_ask') {
       const scopePart = mediaType !== 'all' ? `, "scope": {"types": ["${mediaType}"]}` : '';
-      curl = `curl -X POST https://api.aarecords.tech/ask \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"question": "${query}", "limit": ${limit}${scopePart}}'`;
+      const qbPart = queryBreakdown ? ', "query_breakdown": true' : '';
+      curl = `curl -X POST https://api.aarecords.tech/ask \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"question": "${query}", "limit": ${limit}${qbPart}${scopePart}}'`;
     } else if (activeMode === 'lore_ask') {
-      curl = `curl -X POST https://api.aarecords.tech/lore-ask \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"query": "${query}", "limit": ${limit}, "granularity": "${granularity}"}'`;
+      const qbPart = queryBreakdown ? ', "query_breakdown": true' : '';
+      curl = `curl -X POST https://api.aarecords.tech/lore-ask \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: YOUR_API_KEY" \\\n  -d '{"query": "${query}", "limit": ${limit}, "granularity": "${granularity}"${qbPart}}'`;
     }
 
     await safeCopyToClipboard(curl);
@@ -1702,13 +1709,13 @@ export function Search() {
                     if (results) {
                       setTimeout(() => {
                         if (activeMode === 'catalog_search' && query.trim()) {
-                          searchApi.search(query.trim(), limit, searchMethod, val, adultFilter).then(setResults).catch(err => setError(err.message));
+                          searchApi.search(query.trim(), limit, searchMethod, val, adultFilter, queryBreakdown).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_recommend' && positiveSeeds.length > 0) {
                           const posIds = positiveSeeds.map(s => s.id);
                           const negIds = negativeSeeds.map(s => s.id);
                           searchApi.recommend(posIds, limit, negIds, val, adultFilter).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_ask' && query.trim()) {
-                          searchApi.ask(query.trim(), limit, val, adultFilter).then(setResults).catch(err => setError(err.message));
+                          searchApi.ask(query.trim(), limit, val, adultFilter, queryBreakdown).then(setResults).catch(err => setError(err.message));
                         }
                       }, 50);
                     }
@@ -1754,13 +1761,13 @@ export function Search() {
                     if (results) {
                       setTimeout(() => {
                         if (activeMode === 'catalog_search' && query.trim()) {
-                          searchApi.search(query.trim(), limit, searchMethod, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
+                          searchApi.search(query.trim(), limit, searchMethod, mediaType, nextVal, queryBreakdown).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_recommend' && positiveSeeds.length > 0) {
                           const posIds = positiveSeeds.map(s => s.id);
                           const negIds = negativeSeeds.map(s => s.id);
                           searchApi.recommend(posIds, limit, negIds, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
                         } else if (activeMode === 'catalog_ask' && query.trim()) {
-                          searchApi.ask(query.trim(), limit, mediaType, nextVal).then(setResults).catch(err => setError(err.message));
+                          searchApi.ask(query.trim(), limit, mediaType, nextVal, queryBreakdown).then(setResults).catch(err => setError(err.message));
                         }
                       }, 50);
                     }
@@ -1775,6 +1782,67 @@ export function Search() {
                     }`}
                   />
                 </button>
+              </div>
+            )}
+
+            {(activeMode === 'catalog_search' || activeMode === 'scene_search' || activeMode === 'catalog_ask' || activeMode === 'lore_ask') && (
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">Query Breakdown:</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={queryBreakdown}
+                  title={queryBreakdown ? "AI Query Breakdown ON (splits complex queries into focused sub-queries)" : "AI Query Breakdown OFF (fast single-pass query)"}
+                  onClick={() => {
+                    const nextQb = !queryBreakdown;
+                    setQueryBreakdown(nextQb);
+                    if (results && query.trim()) {
+                      setTimeout(() => {
+                        if (activeMode === 'catalog_search') {
+                          searchApi.search(query.trim(), limit, searchMethod, mediaType, adultFilter, nextQb).then(setResults).catch(err => setError(err.message));
+                        } else if (activeMode === 'catalog_ask') {
+                          searchApi.ask(query.trim(), limit, mediaType, adultFilter, nextQb).then(setResults).catch(err => setError(err.message));
+                        } else if (activeMode === 'scene_search' || activeMode === 'lore_ask') {
+                          const scopeFilters = {};
+                          if (loreSelectedWork) {
+                            const wId = loreSelectedWork.work_id || loreSelectedWork.canonical_id || loreSelectedWork.id;
+                            if (wId) scopeFilters.work_id = wId;
+                            if (loreSelectedWork.mal_id) scopeFilters.mal_id = Number(loreSelectedWork.mal_id);
+                            if (loreSelectedWork.anilist_id) scopeFilters.anilist_id = Number(loreSelectedWork.anilist_id);
+                          }
+                          if (loreEpisodeNum && String(loreEpisodeNum).trim() !== '') {
+                            scopeFilters.episode_number = Number(loreEpisodeNum);
+                          }
+                          if (nextQb) scopeFilters.query_breakdown = true;
+                          const fn = activeMode === 'scene_search' ? searchApi.advancedSearch : searchApi.loreAsk;
+                          fn(query.trim(), limit, granularity, scopeFilters).then(setResults).catch(err => setError(err.message));
+                        }
+                      }, 50);
+                    }
+                  }}
+                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none ${
+                    queryBreakdown ? 'bg-brand-600' : 'bg-zinc-300 dark:bg-zinc-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-xs transition-transform duration-200 ${
+                      queryBreakdown ? 'translate-x-4' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+                <span className="relative group inline-flex items-center">
+                  <span
+                    tabIndex={0}
+                    title="When enabled, AI decomposes complex multi-part descriptions or questions into focused sub-queries and fuses their results via Reciprocal Rank Fusion (RRF) for higher accuracy."
+                    className="inline-flex h-4 w-4 cursor-help items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-[10px] font-mono font-bold text-zinc-500 dark:text-zinc-400 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-500/50 transition-colors"
+                  >
+                    ?
+                  </span>
+                  <span className="pointer-events-none invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-150 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 rounded-lg bg-zinc-900 dark:bg-zinc-800 text-zinc-100 text-[11px] font-sans leading-relaxed shadow-xl border border-zinc-700/80 z-50 text-left">
+                    <strong className="block font-mono text-[10px] text-brand-400 uppercase tracking-wider mb-0.5">AI Query Breakdown</strong>
+                    Splits complex multi-part queries into focused sub-queries and fuses results via Reciprocal Rank Fusion (RRF). Keep OFF for fast single-pass search.
+                  </span>
+                </span>
               </div>
             )}
 
@@ -1909,6 +1977,32 @@ export function Search() {
                           ))}
                         </div>
                       )}
+
+                      {/* External Platform Links (AniList & MAL) */}
+                      <div className="flex items-center gap-1.5 pt-1.5">
+                        {item.anilist_id && (
+                          <a
+                            href={`https://anilist.co/${item.type === 'manga' ? 'manga' : 'anime'}/${item.anilist_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition"
+                          >
+                            AniList
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
+                        {item.mal_id && (
+                          <a
+                            href={`https://myanimelist.net/${item.type === 'manga' ? 'manga' : 'anime'}/${item.mal_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-600/10 text-blue-700 dark:text-blue-300 hover:bg-blue-600/20 transition"
+                          >
+                            MAL
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
