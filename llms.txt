@@ -218,7 +218,7 @@ curl -X GET "https://api.aarecords.tech/health" \
 ```json
 {
   "status": "ok",
-  "works": 144025,
+  "works": 146140,
   "chunks": 157340
 }
 ```
@@ -565,7 +565,7 @@ curl -X GET "https://api.aarecords.tech/stats" \
 ```json
 {
   "status": "healthy",
-  "total_works": 144698,
+  "total_works": 146140,
   "by_type": {
     "anime": 38434,
     "light_novel": 11724,
